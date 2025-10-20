@@ -539,6 +539,312 @@
             }
         };
 
+        const activityCategoriesMeta = {
+            epicurien: {
+                icon: '🍷',
+                label: { fr: 'Épicurien', en: 'Epicurean' },
+                tagline: { fr: 'Saveurs & plaisirs gourmands', en: 'Flavors & gourmet delights' },
+                listSubtitle: { fr: '3 expériences pour éveiller vos papilles.', en: '3 experiences to delight your taste buds.' }
+            },
+            creatif: {
+                icon: '🎨',
+                label: { fr: 'Créatif', en: 'Creative' },
+                tagline: { fr: 'Laissez parler votre imagination', en: 'Let your imagination flow' },
+                listSubtitle: { fr: '3 ateliers pour libérer votre créativité.', en: '3 workshops to unleash your creativity.' }
+            },
+            sportif: {
+                icon: '🏋️',
+                label: { fr: 'Sportif', en: 'Sporty' },
+                tagline: { fr: 'Bougez en bonne compagnie', en: 'Move together with energy' },
+                listSubtitle: { fr: '3 sessions pour faire le plein d’énergie.', en: '3 sessions to boost your energy.' }
+            },
+            curieux: {
+                icon: '🔍',
+                label: { fr: 'Curieux', en: 'Curious' },
+                tagline: { fr: 'Explorez et apprenez', en: 'Explore and learn' },
+                listSubtitle: { fr: '3 découvertes pour nourrir votre curiosité.', en: '3 discoveries to feed your curiosity.' }
+            },
+            bienveillant: {
+                icon: '☀️',
+                label: { fr: 'Bienveillant', en: 'Caring' },
+                tagline: { fr: 'Respirez & recentrez-vous', en: 'Breathe and recentre yourself' },
+                listSubtitle: { fr: '3 instants pour prendre soin de vous.', en: '3 moments to take care of yourself.' }
+            }
+        };
+
+        const activitiesData = {
+            fr: {
+                epicurien: [
+                    {
+                        icon: '🍷',
+                        title: 'Dégustation de vins',
+                        day: 'Lundi 18',
+                        time: '17h00',
+                        location: 'Patio Atlas',
+                        description: 'Découvrez les saveurs locales à travers une sélection de vins marocains.'
+                    },
+                    {
+                        icon: '🍴',
+                        title: 'Atelier cuisine',
+                        day: 'Mardi 19',
+                        time: '14h00',
+                        location: 'Salle Agdal',
+                        description: 'Préparez un tajine traditionnel avec notre chef.'
+                    },
+                    {
+                        icon: '🥐',
+                        title: 'Brunch gourmand',
+                        day: 'Mercredi 20',
+                        time: '10h00',
+                        location: 'Terrasse principale',
+                        description: 'Buffet sucré-salé pour bien terminer la semaine.'
+                    }
+                ],
+                creatif: [
+                    {
+                        icon: '🎨',
+                        title: 'Poterie berbère',
+                        day: 'Lundi 18',
+                        time: '15h00',
+                        location: 'Atelier Arts & Culture',
+                        description: 'Apprenez les techniques traditionnelles avec un artisan local.'
+                    },
+                    {
+                        icon: '✍️',
+                        title: 'Calligraphie arabe',
+                        day: 'Mardi 19',
+                        time: '10h00',
+                        location: 'Salle Agdal',
+                        description: 'Initiez-vous à l’art de l’écriture orientale.'
+                    },
+                    {
+                        icon: '🌺',
+                        title: 'Atelier henné',
+                        day: 'Mercredi 20',
+                        time: '16h00',
+                        location: 'Terrasse Jardins',
+                        description: 'Créez vos motifs personnalisés avec nos expertes.'
+                    }
+                ],
+                sportif: [
+                    {
+                        icon: '🎾',
+                        title: 'Tennis intensif',
+                        day: 'Lundi 18',
+                        time: '09h00',
+                        location: 'Courts principaux',
+                        description: 'Session encadrée par nos coachs Club Med.'
+                    },
+                    {
+                        icon: '💦',
+                        title: 'Aqua fitness',
+                        day: 'Mardi 19',
+                        time: '11h00',
+                        location: 'Piscine centrale',
+                        description: 'Un cours tonique et rafraîchissant au rythme de la musique.'
+                    },
+                    {
+                        icon: '⛰️',
+                        title: 'Randonnée Atlas',
+                        day: 'Mercredi 20',
+                        time: '08h00',
+                        location: 'Départ réception',
+                        description: 'Une matinée pour explorer les paysages marocains.'
+                    }
+                ],
+                curieux: [
+                    {
+                        icon: '🕌',
+                        title: 'Visite des souks',
+                        day: 'Lundi 18',
+                        time: '15h00',
+                        location: 'Départ réception',
+                        description: 'Immergez-vous dans l’ambiance colorée de Marrakech.'
+                    },
+                    {
+                        icon: '🎤',
+                        title: 'Conférence berbère',
+                        day: 'Mardi 19',
+                        time: '17h00',
+                        location: 'Salle Atlas',
+                        description: 'Découvrez la culture locale avec un intervenant passionné.'
+                    },
+                    {
+                        icon: '🌿',
+                        title: 'Jardin Majorelle',
+                        day: 'Mercredi 20',
+                        time: '10h00',
+                        location: 'Excursion Marrakech',
+                        description: 'Un moment suspendu dans un jardin iconique.'
+                    }
+                ],
+                bienveillant: [
+                    {
+                        icon: '🧘',
+                        title: 'Yoga sunrise',
+                        day: 'Lundi 18',
+                        time: '07h00',
+                        location: 'Terrasse principale',
+                        description: 'Commencez la journée par une séance en douceur face au soleil.'
+                    },
+                    {
+                        icon: '🌅',
+                        title: 'Méditation guidée',
+                        day: 'Mardi 19',
+                        time: '08h00',
+                        location: 'Espace bien-être',
+                        description: 'Respirez, relâchez et recentrez-vous avec notre coach.'
+                    },
+                    {
+                        icon: '💆',
+                        title: 'Spa & hammam',
+                        day: 'Mercredi 20',
+                        time: '16h00',
+                        location: 'Spa Atlas',
+                        description: 'Offrez-vous un moment de détente totale.'
+                    }
+                ]
+            },
+            en: {
+                epicurien: [
+                    {
+                        icon: '🍷',
+                        title: 'Wine tasting',
+                        day: 'Mon 18',
+                        time: '5:00 PM',
+                        location: 'Atlas Patio',
+                        description: 'Discover Moroccan terroirs through a curated selection of wines.'
+                    },
+                    {
+                        icon: '🍴',
+                        title: 'Cooking workshop',
+                        day: 'Tue 19',
+                        time: '2:00 PM',
+                        location: 'Agdal Room',
+                        description: 'Cook a traditional tajine step by step with our chef.'
+                    },
+                    {
+                        icon: '🥐',
+                        title: 'Gourmet brunch',
+                        day: 'Wed 20',
+                        time: '10:00 AM',
+                        location: 'Main Terrace',
+                        description: 'Sweet and savory buffet to wrap up the week in style.'
+                    }
+                ],
+                creatif: [
+                    {
+                        icon: '🎨',
+                        title: 'Berber pottery',
+                        day: 'Mon 18',
+                        time: '3:00 PM',
+                        location: 'Arts & Culture Studio',
+                        description: 'Shape clay using ancestral techniques guided by an artisan.'
+                    },
+                    {
+                        icon: '✍️',
+                        title: 'Arabic calligraphy',
+                        day: 'Tue 19',
+                        time: '10:00 AM',
+                        location: 'Agdal Room',
+                        description: 'Try the elegance of oriental lettering with personalized tips.'
+                    },
+                    {
+                        icon: '🌺',
+                        title: 'Henna atelier',
+                        day: 'Wed 20',
+                        time: '4:00 PM',
+                        location: 'Garden Terrace',
+                        description: 'Design your own motifs with natural pigments.'
+                    }
+                ],
+                sportif: [
+                    {
+                        icon: '🎾',
+                        title: 'Tennis coaching',
+                        day: 'Mon 18',
+                        time: '9:00 AM',
+                        location: 'Main Courts',
+                        description: 'Work on your game with Club Med certified coaches.'
+                    },
+                    {
+                        icon: '💦',
+                        title: 'Aqua fitness',
+                        day: 'Tue 19',
+                        time: '11:00 AM',
+                        location: 'Central Pool',
+                        description: 'A dynamic water workout boosted by upbeat music.'
+                    },
+                    {
+                        icon: '⛰️',
+                        title: 'Atlas hike',
+                        day: 'Wed 20',
+                        time: '8:00 AM',
+                        location: 'Reception departure',
+                        description: 'Set off for a morning adventure in the Moroccan mountains.'
+                    }
+                ],
+                curieux: [
+                    {
+                        icon: '🕌',
+                        title: 'Souk discovery tour',
+                        day: 'Mon 18',
+                        time: '3:00 PM',
+                        location: 'Reception departure',
+                        description: 'Dive into the vibrant atmosphere of Marrakech markets.'
+                    },
+                    {
+                        icon: '🎤',
+                        title: 'Berber culture talk',
+                        day: 'Tue 19',
+                        time: '5:00 PM',
+                        location: 'Atlas Room',
+                        description: 'Learn local traditions during an inspiring conference.'
+                    },
+                    {
+                        icon: '🌿',
+                        title: 'Majorelle Garden visit',
+                        day: 'Wed 20',
+                        time: '10:00 AM',
+                        location: 'Marrakech excursion',
+                        description: 'Stroll through Yves Saint Laurent’s iconic garden.'
+                    }
+                ],
+                bienveillant: [
+                    {
+                        icon: '🧘',
+                        title: 'Sunrise yoga',
+                        day: 'Mon 18',
+                        time: '7:00 AM',
+                        location: 'Main Terrace',
+                        description: 'Welcome the day with a gentle flow facing the sunrise.'
+                    },
+                    {
+                        icon: '🌅',
+                        title: 'Guided meditation',
+                        day: 'Tue 19',
+                        time: '8:00 AM',
+                        location: 'Wellness lounge',
+                        description: 'Breathe, release tension and refocus with our coach.'
+                    },
+                    {
+                        icon: '💆',
+                        title: 'Spa & hammam ritual',
+                        day: 'Wed 20',
+                        time: '4:00 PM',
+                        location: 'Atlas Spa',
+                        description: 'Indulge in a relaxing spa journey with steam and massage.'
+                    }
+                ]
+            }
+        };
+
+        let activitiesViewState = {
+            active: false,
+            category: null,
+            container: null
+        };
+
         function createAgentMessages() {
             return {
                 fr: { ...baseAgentMessages.fr },
@@ -676,6 +982,14 @@
             if (selectedPopulation) {
                 const activePopulation = academyData.populations[selectedPopulation];
                 document.getElementById('selectedPopName').textContent = activePopulation.fullName[currentLang];
+            }
+
+            if (activitiesViewState.active && activitiesViewState.container && document.body.contains(activitiesViewState.container)) {
+                if (activitiesViewState.category) {
+                    renderActivitiesList(activitiesViewState.container, activitiesViewState.category);
+                } else {
+                    renderActivitiesCategories(activitiesViewState.container);
+                }
             }
         }
 
@@ -856,7 +1170,7 @@
             return tempContainer.innerHTML;
         }
 
-        function addMessage(content, isUser = false) {
+        function addMessage(content, isUser = false, options = {}) {
             removeTypingIndicator();
 
             const messagesContainer = document.getElementById('chatMessages');
@@ -875,19 +1189,166 @@
                 ? 'background: linear-gradient(135deg, var(--club-med-brown) 0%, var(--club-med-yellow) 100%);'
                 : 'border: 1px solid var(--club-med-beige);';
             
-            const formattedContent = isUser ? content : appendAssistantSignoff(content);
+            const { skipSignoff = false } = options;
+            const formattedContent = (isUser || skipSignoff) ? content : appendAssistantSignoff(content);
 
             messageDiv.innerHTML = `
                 <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style="${avatarStyle}">
                     <span class="text-white font-bold text-lg">${isUser ? 'U' : 'H'}</span>
                 </div>
                 <div class="${bubbleClass}" style="${bubbleStyle}">
-                    <div class="${isUser ? 'text-white' : ''}" style="${isUser ? '' : 'color: var(--club-med-primary);'}">${formattedContent}</div>
+                    <div class="${isUser ? 'text-white' : ''} message-content" style="${isUser ? '' : 'color: var(--club-med-primary);'}">${formattedContent}</div>
                 </div>
             `;
 
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            return messageDiv;
+        }
+
+        function clearActivitiesViewState() {
+            activitiesViewState.active = false;
+            activitiesViewState.category = null;
+            activitiesViewState.container = null;
+        }
+
+        function renderActivitiesCategories(container) {
+            if (!container) {
+                return;
+            }
+
+            const introTitle = currentLang === 'fr'
+                ? 'Choisissez une catégorie d’activités'
+                : 'Choose an activity category';
+            const introSubtitle = currentLang === 'fr'
+                ? 'Explorez les expériences Club Med selon vos envies.'
+                : 'Explore the Club Med experiences that match your mood.';
+            const helperText = currentLang === 'fr'
+                ? 'Cliquez sur une catégorie pour découvrir 3 idées.'
+                : 'Tap a category to reveal 3 curated ideas.';
+
+            const categoriesHtml = Object.keys(activityCategoriesMeta).map(categoryKey => {
+                const meta = activityCategoriesMeta[categoryKey];
+                const label = meta.label[currentLang];
+                const tagline = meta.tagline[currentLang];
+
+                return `
+                    <button data-category-btn data-category="${categoryKey}" class="w-full flex items-center justify-between px-4 py-3 bg-white/90 border border-[var(--club-med-beige)] rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+                        <div class="flex items-center gap-3 text-left">
+                            <span class="text-2xl">${meta.icon}</span>
+                            <div>
+                                <p class="text-sm font-semibold text-[var(--club-med-primary)]">${label}</p>
+                                <p class="text-xs text-gray-500">${tagline}</p>
+                            </div>
+                        </div>
+                        <span class="text-xl text-[var(--club-med-primary)]">➜</span>
+                    </button>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="space-y-4" data-activities-view="categories">
+                    <div class="space-y-1">
+                        <p class="text-xs uppercase tracking-wide text-[var(--club-med-primary)]/60">${currentLang === 'fr' ? 'Hubby recommande' : 'Hubby recommends'}</p>
+                        <h3 class="text-xl font-newsreader font-semibold text-[var(--club-med-primary)]">${introTitle}</h3>
+                        <p class="text-sm text-gray-600">${introSubtitle}</p>
+                        <p class="text-xs text-gray-500">${helperText}</p>
+                    </div>
+                    <div class="grid gap-3 sm:grid-cols-2">${categoriesHtml}</div>
+                </div>
+            `;
+
+            container.querySelectorAll('[data-category-btn]').forEach(btn => {
+                btn.addEventListener('click', () => displayActivitiesList(btn.dataset.category));
+            });
+        }
+
+        function renderActivitiesList(container, categoryKey) {
+            if (!container) {
+                return;
+            }
+
+            const meta = activityCategoriesMeta[categoryKey];
+            if (!meta) {
+                return;
+            }
+
+            const activities = (activitiesData[currentLang] && activitiesData[currentLang][categoryKey]) || [];
+            const cardsHtml = activities.map(activity => `
+                <div class="bg-white/90 border border-[var(--club-med-beige)] rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${activity.icon}</span>
+                        <h4 class="text-lg font-semibold text-[var(--club-med-primary)]">${activity.title}</h4>
+                    </div>
+                    <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
+                        <span>📅 ${activity.day}</span>
+                        <span>🕒 ${activity.time}</span>
+                        <span>📍 ${activity.location}</span>
+                    </div>
+                    <p class="mt-3 text-sm text-gray-700 leading-relaxed">${activity.description}</p>
+                </div>
+            `).join('');
+
+            const listIntro = currentLang === 'fr'
+                ? 'Partez à la découverte de ces propositions sélectionnées pour vous.'
+                : 'Discover these curated highlights selected for you.';
+            const backLabel = currentLang === 'fr' ? 'Retour' : 'Back';
+
+            container.innerHTML = `
+                <div class="space-y-4" data-activities-view="list">
+                    <button data-back-btn class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--club-med-primary)] hover:text-[var(--club-med-brown)] transition-colors">
+                        <span>⬅️</span>
+                        <span>${backLabel}</span>
+                    </button>
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-newsreader font-semibold text-[var(--club-med-primary)]">${meta.icon} ${meta.label[currentLang]}</h3>
+                        <p class="text-sm text-gray-600">${meta.listSubtitle[currentLang]}</p>
+                        <p class="text-xs text-gray-500">${listIntro}</p>
+                    </div>
+                    <div class="space-y-3">${cardsHtml}</div>
+                </div>
+            `;
+
+            const backBtn = container.querySelector('[data-back-btn]');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => displayActivitiesCategories());
+            }
+        }
+
+        function displayActivitiesCategories() {
+            if (!activitiesViewState.container || !document.body.contains(activitiesViewState.container)) {
+                clearActivitiesViewState();
+                return;
+            }
+
+            activitiesViewState.category = null;
+            renderActivitiesCategories(activitiesViewState.container);
+        }
+
+        function displayActivitiesList(categoryKey) {
+            if (!activitiesViewState.container || !document.body.contains(activitiesViewState.container)) {
+                clearActivitiesViewState();
+                return;
+            }
+
+            activitiesViewState.category = categoryKey;
+            renderActivitiesList(activitiesViewState.container, categoryKey);
+        }
+
+        function presentActivitiesExperience() {
+            const messageDiv = addMessage('', false, { skipSignoff: true });
+            const container = messageDiv ? messageDiv.querySelector('.message-content') : null;
+
+            if (!container) {
+                clearActivitiesViewState();
+                return;
+            }
+
+            activitiesViewState.active = true;
+            activitiesViewState.container = container;
+            activitiesViewState.category = null;
+            renderActivitiesCategories(container);
         }
 
         function handleQuickQuestion(questionKey) {
@@ -907,6 +1368,12 @@
             setTimeout(() => {
                 const agentId = getAgentId(selectedPopulation);
                 currentAgent = agentId;
+                if (questionKey === 'activites') {
+                    presentActivitiesExperience();
+                    return;
+                }
+
+                clearActivitiesViewState();
                 const responseContent = getAgentResponse(agentId, currentLang, questionKey);
                 addMessage(responseContent);
             }, 1200);
@@ -925,6 +1392,12 @@
                     currentAgent = agentId;
                     const detectedKey = detectResponseKeyFromMessage(message);
                     const responseKey = detectedKey || 'default';
+                    if (responseKey === 'activites') {
+                        presentActivitiesExperience();
+                        return;
+                    }
+
+                    clearActivitiesViewState();
                     const response = getAgentResponse(agentId, currentLang, responseKey);
                     addMessage(response);
                 }, 1500);
