@@ -615,6 +615,39 @@
             return typeof content === 'string' ? content.trim() : fallback.fr;
         }
 
+        const vivaEngageResponses = {
+            fr: `
+💭 <b>Explorez les communautés Viva Engage !</b><br><br>
+🌐 Ces espaces sont faits pour partager, apprendre et échanger avec d’autres participants des Academy Days et de la communauté Club Med.<br><br>
+🤖 <b>AI Learning Club</b><br>
+Explorez les usages de l’intelligence artificielle dans la formation.<br>
+🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" class="text-blue-600 underline">Accéder à la communauté</a><br><br>
+🌱 <b>Forever Young</b><br>
+Découvrez les initiatives autour du projet “Forever Young” et l’avenir du learning au Club Med.<br>
+🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" class="text-blue-600 underline">Rejoindre la communauté</a><br><br>
+🗞️ <b>Club Med News & Events</b><br>
+Restez informé des actualités et événements internes du Club Med.<br>
+🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" class="text-blue-600 underline">Consulter les news</a><br><br>
+✨ Rejoignez, commentez, partagez vos inspirations — la communauté vous attend !
+            `,
+            en: `
+💭 <b>Discover Viva Engage communities!</b><br><br>
+🌐 These spaces are designed to share, learn, and connect with other Academy Days participants and the Club Med community.<br><br>
+🤖 <b>AI Learning Club</b><br>
+Explore how AI can transform learning experiences.<br>
+🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" class="text-blue-600 underline">Visit the community</a><br><br>
+🌱 <b>Forever Young</b><br>
+Dive into initiatives shaping the future of learning at Club Med.<br>
+🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" class="text-blue-600 underline">Join the community</a><br><br>
+🗞️ <b>Club Med News & Events</b><br>
+Stay up to date with internal Club Med news and upcoming events.<br>
+🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" class="text-blue-600 underline">Read the updates</a><br><br>
+✨ Join, comment, and share your inspirations — the community awaits you!
+            `
+        };
+
+        const getVivaEngageResponse = (lang) => (vivaEngageResponses[lang] || vivaEngageResponses.fr).trim();
+
         const baseAgentMessages = {
             fr: {
                 programme: "📘 Consultez le programme complet des Academy Days à Marrakech en cliquant ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir le programme</a>.",
@@ -622,62 +655,7 @@
                 infos: "📍 Les informations pratiques seront mises à jour quotidiennement dans Hubby.",
                 live: () => getClubMedLiveContent('fr'),
                 activites: "⚽ Des activités collectives sont prévues chaque jour à partir de 17h.",
-                viva: `
-                    <div class="space-y-6" style="animation: fadeIn 0.6s ease-in-out;">
-                        <div class="bg-white/80 backdrop-blur border border-amber-100 shadow-md rounded-3xl p-6 space-y-6">
-                            <div class="space-y-4">
-                                <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">🇫🇷 Version française</p>
-                                <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-5 space-y-4 text-sm md:text-base leading-relaxed text-slate-800">
-                                    <p class="text-lg font-semibold text-slate-900 flex items-start gap-2"><span class="text-xl">💭</span><span>Explorez les communautés Viva Engage&nbsp;!</span></p>
-                                    <p>🌐 Ces espaces sont faits pour partager, apprendre et échanger avec d’autres participants des Academy Days et de la communauté Club Med.</p>
-                                    <div class="space-y-4">
-                                        <div class="bg-white border border-amber-100 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🤖</span><span>AI Learning Club</span></p>
-                                            <p class="text-slate-700 mt-1">Explorez les usages de l’intelligence artificielle dans la formation.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Accéder à la communauté</a>
-                                        </div>
-                                        <div class="bg-white border border-amber-100 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🌱</span><span>Forever Young</span></p>
-                                            <p class="text-slate-700 mt-1">Découvrez les initiatives autour du projet “Forever Young” et l’avenir du learning au Club Med.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Rejoindre la communauté</a>
-                                        </div>
-                                        <div class="bg-white border border-amber-100 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🗞️</span><span>Club Med News &amp; Events</span></p>
-                                            <p class="text-slate-700 mt-1">Restez informé des actualités et événements internes du Club Med.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Consulter les news</a>
-                                        </div>
-                                    </div>
-                                    <p class="text-slate-900 font-medium">✨ Rejoignez, commentez, partagez vos inspirations — la communauté vous attend !</p>
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">🇬🇧 English version</p>
-                                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4 text-sm md:text-base leading-relaxed text-slate-800">
-                                    <p class="text-lg font-semibold text-slate-900 flex items-start gap-2"><span class="text-xl">💭</span><span>Discover Viva Engage communities!</span></p>
-                                    <p>🌐 These spaces are designed to share, learn, and connect with other Academy Days participants and the Club Med community.</p>
-                                    <div class="space-y-4">
-                                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🤖</span><span>AI Learning Club</span></p>
-                                            <p class="text-slate-700 mt-1">Explore how AI can transform learning experiences.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Visit the community</a>
-                                        </div>
-                                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🌱</span><span>Forever Young</span></p>
-                                            <p class="text-slate-700 mt-1">Dive into initiatives shaping the future of learning at Club Med.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Join the community</a>
-                                        </div>
-                                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🗞️</span><span>Club Med News &amp; Events</span></p>
-                                            <p class="text-slate-700 mt-1">Stay up to date with internal Club Med news and upcoming events.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Read the updates</a>
-                                        </div>
-                                    </div>
-                                    <p class="text-slate-900 font-medium">✨ Join, comment, and share your inspirations — the community awaits you!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
+                viva: getVivaEngageResponse,
                 default: "Je reviens vers vous dès que possible."
             },
             en: {
@@ -686,62 +664,7 @@
                 infos: "📍 Practical information will be updated daily within Hubby.",
                 live: () => getClubMedLiveContent('en'),
                 activites: "⚽ Team activities are scheduled every afternoon from 5pm.",
-                viva: `
-                    <div class="space-y-6" style="animation: fadeIn 0.6s ease-in-out;">
-                        <div class="bg-white/80 backdrop-blur border border-amber-100 shadow-md rounded-3xl p-6 space-y-6">
-                            <div class="space-y-4">
-                                <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">🇫🇷 Version française</p>
-                                <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-5 space-y-4 text-sm md:text-base leading-relaxed text-slate-800">
-                                    <p class="text-lg font-semibold text-slate-900 flex items-start gap-2"><span class="text-xl">💭</span><span>Explorez les communautés Viva Engage&nbsp;!</span></p>
-                                    <p>🌐 Ces espaces sont faits pour partager, apprendre et échanger avec d’autres participants des Academy Days et de la communauté Club Med.</p>
-                                    <div class="space-y-4">
-                                        <div class="bg-white border border-amber-100 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🤖</span><span>AI Learning Club</span></p>
-                                            <p class="text-slate-700 mt-1">Explorez les usages de l’intelligence artificielle dans la formation.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Accéder à la communauté</a>
-                                        </div>
-                                        <div class="bg-white border border-amber-100 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🌱</span><span>Forever Young</span></p>
-                                            <p class="text-slate-700 mt-1">Découvrez les initiatives autour du projet “Forever Young” et l’avenir du learning au Club Med.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Rejoindre la communauté</a>
-                                        </div>
-                                        <div class="bg-white border border-amber-100 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🗞️</span><span>Club Med News &amp; Events</span></p>
-                                            <p class="text-slate-700 mt-1">Restez informé des actualités et événements internes du Club Med.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Consulter les news</a>
-                                        </div>
-                                    </div>
-                                    <p class="text-slate-900 font-medium">✨ Rejoignez, commentez, partagez vos inspirations — la communauté vous attend !</p>
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">🇬🇧 English version</p>
-                                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4 text-sm md:text-base leading-relaxed text-slate-800">
-                                    <p class="text-lg font-semibold text-slate-900 flex items-start gap-2"><span class="text-xl">💭</span><span>Discover Viva Engage communities!</span></p>
-                                    <p>🌐 These spaces are designed to share, learn, and connect with other Academy Days participants and the Club Med community.</p>
-                                    <div class="space-y-4">
-                                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🤖</span><span>AI Learning Club</span></p>
-                                            <p class="text-slate-700 mt-1">Explore how AI can transform learning experiences.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Visit the community</a>
-                                        </div>
-                                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🌱</span><span>Forever Young</span></p>
-                                            <p class="text-slate-700 mt-1">Dive into initiatives shaping the future of learning at Club Med.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Join the community</a>
-                                        </div>
-                                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-                                            <p class="font-semibold text-slate-900 flex items-start gap-2"><span class="text-lg">🗞️</span><span>Club Med News &amp; Events</span></p>
-                                            <p class="text-slate-700 mt-1">Stay up to date with internal Club Med news and upcoming events.</p>
-                                            <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold mt-2 underline">🔗 Read the updates</a>
-                                        </div>
-                                    </div>
-                                    <p class="text-slate-900 font-medium">✨ Join, comment, and share your inspirations — the community awaits you!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
+                viva: getVivaEngageResponse,
                 default: "I'll get back to you shortly."
             }
         };
