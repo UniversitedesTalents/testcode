@@ -166,10 +166,20 @@
         
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        
+
         @keyframes typing {
             0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
             40% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 640px) {
+            .header-title {
+                font-size: 1.4rem;
+            }
+
+            .event-subtitle {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -180,37 +190,36 @@
         <!-- Header -->
         <header class="text-white p-6 shadow-2xl" style="background-color: var(--club-med-primary);">
             <div class="container mx-auto max-w-4xl">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
+                <div class="relative sm:flex sm:items-center sm:justify-between sm:gap-6">
+                    <div class="absolute top-2 right-2 flex items-center space-x-1 sm:static sm:justify-end mt-1 mr-2 sm:mt-0 sm:mr-0 max-w-[140px]">
+                        <div class="bg-white rounded-2xl shadow-lg p-1 flex" style="border: 2px solid var(--club-med-beige);">
+                            <button id="langFr" class="mobile-button mobile-tap px-3 py-2 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 text-white shadow-md flex items-center justify-center min-w-[48px] sm:min-w-[60px]" style="background: var(--club-med-primary);">
+                                <span class="text-[22px] sm:text-[28px]">🇫🇷</span>
+                            </button>
+                            <button id="langEn" class="mobile-button mobile-tap px-3 py-2 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center min-w-[48px] sm:min-w-[60px]" style="color: var(--club-med-primary);">
+                                <span class="text-[22px] sm:text-[28px]">🇬🇧</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center text-center gap-1 pt-12 pb-4 sm:py-6 sm:pt-0 sm:items-start sm:text-left sm:gap-2">
                         <div class="relative">
-                            <h1 class="text-4xl md:text-5xl font-black font-newsreader tracking-tight relative">
+                            <h1 class="header-title text-4xl sm:text-5xl font-black font-newsreader tracking-tight leading-tight relative">
                                 <span class="relative z-10 text-white" style="text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(253,190,0,0.3), 0 2px 4px rgba(0,0,0,0.3);">
                                     Hubby
                                 </span>
-                                <div class="absolute top-0 left-0 text-4xl md:text-5xl font-black font-newsreader tracking-tight text-white opacity-20 transform translate-x-1 translate-y-1 blur-sm">
+                                <div class="absolute top-0 left-0 text-4xl sm:text-5xl font-black font-newsreader tracking-tight text-white opacity-20 transform translate-x-1 translate-y-1 blur-sm">
                                     Hubby
                                 </div>
                             </h1>
-                            <div class="mt-1 overflow-hidden">
-                                <p class="text-sm md:text-base text-yellow-200 font-medium animate-pulse">
+                            <div class="mt-2 space-y-1">
+                                <p class="event-subtitle text-base md:text-lg text-yellow-200 font-medium animate-pulse">
                                     Assistant Academy Days Club Med 2025
                                 </p>
-                                <p class="text-xs md:text-sm text-white opacity-75 mt-1">
+                                <p class="text-xs sm:text-sm text-white/80 flex items-center justify-center sm:justify-start gap-1">
                                     <span class="inline-block animate-bounce" style="animation-delay: 0.1s;">📍</span>
-                                    <span class="ml-1" data-fr="18-20 Novembre • Marrakech" data-en="November 18-20 • Marrakech">18-20 Novembre • Marrakech</span>
+                                    <span data-fr="18-20 Novembre • Marrakech" data-en="November 18-20 • Marrakech">18-20 Novembre • Marrakech</span>
                                 </p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end space-y-2">
-                        <!-- Language buttons -->
-                        <div class="bg-white rounded-2xl shadow-lg p-1 flex" style="border: 2px solid var(--club-med-beige);">
-                            <button id="langFr" class="mobile-button mobile-tap px-4 py-3 rounded-xl text-sm font-bold transition-all duration-200 text-white shadow-md flex items-center justify-center min-w-[60px]" style="background: var(--club-med-primary);">
-                                <span class="text-2xl">🇫🇷</span>
-                            </button>
-                            <button id="langEn" class="mobile-button mobile-tap px-4 py-3 rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center min-w-[60px]" style="color: var(--club-med-primary);">
-                                <span class="text-2xl">🇬🇧</span>
-                            </button>
                         </div>
                     </div>
                 </div>
