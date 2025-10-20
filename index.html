@@ -991,6 +991,27 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             };
         }
 
+        function resolveLocalizedContent(rawContent, lang) {
+            if (rawContent == null) {
+                return '';
+            }
+
+            if (typeof rawContent === 'function') {
+                return resolveLocalizedContent(rawContent(lang), lang);
+            }
+
+            if (typeof rawContent === 'object' && !Array.isArray(rawContent)) {
+                const localizedValue = rawContent[lang] ?? rawContent.fr ?? rawContent.en;
+                return resolveLocalizedContent(localizedValue, lang);
+            }
+
+            if (typeof rawContent === 'string') {
+                return rawContent;
+            }
+
+            return String(rawContent);
+        }
+
         const responses = {
             agent1: createAgentMessages(),
             agent2: createAgentMessages(),
@@ -1001,12 +1022,13 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             const agentBucket = responses[agentId] || responses.agent1;
             const localizedResponses = agentBucket[lang] || agentBucket.fr || responses.agent1.fr;
             const response = localizedResponses[key];
+            const resolved = resolveLocalizedContent(response, lang);
 
-            if (typeof response === 'function') {
-                return response(lang);
+            if (resolved) {
+                return resolved;
             }
 
-            return response || localizedResponses.default || '';
+            return resolveLocalizedContent(localizedResponses.default, lang) || '';
         }
 
         const keywordMap = [
@@ -1336,7 +1358,9 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                 : 'border: 1px solid var(--club-med-beige);';
             
             const { skipSignoff = false } = options;
-            const formattedContent = (isUser || skipSignoff) ? content : appendAssistantSignoff(content);
+            const rawContent = typeof content === 'string' ? content : resolveLocalizedContent(content, currentLang);
+            const normalizedContent = typeof rawContent === 'string' ? rawContent : '';
+            const formattedContent = (isUser || skipSignoff) ? normalizedContent : appendAssistantSignoff(normalizedContent);
 
             messageDiv.innerHTML = `
                 <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style="${avatarStyle}">
