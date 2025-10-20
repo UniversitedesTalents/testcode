@@ -943,7 +943,7 @@
         }
 
         function appendAssistantSignoff(content) {
-            const closingWord = currentLang === 'fr' ? 'merci' : 'thank you';
+            const closingWord = currentLang === 'fr' ? 'à bientôt' : 'thank you';
             const punctuationRegex = /[.!?]$/;
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = content;
@@ -1071,8 +1071,8 @@
                 showTypingIndicator();
                 
                 setTimeout(() => {
-                    const response = currentLang === 'fr' ? 
-                        `<p>Merci pour votre question ! Je suis là pour vous aider avec toutes les informations sur les Academy Days 2025. Utilisez les boutons rapides pour des réponses détaillées.</p>` :
+                    const response = currentLang === 'fr' ?
+                        `<p>Ravi de votre question ! Je suis là pour vous aider avec toutes les informations sur les Academy Days 2025. Utilisez les boutons rapides pour des réponses détaillées.</p>` :
                         `<p>Thank you for your question! I'm here to help you with all Academy Days 2025 information. Use the quick buttons for detailed answers.</p>`;
                     addMessage(response);
                 }, 1500);
