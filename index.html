@@ -80,6 +80,16 @@
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
+
+        .chat-bubble a {
+            color: #1e2848;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .chat-bubble a:hover {
+            text-decoration: underline;
+        }
         
         @media (min-width: 768px) {
             .chat-bubble {
@@ -398,22 +408,22 @@
                 <div class="mb-4">
                     <p class="text-sm font-medium mb-3" style="color: var(--club-med-primary);" data-fr="Questions rapides :" data-en="Quick questions:">Questions rapides :</p>
                     <div class="quick-questions-grid">
-                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-primary);" data-question="programme-book">
+                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-primary);" data-question="programme">
                             <span data-fr="📖 Programme complet" data-en="📖 Full Program Book">📖 Programme complet</span>
                         </button>
-                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-brown);" data-question="mon-groupe">
+                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-brown);" data-question="groupe">
                             <span data-fr="👥 Mon groupe" data-en="👥 My group">👥 Mon groupe</span>
                         </button>
-                        <button class="quick-question-btn mobile-tap" style="background: var(--club-med-beige); color: var(--club-med-primary);" data-question="infos-pratiques">
+                        <button class="quick-question-btn mobile-tap" style="background: var(--club-med-beige); color: var(--club-med-primary);" data-question="infos">
                             <span data-fr="ℹ️ Infos pratiques" data-en="ℹ️ Practical info">ℹ️ Infos pratiques</span>
                         </button>
-                        <button class="quick-question-btn mobile-tap" style="background: var(--club-med-yellow); color: var(--club-med-primary);" data-question="club-med-live">
+                        <button class="quick-question-btn mobile-tap" style="background: var(--club-med-yellow); color: var(--club-med-primary);" data-question="live">
                             <span data-fr="🎬 Club Med Live" data-en="🎬 Club Med Live">🎬 Club Med Live</span>
                         </button>
                         <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-brown);" data-question="activites">
                             <span data-fr="🏃‍♂️ Activités" data-en="🏃‍♂️ Activities">🏃‍♂️ Activités</span>
                         </button>
-                        <button class="quick-question-btn mobile-tap text-white" style="background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 50%, var(--club-med-yellow) 100%);" data-question="viva-engage">
+                        <button class="quick-question-btn mobile-tap text-white" style="background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 50%, var(--club-med-yellow) 100%);" data-question="viva">
                             <span data-fr="💬 Viva Engage" data-en="💬 Viva Engage">💬 Viva Engage</span>
                         </button>
                     </div>
@@ -508,209 +518,71 @@
             }
         };
 
-        const baseAgentResponses = {
+        const baseAgentMessages = {
             fr: {
-                "programme-book": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">📖 Programme Academy Days 2025</h3>
-                    <p class="mb-3">Voici le programme complet des Academy Days à Marrakech :</p>
-                    <div class="bg-white rounded-lg p-4 shadow-md" style="border-left: 4px solid var(--club-med-primary);">
-                        <p class="font-bold mb-2">📅 Lundi 18 Novembre</p>
-                        <p class="text-sm mb-2">• 09:00 - Accueil et petit-déjeuner</p>
-                        <p class="text-sm mb-2">• 10:00 - Cérémonie d'ouverture</p>
-                        <p class="text-sm">• 14:00 - Ateliers par population</p>
-                    </div>
-                `,
-                "mon-groupe": ({ population, academyData }) => {
-                    if (!population) {
-                        return `<p>Choisissez une population pour découvrir votre accompagnement personnalisé.</p>`;
-                    }
-                    const popData = academyData.populations[population] || {};
-                    const fullName = popData.fullName?.fr || population;
-                    const color = popData.color || 'var(--club-med-primary)';
-
-                    return `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">👥 Votre groupe ${population}</h3>
-                        <p class="mb-3">Vous faites partie de la population <strong>${population}</strong> - ${fullName}</p>
-                        <div class="bg-white rounded-lg p-4 shadow-md" style="border-left: 4px solid ${color};">
-                            <p class="font-bold mb-2">📍 Informations de groupe</p>
-                            <p class="text-sm">Vos ateliers et activités seront adaptés à votre rôle ${population}.</p>
-                        </div>
-                    `;
-                },
-                "infos-pratiques": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">ℹ️ Informations pratiques</h3>
-                    <div class="space-y-3">
-                        <div class="bg-white rounded-lg p-3 shadow-md" style="border-left: 4px solid var(--club-med-yellow);">
-                            <p class="font-bold mb-1">🍽️ Horaires des repas</p>
-                            <p class="text-sm">Petit-déjeuner: 07:30-09:00 | Déjeuner: 12:45-14:00 | Dîner: 20:30-22:00</p>
-                        </div>
-                        <div class="bg-white rounded-lg p-3 shadow-md" style="border-left: 4px solid var(--club-med-primary);">
-                            <p class="font-bold mb-1">📶 Wi-Fi</p>
-                            <p class="text-sm">Accès Wi-Fi gratuit dans tout le resort</p>
-                        </div>
-                    </div>
-                `,
-                "club-med-live": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">🎬 Club Med Live</h3>
-                    <p class="mb-3">Retrouvez les moments forts de chaque journée sur Club Med Live avec des résumés vidéo et des interviews exclusives.</p>
-                    <div class="bg-white rounded-lg p-4 shadow-md" style="border-left: 4px solid var(--club-med-brown);">
-                        <p class="font-bold mb-2">▶️ Diffusion en direct</p>
-                        <p class="text-sm">Connectez-vous chaque soir à 21h pour revivre les meilleurs moments de la journée.</p>
-                    </div>
-                `,
-                "viva-engage": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">💬 Viva Engage</h3>
-                    <p class="mb-3">Partagez vos impressions et échangez avec les autres participants directement sur Viva Engage.</p>
-                    <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                        <li>Publiez vos photos avec #AcademyDays2025</li>
-                        <li>Posez vos questions à l'équipe organisatrice</li>
-                        <li>Retrouvez les documents clés partagés pendant les sessions</li>
-                    </ul>
-                `,
-                "activites": ({ population }) => {
-                    const focus = population ? ` ${population}` : '';
-                    return `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">🏃‍♂️ Activités${focus}</h3>
-                        <p class="mb-3">Profitez d'une sélection d'activités sportives et culturelles pour renforcer l'esprit d'équipe.</p>
-                        <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                            <li>Sessions de team building en plein air</li>
-                            <li>Découverte des saveurs marocaines</li>
-                            <li>Moments de détente au bord de la piscine</li>
-                        </ul>
-                    `;
-                }
+                programme: "📘 Vous pouvez consulter le programme complet des Academy Days en cliquant ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' rel='noopener noreferrer'>Voir le programme complet</a>.",
+                groupe: "👥 Retrouvez votre groupe et les membres associés sur cette page : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' rel='noopener noreferrer'>Découvrir mon groupe</a>.",
+                infos: "📍 Les informations pratiques seront mises à jour quotidiennement dans Hubby.",
+                live: "🎤 Le Club Med Live aura lieu le lundi soir dans la salle principale Atlas. Ambiance garantie !",
+                activites: "⚽ Des activités collectives sont prévues chaque jour à partir de 17h.",
+                viva: "💬 Rejoignez la conversation sur Viva Engage via l’onglet Communauté de votre intranet.",
+                default: "Merci pour votre question ! Je vous tiens informé dès que possible."
             },
             en: {
-                "programme-book": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">📖 Academy Days 2025 Program</h3>
-                    <p class="mb-3">Here's the complete Academy Days program in Marrakech:</p>
-                    <div class="bg-white rounded-lg p-4 shadow-md" style="border-left: 4px solid var(--club-med-primary);">
-                        <p class="font-bold mb-2">📅 Monday, November 18</p>
-                        <p class="text-sm mb-2">• 09:00 - Welcome and breakfast</p>
-                        <p class="text-sm mb-2">• 10:00 - Opening ceremony</p>
-                        <p class="text-sm">• 14:00 - Population workshops</p>
-                    </div>
-                `,
-                "mon-groupe": ({ population, academyData }) => {
-                    if (!population) {
-                        return `<p>Select a population to discover your personalized support.</p>`;
-                    }
-                    const popData = academyData.populations[population] || {};
-                    const fullName = popData.fullName?.en || population;
-                    const color = popData.color || 'var(--club-med-primary)';
-
-                    return `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">👥 Your ${population} Group</h3>
-                        <p class="mb-3">You are part of the <strong>${population}</strong> population - ${fullName}</p>
-                        <div class="bg-white rounded-lg p-4 shadow-md" style="border-left: 4px solid ${color};">
-                            <p class="font-bold mb-2">📍 Group Information</p>
-                            <p class="text-sm">Your workshops and activities are tailored to your ${population} role.</p>
-                        </div>
-                    `;
-                },
-                "infos-pratiques": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">ℹ️ Practical Information</h3>
-                    <div class="space-y-3">
-                        <div class="bg-white rounded-lg p-3 shadow-md" style="border-left: 4px solid var(--club-med-yellow);">
-                            <p class="font-bold mb-1">🍽️ Meal Times</p>
-                            <p class="text-sm">Breakfast: 07:30-09:00 | Lunch: 12:45-14:00 | Dinner: 20:30-22:00</p>
-                        </div>
-                        <div class="bg-white rounded-lg p-3 shadow-md" style="border-left: 4px solid var(--club-med-primary);">
-                            <p class="font-bold mb-1">📶 Wi-Fi</p>
-                            <p class="text-sm">Free Wi-Fi access throughout the resort</p>
-                        </div>
-                    </div>
-                `,
-                "club-med-live": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">🎬 Club Med Live</h3>
-                    <p class="mb-3">Catch the highlights of each day on Club Med Live with video recaps and exclusive interviews.</p>
-                    <div class="bg-white rounded-lg p-4 shadow-md" style="border-left: 4px solid var(--club-med-brown);">
-                        <p class="font-bold mb-2">▶️ Live broadcast</p>
-                        <p class="text-sm">Tune in every evening at 9 PM to relive the day's best moments.</p>
-                    </div>
-                `,
-                "viva-engage": `
-                    <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">💬 Viva Engage</h3>
-                    <p class="mb-3">Share your feedback and connect with other attendees directly on Viva Engage.</p>
-                    <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                        <li>Post your photos with #AcademyDays2025</li>
-                        <li>Ask the organizing team your questions</li>
-                        <li>Find key documents shared during the sessions</li>
-                    </ul>
-                `,
-                "activites": ({ population }) => {
-                    const focus = population ? ` ${population}` : '';
-                    return `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">🏃‍♂️ Activities${focus}</h3>
-                        <p class="mb-3">Enjoy a selection of sports and cultural activities designed to strengthen team spirit.</p>
-                        <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                            <li>Outdoor team-building sessions</li>
-                            <li>Discover Moroccan flavors</li>
-                            <li>Relaxing moments by the pool</li>
-                        </ul>
-                    `;
-                }
+                programme: "📘 You can check the full Academy Days program here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' rel='noopener noreferrer'>View full program</a>.",
+                groupe: "👥 Find your group and members on this page: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' rel='noopener noreferrer'>Discover my group</a>.",
+                infos: "📍 Practical information will be updated daily within Hubby.",
+                live: "🎤 Club Med Live will take place on Monday evening in the Atlas main room.",
+                activites: "⚽ Team activities are scheduled every afternoon from 5pm.",
+                viva: "💬 Join the conversation on Viva Engage through your intranet community tab.",
+                default: "Thank you for your question ! I’ll keep you updated soon."
             }
         };
 
-        function createAgentResponses(overrides = {}) {
+        function createAgentMessages() {
             return {
-                fr: { ...baseAgentResponses.fr, ...(overrides.fr || {}) },
-                en: { ...baseAgentResponses.en, ...(overrides.en || {}) }
+                fr: { ...baseAgentMessages.fr },
+                en: { ...baseAgentMessages.en }
             };
         }
 
         const responses = {
-            agent1: createAgentResponses(),
-            agent2: createAgentResponses({
-                fr: {
-                    "activites": () => `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">📊 Activités Marketing</h3>
-                        <p class="mb-3">Des ateliers immersifs pour renforcer la stratégie de marque et l'alignement des campagnes.</p>
-                        <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                            <li>Analyse des tendances 2025</li>
-                            <li>Sessions de co-création de campagnes</li>
-                            <li>Moments de networking avec l'équipe digitale</li>
-                        </ul>
-                    `
-                },
-                en: {
-                    "activites": () => `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">📊 Marketing Activities</h3>
-                        <p class="mb-3">Immersive workshops to reinforce brand strategy and campaign alignment.</p>
-                        <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                            <li>2025 trend analysis</li>
-                            <li>Co-creating upcoming campaigns</li>
-                            <li>Networking moments with the digital team</li>
-                        </ul>
-                    `
-                }
-            }),
-            agent3: createAgentResponses({
-                fr: {
-                    "activites": () => `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">🚀 Activités Marketing Plus</h3>
-                        <p class="mb-3">Focus sur l'innovation et les projets premium pour accélérer la croissance.</p>
-                        <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                            <li>Laboratoires d'innovation produit</li>
-                            <li>Stratégies de personnalisation avancées</li>
-                            <li>Sessions inspirantes avec des experts externes</li>
-                        </ul>
-                    `
-                },
-                en: {
-                    "activites": () => `
-                        <h3 class="font-bold text-lg mb-3" style="color: var(--club-med-primary);">🚀 Marketing Plus Activities</h3>
-                        <p class="mb-3">A focus on innovation and premium projects to accelerate growth.</p>
-                        <ul class="list-disc list-inside text-sm space-y-1" style="color: var(--club-med-primary);">
-                            <li>Product innovation labs</li>
-                            <li>Advanced personalization strategies</li>
-                            <li>Inspiring sessions with external experts</li>
-                        </ul>
-                    `
-                }
-            })
+            agent1: createAgentMessages(),
+            agent2: createAgentMessages(),
+            agent3: createAgentMessages()
         };
+
+        function getAgentResponse(agentId, lang, key) {
+            const agentBucket = responses[agentId] || responses.agent1;
+            const localizedResponses = agentBucket[lang] || agentBucket.fr || responses.agent1.fr;
+            return localizedResponses[key] || localizedResponses.default || '';
+        }
+
+        const keywordMap = [
+            { key: 'programme', patterns: ['programme', 'program'] },
+            { key: 'groupe', patterns: ['groupe', 'group', 'team'] },
+            { key: 'infos', patterns: ['info', 'infos', 'information', 'pratique', 'practical'] },
+            { key: 'live', patterns: ['live'] },
+            { key: 'activites', patterns: ['activite', 'activité', 'activites', 'activities', 'activity', 'sport'] },
+            { key: 'viva', patterns: ['viva', 'engage'] }
+        ];
+
+        function normalizeText(text) {
+            return text
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+        }
+
+        function detectResponseKeyFromMessage(message) {
+            const normalizedMessage = normalizeText(message);
+            for (const entry of keywordMap) {
+                if (entry.patterns.some(pattern => normalizedMessage.includes(pattern))) {
+                    return entry.key;
+                }
+            }
+            return null;
+        }
 
         function getAgentId(population) {
             if (!population) {
@@ -1018,46 +890,24 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        function handleQuickQuestion(question) {
+        function handleQuickQuestion(questionKey) {
             const questionTexts = {
-                "programme-book": { fr: "📖 Programme complet", en: "📖 Full Program Book" },
-                "mon-groupe": { fr: "👥 Mon groupe", en: "👥 My group" },
-                "infos-pratiques": { fr: "ℹ️ Infos pratiques", en: "ℹ️ Practical info" },
-                "club-med-live": { fr: "🎬 Club Med Live", en: "🎬 Club Med Live" },
-                "viva-engage": { fr: "💬 Viva Engage", en: "💬 Viva Engage" },
-                "activites": { fr: "🏃‍♂️ Activités", en: "🏃‍♂️ Activities" }
+                programme: { fr: "📖 Programme complet", en: "📖 Full Program Book" },
+                groupe: { fr: "👥 Mon groupe", en: "👥 My group" },
+                infos: { fr: "ℹ️ Infos pratiques", en: "ℹ️ Practical info" },
+                live: { fr: "🎬 Club Med Live", en: "🎬 Club Med Live" },
+                viva: { fr: "💬 Viva Engage", en: "💬 Viva Engage" },
+                activites: { fr: "🏃‍♂️ Activités", en: "🏃‍♂️ Activities" }
             };
 
-            const userPrompt = questionTexts[question]?.[currentLang] || question;
+            const userPrompt = questionTexts[questionKey]?.[currentLang] || questionKey;
             addMessage(userPrompt, true);
             showTypingIndicator();
 
             setTimeout(() => {
-                const agentId = currentAgent || 'agent1';
-                const agentBucket = responses[agentId] || responses.agent1;
-                const localizedResponses = agentBucket[currentLang] || {};
-                const agentResponse = localizedResponses[question];
-
-                let responseContent = '';
-
-                if (typeof agentResponse === 'function') {
-                    responseContent = agentResponse({
-                        population: selectedPopulation,
-                        academyData,
-                        lang: currentLang,
-                        agentId,
-                        dateFilter: selectedDateFilter
-                    });
-                } else if (typeof agentResponse === 'string') {
-                    responseContent = agentResponse;
-                }
-
-                if (!responseContent) {
-                    responseContent = currentLang === 'fr'
-                        ? `<p>Je n'ai pas encore d'informations pour cette question. Essayez une autre ou contactez l'équipe.</p>`
-                        : `<p>I don't have information for that yet. Try another question or contact the team.</p>`;
-                }
-
+                const agentId = getAgentId(selectedPopulation);
+                currentAgent = agentId;
+                const responseContent = getAgentResponse(agentId, currentLang, questionKey);
                 addMessage(responseContent);
             }, 1200);
         }
@@ -1069,11 +919,13 @@
                 addMessage(message, true);
                 messageInput.value = '';
                 showTypingIndicator();
-                
+
                 setTimeout(() => {
-                    const response = currentLang === 'fr' ? 
-                        `<p>Merci pour votre question ! Je suis là pour vous aider avec toutes les informations sur les Academy Days 2025. Utilisez les boutons rapides pour des réponses détaillées.</p>` :
-                        `<p>Thank you for your question! I'm here to help you with all Academy Days 2025 information. Use the quick buttons for detailed answers.</p>`;
+                    const agentId = getAgentId(selectedPopulation);
+                    currentAgent = agentId;
+                    const detectedKey = detectResponseKeyFromMessage(message);
+                    const responseKey = detectedKey || 'default';
+                    const response = getAgentResponse(agentId, currentLang, responseKey);
                     addMessage(response);
                 }, 1500);
             }
