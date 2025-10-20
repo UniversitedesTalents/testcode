@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hubby v2 - Assistant Academy Days Club Med 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
@@ -191,13 +192,13 @@
         <header class="text-white p-6 shadow-2xl" style="background-color: var(--club-med-primary);">
             <div class="container mx-auto max-w-4xl">
                 <div class="relative sm:flex sm:items-center sm:justify-between sm:gap-6">
-                    <div class="absolute top-2 right-2 flex items-center space-x-1 sm:static sm:justify-end mt-1 mr-2 sm:mt-0 sm:mr-0 max-w-[140px]">
-                        <div class="bg-white rounded-2xl shadow-lg p-1 flex" style="border: 2px solid var(--club-med-beige);">
-                            <button id="langFr" class="mobile-button mobile-tap px-3 py-2 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 text-white shadow-md flex items-center justify-center min-w-[48px] sm:min-w-[60px]" style="background: var(--club-med-primary);">
-                                <span class="text-[22px] sm:text-[28px]">🇫🇷</span>
+                    <div class="language-switcher-wrapper sm:static sm:justify-end mt-1 mr-2 sm:mt-0 sm:mr-0">
+                        <div class="language-switcher">
+                            <button id="langFr" class="language-button mobile-button mobile-tap language-button--active">
+                                <span class="language-flag">🇫🇷</span>
                             </button>
-                            <button id="langEn" class="mobile-button mobile-tap px-3 py-2 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center min-w-[48px] sm:min-w-[60px]" style="color: var(--club-med-primary);">
-                                <span class="text-[22px] sm:text-[28px]">🇬🇧</span>
+                            <button id="langEn" class="language-button mobile-button mobile-tap">
+                                <span class="language-flag">🇬🇧</span>
                             </button>
                         </div>
                     </div>
@@ -1117,26 +1118,20 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             const frBtnChat = document.getElementById('langFrChat');
             const enBtnChat = document.getElementById('langEnChat');
             
+            frBtn.classList.toggle('language-button--active', lang === 'fr');
+            enBtn.classList.toggle('language-button--active', lang === 'en');
+
+            frBtn.style.background = '';
+            frBtn.style.color = '';
+            enBtn.style.background = '';
+            enBtn.style.color = '';
+
             if (lang === 'fr') {
-                // Population screen buttons
-                frBtn.style.background = 'var(--club-med-primary)';
-                frBtn.style.color = 'white';
-                enBtn.style.background = 'transparent';
-                enBtn.style.color = 'var(--club-med-primary)';
-                
-                // Chat screen buttons
                 frBtnChat.style.background = 'var(--club-med-primary)';
                 frBtnChat.style.color = 'white';
                 enBtnChat.style.background = 'transparent';
                 enBtnChat.style.color = 'var(--club-med-primary)';
             } else {
-                // Population screen buttons
-                enBtn.style.background = 'var(--club-med-primary)';
-                enBtn.style.color = 'white';
-                frBtn.style.background = 'transparent';
-                frBtn.style.color = 'var(--club-med-primary)';
-                
-                // Chat screen buttons
                 enBtnChat.style.background = 'var(--club-med-primary)';
                 enBtnChat.style.color = 'white';
                 frBtnChat.style.background = 'transparent';
@@ -1642,6 +1637,8 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                     sendMessage();
                 }
             });
+
+            updateLanguage(currentLang);
 
             console.log('Hubby v2 initialized successfully!');
         });
