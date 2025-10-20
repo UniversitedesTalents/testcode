@@ -462,6 +462,7 @@
         let selectedPopulation = null;
         let selectedDateFilter = 'all';
         let currentAgent = null;
+        let currentDay = null;
 
         // Academy Days 2025 Data
         const academyData = {
@@ -518,12 +519,108 @@
             }
         };
 
+        function getClubMedLiveContent(lang) {
+            const fallback = {
+                fr: "🎬 Sélectionnez un jour pour découvrir le programme du Club Med Live.",
+                en: "🎬 Select a day to see the Club Med Live lineup."
+            };
+
+            if (!currentDay || currentDay === 'all') {
+                return fallback[lang] || fallback.fr;
+            }
+
+            const lineups = {
+                day1: {
+                    fr: `
+                        <div class="space-y-2">
+                            <p><strong>Lundi 18 Novembre :</strong></p>
+                            <p>
+                                🎵 <b>Club Med Live – Soirée d’ouverture</b><br>
+                                📍 Salle Atlas<br>
+                                🕗 21h00 – <b>Zavmusic</b> : musique électronique innovante.<br>
+                                🕙 22h30 – <b>Fleur de Mur</b> : performance artistique immersive mêlant musique et visuels.
+                            </p>
+                        </div>
+                    `,
+                    en: `
+                        <div class="space-y-2">
+                            <p><strong>Monday 18 November:</strong></p>
+                            <p>
+                                🎵 <b>Club Med Live – Opening Night</b><br>
+                                📍 Atlas Hall<br>
+                                🕗 9:00 PM – <b>Zavmusic</b>: innovative electronic soundscapes.<br>
+                                🕙 10:30 PM – <b>Fleur de Mur</b>: immersive art performance with visuals and sound.
+                            </p>
+                        </div>
+                    `
+                },
+                day2: {
+                    fr: `
+                        <div class="space-y-2">
+                            <p><strong>Mardi 19 Novembre :</strong></p>
+                            <p>
+                                🎶 <b>Club Med Live – Ambiance fusion</b><br>
+                                📍 Terrasse Agdal<br>
+                                🕗 20h30 – <b>DJ K-Sido</b> : mix électronique énergique et festif.<br>
+                                🕙 22h00 – <b>Sax Vibes</b> : saxophone jazz moderne, rythmes lounge et électro.
+                            </p>
+                        </div>
+                    `,
+                    en: `
+                        <div class="space-y-2">
+                            <p><strong>Tuesday 19 November:</strong></p>
+                            <p>
+                                🎶 <b>Club Med Live – Fusion Night</b><br>
+                                📍 Agdal Terrace<br>
+                                🕗 8:30 PM – <b>DJ K-Sido</b>: energetic electronic mix to light up the night.<br>
+                                🕙 10:00 PM – <b>Sax Vibes</b>: smooth modern jazz saxophone with electro rhythms.
+                            </p>
+                        </div>
+                    `
+                },
+                day3: {
+                    fr: `
+                        <div class="space-y-2">
+                            <p><strong>Mercredi 20 Novembre :</strong></p>
+                            <p>
+                                🌟 <b>Club Med Live – Soirée de clôture</b><br>
+                                📍 Piscine principale<br>
+                                🕗 20h30 – <b>ASMA</b> : chanteuse pop moderne et élégante.<br>
+                                🕙 22h00 – <b>Mat Duval</b> & <b>Brikxart</b> : fusion de musique live et d’art urbain.<br>
+                                🎻 <b>Quartet</b> : ensemble musical classique pour la touche finale.
+                            </p>
+                        </div>
+                    `,
+                    en: `
+                        <div class="space-y-2">
+                            <p><strong>Wednesday 20 November:</strong></p>
+                            <p>
+                                🌟 <b>Club Med Live – Closing Night</b><br>
+                                📍 Main Pool Area<br>
+                                🕗 8:30 PM – <b>ASMA</b>: modern pop vocalist with a refined touch.<br>
+                                🕙 10:00 PM – <b>Mat Duval</b> & <b>Brikxart</b>: live music meets urban art.<br>
+                                🎻 <b>Quartet</b>: classical ensemble for a graceful finale.
+                            </p>
+                        </div>
+                    `
+                }
+            };
+
+            const lineup = lineups[currentDay];
+            if (!lineup) {
+                return fallback[lang] || fallback.fr;
+            }
+
+            const content = lineup[lang] || lineup.fr || fallback.fr;
+            return typeof content === 'string' ? content.trim() : fallback.fr;
+        }
+
         const baseAgentMessages = {
             fr: {
                 programme: "📘 Consultez le programme complet des Academy Days à Marrakech en cliquant ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir le programme</a>.",
                 groupe: "👥 Découvrez votre groupe et les membres associés ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir mon groupe</a>.",
                 infos: "📍 Les informations pratiques seront mises à jour quotidiennement dans Hubby.",
-                live: "🎤 Le Club Med Live aura lieu le lundi soir dans la salle principale Atlas. Ambiance garantie !",
+                live: () => getClubMedLiveContent('fr'),
                 activites: "⚽ Des activités collectives sont prévues chaque jour à partir de 17h.",
                 viva: "💬 Rejoignez la conversation sur Viva Engage via l’onglet Communauté de votre intranet.",
                 default: "Je reviens vers vous dès que possible."
@@ -532,7 +629,7 @@
                 programme: "📘 Check the full Academy Days program here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>View program</a>.",
                 groupe: "👥 Find your group and members here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>See my group</a>.",
                 infos: "📍 Practical information will be updated daily within Hubby.",
-                live: "🎤 Club Med Live will take place on Monday evening in the Atlas main room.",
+                live: () => getClubMedLiveContent('en'),
                 activites: "⚽ Team activities are scheduled every afternoon from 5pm.",
                 viva: "💬 Join the conversation on Viva Engage through your intranet community tab.",
                 default: "I'll get back to you shortly."
@@ -555,7 +652,13 @@
         function getAgentResponse(agentId, lang, key) {
             const agentBucket = responses[agentId] || responses.agent1;
             const localizedResponses = agentBucket[lang] || agentBucket.fr || responses.agent1.fr;
-            return localizedResponses[key] || localizedResponses.default || '';
+            const response = localizedResponses[key];
+
+            if (typeof response === 'function') {
+                return response(lang);
+            }
+
+            return response || localizedResponses.default || '';
         }
 
         const keywordMap = [
@@ -768,6 +871,7 @@
 
         function setDateFilter(date) {
             selectedDateFilter = date;
+            currentDay = date === 'all' ? null : date;
             
             // Update button styles
             document.querySelectorAll('.date-filter-btn').forEach(btn => {
