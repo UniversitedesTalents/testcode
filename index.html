@@ -571,6 +571,11 @@
             if (messageInput) {
                 messageInput.placeholder = translations[lang].placeholder;
             }
+
+            if (selectedPopulation) {
+                const activePopulation = academyData.populations[selectedPopulation];
+                document.getElementById('selectedPopName').textContent = activePopulation.fullName[currentLang];
+            }
         }
 
         function selectPopulation(popCode) {
@@ -580,7 +585,7 @@
             // Update chat header
             document.getElementById('selectedPopIcon').textContent = popCode;
             document.getElementById('selectedPopIcon').style.backgroundColor = population.color;
-            document.getElementById('selectedPopName').textContent = `${popCode} Assistant`;
+            document.getElementById('selectedPopName').textContent = population.fullName[currentLang];
             
             // Switch to chat screen
             document.getElementById('populationScreen').style.display = 'none';
