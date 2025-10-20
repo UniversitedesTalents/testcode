@@ -638,7 +638,7 @@ Découvrez les initiatives autour du projet “Forever Young” et l’avenir du
 Restez informé des actualités et événements internes du Club Med.<br>
 🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" class="text-blue-600 underline">Consulter les news</a><br><br>
 ✨ Rejoignez, commentez, partagez vos inspirations — la communauté vous attend !
-            `,
+            `.trim(),
             en: `
 💭 <b>Discover Viva Engage communities!</b><br><br>
 🌐 These spaces are designed to share, learn, and connect with other Academy Days participants and the Club Med community.<br><br>
@@ -652,29 +652,37 @@ Dive into initiatives shaping the future of learning at Club Med.<br>
 Stay up to date with internal Club Med news and upcoming events.<br>
 🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" class="text-blue-600 underline">Read the updates</a><br><br>
 ✨ Join, comment, and share your inspirations — the community awaits you!
-            `
+            `.trim()
         };
 
-        const getVivaEngageResponse = (lang) => (vivaEngageResponses[lang] || vivaEngageResponses.fr).trim();
-
         const baseAgentMessages = {
-            fr: {
-                programme: "📘 Consultez le programme complet des Academy Days à Marrakech en cliquant ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir le programme</a>.",
-                groupe: "👥 Découvrez votre groupe et les membres associés ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir mon groupe</a>.",
-                infos: "📍 Les informations pratiques seront mises à jour quotidiennement dans Hubby.",
-                live: () => getClubMedLiveContent('fr'),
-                activites: "⚽ Des activités collectives sont prévues chaque jour à partir de 17h.",
-                viva: getVivaEngageResponse,
-                default: "Je reviens vers vous dès que possible."
+            programme: {
+                fr: "📘 Consultez le programme complet des Academy Days à Marrakech en cliquant ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir le programme</a>.",
+                en: "📘 Check the full Academy Days program here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>View program</a>."
             },
-            en: {
-                programme: "📘 Check the full Academy Days program here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>View program</a>.",
-                groupe: "👥 Find your group and members here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>See my group</a>.",
-                infos: "📍 Practical information will be updated daily within Hubby.",
-                live: () => getClubMedLiveContent('en'),
-                activites: "⚽ Team activities are scheduled every afternoon from 5pm.",
-                viva: getVivaEngageResponse,
-                default: "I'll get back to you shortly."
+            groupe: {
+                fr: "👥 Découvrez votre groupe et les membres associés ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir mon groupe</a>.",
+                en: "👥 Find your group and members here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>See my group</a>."
+            },
+            infos: {
+                fr: "📍 Les informations pratiques seront mises à jour quotidiennement dans Hubby.",
+                en: "📍 Practical information will be updated daily within Hubby."
+            },
+            live: {
+                fr: () => getClubMedLiveContent('fr'),
+                en: () => getClubMedLiveContent('en')
+            },
+            activites: {
+                fr: "⚽ Des activités collectives sont prévues chaque jour à partir de 17h.",
+                en: "⚽ Team activities are scheduled every afternoon from 5pm."
+            },
+            viva: {
+                fr: vivaEngageResponses.fr,
+                en: vivaEngageResponses.en
+            },
+            default: {
+                fr: "Je reviens vers vous dès que possible.",
+                en: "I'll get back to you shortly."
             }
         };
 
@@ -984,29 +992,37 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             container: null
         };
 
-        function createAgentMessages() {
-            return {
-                fr: { ...baseAgentMessages.fr },
-                en: { ...baseAgentMessages.en }
-            };
+        function cloneBaseAgentMessages() {
+            const cloned = {};
+            Object.keys(baseAgentMessages).forEach(key => {
+                const entry = baseAgentMessages[key];
+                cloned[key] = {
+                    fr: entry.fr,
+                    en: entry.en
+                };
+            });
+            return cloned;
         }
 
         const responses = {
-            agent1: createAgentMessages(),
-            agent2: createAgentMessages(),
-            agent3: createAgentMessages()
+            agent1: cloneBaseAgentMessages(),
+            agent2: cloneBaseAgentMessages(),
+            agent3: cloneBaseAgentMessages()
         };
 
         function getAgentResponse(agentId, lang, key) {
             const agentBucket = responses[agentId] || responses.agent1;
-            const localizedResponses = agentBucket[lang] || agentBucket.fr || responses.agent1.fr;
-            const response = localizedResponses[key];
-
-            if (typeof response === 'function') {
-                return response(lang);
+            const responseEntry = agentBucket[key] || agentBucket.default || baseAgentMessages.default;
+            if (!responseEntry) {
+                return '';
             }
 
-            return response || localizedResponses.default || '';
+            const localizedValue = responseEntry[lang] ?? responseEntry.fr ?? '';
+            if (typeof localizedValue === 'function') {
+                return localizedValue();
+            }
+
+            return localizedValue;
         }
 
         const keywordMap = [
