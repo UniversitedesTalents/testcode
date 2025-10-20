@@ -711,6 +711,7 @@
 
         function appendAssistantSignoff(content) {
             const closingWord = currentLang === 'fr' ? 'merci' : 'thank you';
+            const punctuationRegex = /[.!?]$/;
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = content;
 
@@ -724,7 +725,14 @@
                 for (let i = node.childNodes.length - 1; i >= 0; i--) {
                     const child = node.childNodes[i];
                     if (child.nodeType === Node.TEXT_NODE) {
-                        child.textContent = child.textContent.replace(/\s*$/, '') + ' ' + closingWord;
+                        const trimmedText = child.textContent.trim();
+                        if (!trimmedText) {
+                            continue;
+                        }
+
+                        const needsPunctuation = !punctuationRegex.test(trimmedText);
+                        const suffix = ` ${closingWord}${needsPunctuation ? '.' : ''}`;
+                        child.textContent = child.textContent.replace(/\s*$/, '') + suffix;
                         return true;
                     }
                     if (child.nodeType === Node.ELEMENT_NODE && appendToLastNode(child)) {
@@ -735,7 +743,9 @@
             }
 
             if (!appendToLastNode(tempContainer)) {
-                tempContainer.appendChild(document.createTextNode(' ' + closingWord));
+                const paragraph = document.createElement('p');
+                paragraph.textContent = closingWord.charAt(0).toUpperCase() + closingWord.slice(1) + '.';
+                tempContainer.appendChild(paragraph);
             }
 
             return tempContainer.innerHTML;
