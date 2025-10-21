@@ -27,6 +27,18 @@
             box-sizing: border-box;
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -345,66 +357,634 @@
             opacity: 0.85;
         }
 
+        .chat-interface.active {
+            display: flex !important;
+        }
+
+        .chat-screen {
+            min-height: 100vh;
+            background-color: var(--club-med-sand);
+            display: flex;
+            flex-direction: column;
+            animation: backgroundFade 0.4s ease both;
+        }
+
+        .chat-header {
+            background-color: var(--club-med-primary);
+            color: var(--club-med-offwhite);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 32px rgba(30, 40, 72, 0.25);
+            animation: headerSlideDown 0.5s ease both;
+        }
+
+        .chat-header-band {
+            height: 40px;
+            background-color: var(--club-med-terracotta);
+            display: flex;
+            align-items: center;
+            padding: 0 1.75rem;
+        }
+
+        .chat-trident {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-trident svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--club-med-gold);
+        }
+
+        .chat-header-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.75rem 1.75rem 1.5rem;
+        }
+
+        .chat-logo {
+            font-size: 2.75rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin: 0;
+            animation: logoFadeIn 0.6s ease both;
+        }
+
+        .chat-language-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-language-button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.14);
+            color: var(--club-med-offwhite);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .chat-language-button.is-active {
+            background: var(--club-med-offwhite);
+            color: var(--club-med-primary);
+            box-shadow: 0 8px 16px rgba(253, 190, 0, 0.28);
+        }
+
+        .chat-language-button:focus-visible {
+            outline: 2px solid var(--club-med-gold);
+            outline-offset: 3px;
+        }
+
+        .chat-shell {
+            flex: 1;
+            padding: 2.5rem 1.5rem 3rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .chat-window {
+            background: var(--club-med-offwhite);
+            border-radius: 16px;
+            box-shadow: 0 22px 40px rgba(30, 40, 72, 0.15);
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            animation: chatWindowReveal 0.5s ease 0.15s both;
+        }
+
+        .chat-context {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 2rem 1.25rem;
+            background: linear-gradient(180deg, rgba(237, 229, 214, 0.35) 0%, transparent 100%);
+            gap: 1rem;
+        }
+
+        .chat-context-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-back-button {
+            appearance: none;
+            border: none;
+            background: transparent;
+            color: var(--club-med-primary);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 999px;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .chat-back-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .chat-back-button:hover,
+        .chat-back-button:focus-visible {
+            background: rgba(253, 190, 0, 0.14);
+            color: var(--club-med-brown);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .chat-population {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-population-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--club-med-offwhite);
+            box-shadow: 0 8px 20px rgba(30, 40, 72, 0.18);
+        }
+
+        .chat-population-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .chat-population-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--club-med-primary);
+        }
+
+        .chat-population-change {
+            background: transparent;
+            border: none;
+            color: var(--club-med-brown);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            cursor: pointer;
+        }
+
+        .chat-population-change:hover,
+        .chat-population-change:focus-visible {
+            color: var(--club-med-primary);
+            outline: none;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(30, 40, 72, 0.2);
+            border-radius: 999px;
+        }
+
+        .message-row {
+            display: flex;
+            gap: 0.9rem;
+            align-items: flex-start;
+            animation: messageFade 0.45s ease both;
+        }
+
+        .message-row--hubby {
+            justify-content: flex-start;
+        }
+
+        .message-row--user {
+            justify-content: flex-end;
+        }
+
         .chat-bubble {
-            max-width: 90%;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            position: relative;
+            max-width: min(520px, 100%);
+            padding: 1.1rem 1.25rem;
+            border-radius: 22px;
+            box-shadow: 0 12px 28px rgba(30, 40, 72, 0.08);
+            line-height: 1.6;
+            backdrop-filter: blur(2px);
+            transition: transform 0.2s ease;
+        }
+
+        .chat-bubble:hover {
+            transform: translateY(-1px);
+        }
+
+        .chat-bubble--hubby {
+            background: var(--club-med-primary);
+            color: var(--club-med-offwhite);
+            border-radius: 24px 24px 24px 14px;
+            padding-left: 3.1rem;
+        }
+
+        .chat-bubble--user {
+            background: var(--club-med-terracotta);
+            color: var(--club-med-offwhite);
+            border-radius: 24px 24px 14px 24px;
+            animation: bubblePop 0.3s ease both;
+        }
+
+        .chat-bubble--typing {
+            background: rgba(30, 40, 72, 0.08);
+            border-radius: 20px;
+            padding: 0.85rem 1.1rem;
+            box-shadow: none;
+        }
+
+        .bubble-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 1rem;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bubble-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--club-med-gold);
+        }
+
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .message-content p {
+            margin: 0;
         }
 
         .chat-bubble a {
-            color: var(--club-med-primary);
+            color: inherit;
             font-weight: 600;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        .chat-bubble a:hover,
+        .chat-bubble a:focus-visible {
             text-decoration: none;
         }
 
-        .chat-bubble a:hover {
-            text-decoration: underline;
-        }
-
         .typing-indicator {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
+            gap: 0.4rem;
         }
 
         .typing-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: rgba(253, 190, 0, 0.6);
-            animation: typing 1.4s infinite ease-in-out;
+            background: var(--club-med-gold);
+            opacity: 0.6;
+            animation: typingDots 1.2s infinite ease-in-out;
         }
 
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.12s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.24s; }
 
-        .quick-questions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+        .chat-panel {
+            padding: 1.5rem 2rem 2rem;
+            background: linear-gradient(180deg, rgba(237, 229, 214, 0.45) 0%, rgba(249, 248, 244, 0.95) 60%);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .quick-question-btn {
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
+        .date-filters {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .date-filter-btn {
+            border: 1px solid transparent;
+            border-radius: 999px;
+            padding: 0.55rem 1.35rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--club-med-primary);
+            background: var(--club-med-sand);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .date-filter-btn:hover,
+        .date-filter-btn:focus-visible {
+            outline: none;
+            border-color: var(--club-med-gold);
+        }
+
+        .date-filter-btn--active {
+            background: var(--club-med-primary);
+            color: var(--club-med-offwhite);
+            box-shadow: 0 12px 24px rgba(30, 40, 72, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            padding: 0 0.25rem;
+        }
+
+        .quick-reply {
             border: none;
+            border-radius: 999px;
+            padding: 0.7rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            cursor: pointer;
+            background: var(--club-med-gold);
+            color: var(--club-med-primary);
+            box-shadow: 0 12px 20px rgba(253, 190, 0, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, filter 0.2s ease;
+            animation: quickReplySlide 0.45s ease both;
+        }
+
+        .quick-reply--secondary {
+            background: var(--club-med-terracotta);
+            color: var(--club-med-primary);
+            box-shadow: 0 12px 24px rgba(167, 82, 40, 0.25);
+        }
+
+        .quick-reply:hover,
+        .quick-reply:focus-visible {
+            transform: translateY(-2px);
+            background: #ffcf33;
+            box-shadow: 0 16px 28px rgba(253, 190, 0, 0.32);
+            outline: none;
+        }
+
+        .quick-reply--secondary:hover,
+        .quick-reply--secondary:focus-visible {
+            background: #b86135;
+            box-shadow: 0 16px 32px rgba(167, 82, 40, 0.32);
+        }
+
+        .quick-reply-icon {
+            font-size: 1.15rem;
+            line-height: 1;
+        }
+
+        .quick-reply:nth-child(1) { animation-delay: 0.05s; }
+        .quick-reply:nth-child(2) { animation-delay: 0.15s; }
+        .quick-reply:nth-child(3) { animation-delay: 0.25s; }
+        .quick-reply:nth-child(4) { animation-delay: 0.35s; }
+        .quick-reply:nth-child(5) { animation-delay: 0.45s; }
+        .quick-reply:nth-child(6) { animation-delay: 0.55s; }
+
+        .chat-input {
+            display: flex;
+            gap: 0.85rem;
+            align-items: center;
+            background: var(--club-med-offwhite);
+            border: 1px solid var(--club-med-gold);
+            border-radius: 12px;
+            padding: 0.5rem;
+            box-shadow: 0 12px 24px rgba(30, 40, 72, 0.12);
+        }
+
+        .chat-input-field {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            color: var(--club-med-primary);
+        }
+
+        .chat-input-field:focus {
+            outline: none;
+        }
+
+        .chat-input-field::placeholder {
+            color: #7A746D;
+        }
+
+        .chat-send {
+            border: none;
+            background: var(--club-med-primary);
+            color: var(--club-med-offwhite);
+            border-radius: 10px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 16px 30px rgba(30, 40, 72, 0.25);
         }
 
-        .quick-question-btn:hover,
-        .quick-question-btn:focus-visible {
-            outline: none;
+        .chat-send:hover,
+        .chat-send:focus-visible {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(30, 40, 72, 0.15);
+            box-shadow: 0 18px 34px rgba(253, 190, 0, 0.3);
+            outline: none;
         }
 
-        .chat-interface.active {
-            display: flex !important;
-            animation: fadeUp 0.6s ease both;
+        .chat-send-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--club-med-gold);
+        }
+
+        .hubby-info-card {
+            background: var(--club-med-offwhite);
+            border: 1px solid var(--club-med-gold);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: 0 16px 32px rgba(30, 40, 72, 0.12);
+        }
+
+        .hubby-info-card .hubby-info-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hubby-info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            font-size: 1.35rem;
+            color: var(--club-med-gold);
+        }
+
+        .hubby-info-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--club-med-gold);
+        }
+
+        .hubby-info-title {
+            font-weight: 700;
+            color: var(--club-med-primary);
+            font-size: 1.05rem;
+        }
+
+        .hubby-info-subtitle {
+            font-size: 0.9rem;
+            color: #6C6C6C;
+            margin: 0;
+        }
+
+        .hubby-info-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+            font-size: 0.9rem;
+            color: #6C6C6C;
+            margin: 0.5rem 0;
+        }
+
+        .hubby-info-card--action {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            cursor: pointer;
+            text-align: left;
+            border: 1px solid var(--club-med-gold);
+            appearance: none;
+            width: 100%;
+        }
+
+        .hubby-info-card--action:hover,
+        .hubby-info-card--action:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 36px rgba(30, 40, 72, 0.18);
+            outline: none;
+        }
+
+        .hubby-info-arrow {
+            font-size: 1.25rem;
+            color: var(--club-med-primary);
+        }
+
+        .hubby-info-card--action .hubby-info-header {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .hubby-info-action {
+            align-self: flex-start;
+            border: none;
+            border-radius: 999px;
+            padding: 0.65rem 1.4rem;
+            background: var(--club-med-primary);
+            color: var(--club-med-offwhite);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .hubby-info-action:hover,
+        .hubby-info-action:focus-visible {
+            background: var(--club-med-gold);
+            color: var(--club-med-primary);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        @keyframes headerSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes chatWindowReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes logoFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes messageFade {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bubblePop {
+            0% { transform: scale(0.96); opacity: 0; }
+            60% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes quickReplySlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes typingDots {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+            40% { transform: translateY(-3px); opacity: 1; }
+        }
+
+        @keyframes backgroundFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes fadeIn {
@@ -465,6 +1045,39 @@
             .population-content {
                 padding-top: 2.5rem;
             }
+
+            .chat-header-main {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .chat-language-switch {
+                align-self: flex-start;
+            }
+
+            .chat-context {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1.25rem 1.5rem;
+            }
+
+            .chat-population {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .chat-shell {
+                padding: 2rem 1.25rem 2.5rem;
+            }
+
+            .chat-messages {
+                padding: 0 1.5rem 1.75rem;
+            }
+
+            .chat-panel {
+                padding: 1.5rem 1.5rem 2rem;
+            }
         }
 
         @media (max-width: 640px) {
@@ -517,6 +1130,97 @@
 
             .population-content {
                 padding: 2.75rem 1rem 2.25rem;
+            }
+
+            .chat-header-band {
+                height: 32px;
+            }
+
+            .chat-trident {
+                display: none;
+            }
+
+            .chat-header-main {
+                align-items: center;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .chat-logo {
+                font-size: 2.2rem;
+            }
+
+            .chat-language-switch {
+                justify-content: center;
+            }
+
+            .chat-context {
+                padding: 1.1rem 1.1rem 0.9rem;
+                align-items: stretch;
+            }
+
+            .chat-context-left {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .chat-back-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .chat-population {
+                gap: 0.75rem;
+            }
+
+            .chat-population-meta {
+                align-items: flex-start;
+            }
+
+            .chat-shell {
+                padding: 1.5rem 0.75rem 2.25rem;
+            }
+
+            .chat-window {
+                border-radius: 14px;
+            }
+
+            .chat-messages {
+                padding: 0 1rem 1.5rem;
+            }
+
+            .chat-panel {
+                padding: 1.25rem 1rem 1.5rem;
+                gap: 1.25rem;
+            }
+
+            .quick-replies {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                padding-bottom: 0.5rem;
+            }
+
+            .quick-replies::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            .quick-reply {
+                flex: 0 0 auto;
+            }
+
+            .chat-input {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .chat-input-field {
+                padding: 0.75rem 0.75rem 0.5rem;
+            }
+
+            .chat-send {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -624,129 +1328,127 @@
     </div>
 
     <!-- Chat Interface Screen -->
-    <div id="chatScreen" class="chat-interface min-h-screen flex flex-col" style="display: none;">
-        <!-- Chat Header -->
-        <header class="text-white p-4 shadow-lg" style="background-color: var(--club-med-primary);">
-            <div class="container mx-auto max-w-4xl">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <button id="backButton" class="mobile-button mobile-tap p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-200">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </button>
-                        <div>
-                            <h1 class="text-2xl md:text-3xl font-black font-newsreader">Hubby</h1>
-                            <div class="flex items-center space-x-2">
-                                <div id="selectedPopIcon" class="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background-color: var(--club-med-brown);">LC</div>
-                                <span id="selectedPopName" class="text-sm opacity-90">LC Assistant</span>
-                                <button id="changePopulationBtn" class="mobile-button mobile-tap ml-2 px-2 py-1 rounded-lg bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-200 text-xs font-medium text-white" data-fr="Changer" data-en="Change">
-                                    Changer
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <!-- Language buttons -->
-                        <div class="bg-white rounded-xl shadow-lg p-1 flex">
-                            <button id="langFrChat" class="mobile-button mobile-tap px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 text-white shadow-sm" style="background: var(--club-med-primary);">
-                                🇫🇷
-                            </button>
-                            <button id="langEnChat" class="mobile-button mobile-tap px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200" style="color: var(--club-med-primary);">
-                                🇬🇧
-                            </button>
-                        </div>
-                    </div>
+    <div id="chatScreen" class="chat-interface chat-screen" style="display: none;">
+        <header class="chat-header">
+            <div class="chat-header-band">
+                <span class="chat-trident" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.999 3c.347 0 .688.14.937.39l5.333 5.333a1.326 1.326 0 0 1-1.875 1.875l-2.402-2.4v9.82c0 .846.336 1.657.934 2.256l2.898 2.897a1.326 1.326 0 1 1-1.875 1.876l-2.35-2.35-.434 7.4a1.326 1.326 0 0 1-2.65 0l-.433-7.4-2.35 2.35a1.326 1.326 0 0 1-1.876-1.876l2.898-2.897a3.19 3.19 0 0 0 .934-2.256v-9.82l-2.402 2.4a1.326 1.326 0 0 1-1.875-1.875l5.333-5.333c.25-.25.59-.39.937-.39Z" fill="currentColor"/>
+                    </svg>
+                </span>
+            </div>
+            <div class="chat-header-main">
+                <h1 class="chat-logo font-newsreader">Hubby</h1>
+                <div class="chat-language-switch" role="group" aria-label="Sélection de la langue">
+                    <button id="langFrChat" class="chat-language-button is-active" type="button" aria-label="Français" aria-pressed="true">FR</button>
+                    <button id="langEnChat" class="chat-language-button" type="button" aria-label="English" aria-pressed="false">GB</button>
                 </div>
             </div>
         </header>
-
-        <!-- Chat Messages -->
-        <div class="flex-1 flex flex-col">
-            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-white to-gray-50" style="min-height: 400px; max-height: 60vh;">
-                <!-- Welcome Message -->
-                <div class="flex items-start space-x-3 fade-in">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style="background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 100%);">
-                        <span class="text-white font-bold text-lg">H</span>
+        <div class="chat-shell">
+            <div class="chat-window">
+                <div class="chat-context">
+                    <div class="chat-context-left">
+                        <button id="backButton" class="chat-back-button" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M15 19L8 12l7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span data-fr="Retour" data-en="Back">Retour</span>
+                        </button>
                     </div>
-                    <div class="bg-gradient-to-r from-gray-100 to-gray-50 rounded-2xl rounded-tl-sm p-4 chat-bubble shadow-md" style="border: 1px solid var(--club-med-beige);">
-                        <div id="welcomeMessage">
-                            <p class="font-bold font-newsreader text-lg mb-2" style="color: var(--club-med-primary);">👋 Bonjour ! Je suis votre assistant Hubby personnalisé</p>
-                            <p class="mb-2" style="color: var(--club-med-primary);">Je connais tout le programme des Academy Days 2025 à Marrakech et je peux vous aider avec toutes vos questions !</p>
-                            <p class="font-medium" style="color: var(--club-med-brown);">💬 Utilisez les questions rapides ci-dessous ou posez-moi directement vos questions !</p>
+                    <div class="chat-population">
+                        <div id="selectedPopIcon" class="chat-population-badge">LC</div>
+                        <div class="chat-population-meta">
+                            <span id="selectedPopName" class="chat-population-label">LC Assistant</span>
+                            <button id="changePopulationBtn" class="chat-population-change" type="button" data-fr="Changer de population" data-en="Change population">Changer de population</button>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Chat Input Section -->
-            <div class="bg-white border-t p-4" style="border-color: var(--club-med-beige);">
-                <!-- Date Filter -->
-                <div class="mb-4">
-                    <p class="text-sm font-medium mb-3" style="color: var(--club-med-primary);" data-fr="Filtrer par jour :" data-en="Filter by day:">Filtrer par jour :</p>
-                    <div class="flex space-x-2 mb-4">
-                        <button class="date-filter-btn mobile-tap px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-white" style="background: var(--club-med-primary);" data-date="all">
-                            <span data-fr="Tous" data-en="All">Tous</span>
-                        </button>
-                        <button class="date-filter-btn mobile-tap px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" style="background: var(--club-med-beige); color: var(--club-med-primary);" data-date="day1">
-                            <span data-fr="Lun 18" data-en="Mon 18">Lun 18</span>
-                        </button>
-                        <button class="date-filter-btn mobile-tap px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" style="background: var(--club-med-beige); color: var(--club-med-primary);" data-date="day2">
-                            <span data-fr="Mar 19" data-en="Tue 19">Mar 19</span>
-                        </button>
-                        <button class="date-filter-btn mobile-tap px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" style="background: var(--club-med-beige); color: var(--club-med-primary);" data-date="day3">
-                            <span data-fr="Mer 20" data-en="Wed 20">Mer 20</span>
-                        </button>
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message-row message-row--hubby welcome-message fade-in" style="animation-delay: 0.6s;">
+                        <div class="chat-bubble chat-bubble--hubby">
+                            <span class="bubble-icon" aria-hidden="true">
+                                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.999 3c.347 0 .688.14.937.39l5.333 5.333a1.326 1.326 0 0 1-1.875 1.875l-2.402-2.4v9.82c0 .846.336 1.657.934 2.256l2.898 2.897a1.326 1.326 0 1 1-1.875 1.876l-2.35-2.35-.434 7.4a1.326 1.326 0 0 1-2.65 0l-.433-7.4-2.35 2.35a1.326 1.326 0 0 1-1.876-1.876l2.898-2.897a3.19 3.19 0 0 0 .934-2.256v-9.82l-2.402 2.4a1.326 1.326 0 0 1-1.875-1.875l5.333-5.333c.25-.25.59-.39.937-.39Z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <div id="welcomeMessage" class="message-content">
+                                <p class="font-newsreader text-xl">👋 Bonjour ! Je suis votre assistant Hubby personnalisé</p>
+                                <p>Je connais tout le programme des Academy Days 2025 à Marrakech et je peux vous aider avec toutes vos questions !</p>
+                                <p class="font-medium">💬 Utilisez les questions rapides ci-dessous ou posez-moi directement vos questions !</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Quick Questions -->
-                <div class="mb-4">
-                    <p class="text-sm font-medium mb-3" style="color: var(--club-med-primary);" data-fr="Questions rapides :" data-en="Quick questions:">Questions rapides :</p>
-                    <div class="quick-questions-grid">
-                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-primary);" data-question="programme">
-                            <span data-fr="📖 Programme complet" data-en="📖 Full Program Book">📖 Programme complet</span>
-                        </button>
-                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-brown);" data-question="groupe">
-                            <span data-fr="👥 Mon groupe" data-en="👥 My group">👥 Mon groupe</span>
-                        </button>
-                        <button class="quick-question-btn mobile-tap" style="background: var(--club-med-beige); color: var(--club-med-primary);" data-question="infos">
-                            <span data-fr="ℹ️ Infos pratiques" data-en="ℹ️ Practical info">ℹ️ Infos pratiques</span>
-                        </button>
-                        <button class="quick-question-btn mobile-tap" style="background: var(--club-med-yellow); color: var(--club-med-primary);" data-question="live">
-                            <span data-fr="🎬 Club Med Live" data-en="🎬 Club Med Live">🎬 Club Med Live</span>
-                        </button>
-                        <button class="quick-question-btn mobile-tap text-white" style="background: var(--club-med-brown);" data-question="activites">
-                            <span data-fr="🏃‍♂️ Activités" data-en="🏃‍♂️ Activities">🏃‍♂️ Activités</span>
-                        </button>
-                        <button class="quick-question-btn mobile-tap text-white" style="background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 50%, var(--club-med-yellow) 100%);" data-question="viva">
-                            <span data-fr="💬 Viva Engage" data-en="💬 Viva Engage">💬 Viva Engage</span>
+                <div class="chat-panel">
+                    <div>
+                        <p class="text-sm font-medium mb-3" style="color: var(--club-med-primary);" data-fr="Filtrer par jour" data-en="Filter by day">Filtrer par jour</p>
+                        <div class="date-filters">
+                            <button class="date-filter-btn date-filter-btn--active" type="button" data-date="all" aria-pressed="true">
+                                <span data-fr="Tous" data-en="All">Tous</span>
+                            </button>
+                            <button class="date-filter-btn" type="button" data-date="day1" aria-pressed="false">
+                                <span data-fr="Lun 18" data-en="Mon 18">Lun 18</span>
+                            </button>
+                            <button class="date-filter-btn" type="button" data-date="day2" aria-pressed="false">
+                                <span data-fr="Mar 19" data-en="Tue 19">Mar 19</span>
+                            </button>
+                            <button class="date-filter-btn" type="button" data-date="day3" aria-pressed="false">
+                                <span data-fr="Mer 20" data-en="Wed 20">Mer 20</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium mb-3" style="color: var(--club-med-primary);" data-fr="Questions rapides" data-en="Quick questions">Questions rapides</p>
+                        <div class="quick-replies">
+                            <button class="quick-reply" type="button" data-question="programme">
+                                <span class="quick-reply-icon" aria-hidden="true">📖</span>
+                                <span data-fr="Programme complet" data-en="Full program">Programme complet</span>
+                            </button>
+                            <button class="quick-reply quick-reply--secondary" type="button" data-question="groupe">
+                                <span class="quick-reply-icon" aria-hidden="true">👥</span>
+                                <span data-fr="Mon groupe" data-en="My group">Mon groupe</span>
+                            </button>
+                            <button class="quick-reply" type="button" data-question="infos">
+                                <span class="quick-reply-icon" aria-hidden="true">ℹ️</span>
+                                <span data-fr="Infos pratiques" data-en="Practical info">Infos pratiques</span>
+                            </button>
+                            <button class="quick-reply" type="button" data-question="live">
+                                <span class="quick-reply-icon" aria-hidden="true">🎬</span>
+                                <span data-fr="Club Med Live" data-en="Club Med Live">Club Med Live</span>
+                            </button>
+                            <button class="quick-reply quick-reply--secondary" type="button" data-question="activites">
+                                <span class="quick-reply-icon" aria-hidden="true">🏃‍♂️</span>
+                                <span data-fr="Activités" data-en="Activities">Activités</span>
+                            </button>
+                            <button class="quick-reply" type="button" data-question="viva">
+                                <span class="quick-reply-icon" aria-hidden="true">💬</span>
+                                <span data-fr="Viva Engage" data-en="Viva Engage">Viva Engage</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input
+                            type="text"
+                            id="messageInput"
+                            class="chat-input-field"
+                            placeholder="Posez votre question à Hubby…"
+                        >
+                        <button id="sendButton" class="chat-send" type="button">
+                            <span data-fr="Envoyer" data-en="Send" class="chat-send-label">Envoyer</span>
+                            <span class="chat-send-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="m3 3 18 9-18 9 4-9-4-9Z" fill="currentColor" opacity="0.25" />
+                                    <path d="m7 12 14-5-6.5 6.5" stroke="var(--club-med-gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="m10.5 14.5-1.8 3.5 4.8-4.8" stroke="var(--club-med-gold)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
                         </button>
                     </div>
-                </div>
-
-                <!-- Chat Input -->
-                <div class="flex space-x-3">
-                    <input 
-                        type="text" 
-                        id="messageInput" 
-                        placeholder="Posez votre question sur les Academy Days..."
-                        class="flex-1 border-2 rounded-xl px-4 py-3 focus:outline-none transition-all duration-200 shadow-sm"
-                        style="border-color: var(--club-med-beige); min-height: 48px;"
-                    >
-                    <button 
-                        id="sendButton"
-                        class="mobile-button mobile-tap text-white px-5 py-3 rounded-xl font-medium transition-all duration-200 transform hover:scale-105 flex items-center space-x-2 shadow-lg"
-                        style="background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 100%);"
-                    >
-                        <span data-fr="Envoyer" data-en="Send" class="hidden sm:inline">Envoyer</span>
-                        <span>🚀</span>
-                    </button>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Custom notification -->
     <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in hidden">
         <span id="notificationText"></span>
@@ -796,12 +1498,20 @@
             }
         };
 
+        const HUBBY_BUBBLE_ICON = `
+            <span class="bubble-icon" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.999 3c.347 0 .688.14.937.39l5.333 5.333a1.326 1.326 0 0 1-1.875 1.875l-2.402-2.4v9.82c0 .846.336 1.657.934 2.256l2.898 2.897a1.326 1.326 0 1 1-1.875 1.876l-2.35-2.35-.434 7.4a1.326 1.326 0 0 1-2.65 0l-.433-7.4-2.35 2.35a1.326 1.326 0 0 1-1.876-1.876l2.898-2.897a3.19 3.19 0 0 0 .934-2.256v-9.82l-2.402 2.4a1.326 1.326 0 0 1-1.875-1.875l5.333-5.333c.25-.25.59-.39.937-.39Z" fill="currentColor"/>
+                </svg>
+            </span>
+        `;
+
         const translations = {
             fr: {
                 welcomeTitle: "👋 Bonjour ! Je suis votre assistant Hubby personnalisé",
                 welcomeIntro: "Je connais tout le programme des Academy Days 2025 à Marrakech et je peux vous aider avec toutes vos questions !",
                 welcomeEnd: "💬 Utilisez les questions rapides ci-dessous ou posez-moi directement vos questions !",
-                placeholder: "Posez votre question sur les Academy Days...",
+                placeholder: "Posez votre question à Hubby…",
                 typing: "Hubby tape...",
                 linkCopied: "Lien copié dans le presse-papiers !"
             },
@@ -809,7 +1519,7 @@
                 welcomeTitle: "👋 Hello! I'm your personalized Hubby assistant",
                 welcomeIntro: "I know the complete Academy Days 2025 program in Marrakech and I can help you with all your questions!",
                 welcomeEnd: "💬 Use the quick questions below or ask me your questions directly!",
-                placeholder: "Ask your question about Academy Days...",
+                placeholder: "Ask your question to Hubby…",
                 typing: "Hubby is typing...",
                 linkCopied: "Link copied to clipboard!"
             }
@@ -1437,16 +2147,11 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             enBtn.style.background = '';
             enBtn.style.color = '';
 
-            if (lang === 'fr') {
-                frBtnChat.style.background = 'var(--club-med-primary)';
-                frBtnChat.style.color = 'white';
-                enBtnChat.style.background = 'transparent';
-                enBtnChat.style.color = 'var(--club-med-primary)';
-            } else {
-                enBtnChat.style.background = 'var(--club-med-primary)';
-                enBtnChat.style.color = 'white';
-                frBtnChat.style.background = 'transparent';
-                frBtnChat.style.color = 'var(--club-med-primary)';
+            if (frBtnChat && enBtnChat) {
+                frBtnChat.classList.toggle('is-active', lang === 'fr');
+                enBtnChat.classList.toggle('is-active', lang === 'en');
+                frBtnChat.setAttribute('aria-pressed', lang === 'fr');
+                enBtnChat.setAttribute('aria-pressed', lang === 'en');
             }
 
             // Update welcome message if in chat screen
@@ -1517,9 +2222,9 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             const t = translations[currentLang];
             
             welcomeDiv.innerHTML = `
-                <p class="font-bold font-newsreader text-lg mb-2" style="color: var(--club-med-primary);">${t.welcomeTitle}</p>
-                <p class="mb-2" style="color: var(--club-med-primary);">${t.welcomeIntro}</p>
-                <p class="font-medium" style="color: var(--club-med-brown);">${t.welcomeEnd}</p>
+                <p class="font-newsreader text-xl">${t.welcomeTitle}</p>
+                <p>${t.welcomeIntro}</p>
+                <p class="font-medium">${t.welcomeEnd}</p>
             `;
         }
 
@@ -1533,7 +2238,7 @@ Stay up to date with internal Club Med news and upcoming events.<br>
 
             // Clear chat messages except welcome
             const chatMessages = document.getElementById('chatMessages');
-            const welcomeMessage = chatMessages.querySelector('.fade-in');
+            const welcomeMessage = chatMessages.querySelector('.welcome-message');
             chatMessages.innerHTML = '';
             if (welcomeMessage) {
                 chatMessages.appendChild(welcomeMessage);
@@ -1546,13 +2251,9 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             
             // Update button styles
             document.querySelectorAll('.date-filter-btn').forEach(btn => {
-                if (btn.dataset.date === date) {
-                    btn.style.background = 'var(--club-med-primary)';
-                    btn.style.color = 'white';
-                } else {
-                    btn.style.background = 'var(--club-med-beige)';
-                    btn.style.color = 'var(--club-med-primary)';
-                }
+                const isActive = btn.dataset.date === date;
+                btn.classList.toggle('date-filter-btn--active', isActive);
+                btn.setAttribute('aria-pressed', isActive);
             });
         }
 
@@ -1560,24 +2261,19 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             const messagesContainer = document.getElementById('chatMessages');
             const typingDiv = document.createElement('div');
             typingDiv.id = 'typingIndicator';
-            typingDiv.className = 'flex items-start space-x-3 fade-in';
-            
+            typingDiv.className = 'message-row message-row--hubby fade-in';
+
             typingDiv.innerHTML = `
-                <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style="background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 100%);">
-                    <span class="text-white font-bold text-lg">H</span>
-                </div>
-                <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-4 chat-bubble shadow-md">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-gray-600 text-sm">${translations[currentLang].typing}</span>
-                        <div class="typing-indicator">
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                        </div>
+                <div class="chat-bubble chat-bubble--typing" aria-live="polite">
+                    <span class="sr-only">${translations[currentLang].typing}</span>
+                    <div class="typing-indicator" aria-hidden="true">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
                     </div>
                 </div>
             `;
-            
+
             messagesContainer.appendChild(typingDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
@@ -1636,34 +2332,23 @@ Stay up to date with internal Club Med news and upcoming events.<br>
 
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
-            messageDiv.className = `flex items-start space-x-3 fade-in ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
-            
-            const avatarStyle = isUser
-                ? 'background: linear-gradient(135deg, var(--club-med-brown) 0%, var(--club-med-yellow) 100%);'
-                : 'background: linear-gradient(135deg, var(--club-med-primary) 0%, var(--club-med-brown) 100%);';
-            
-            const bubbleClass = isUser 
-                ? 'text-white rounded-2xl rounded-tr-sm p-4 chat-bubble shadow-lg'
-                : 'bg-gradient-to-r from-gray-100 to-gray-50 rounded-2xl rounded-tl-sm p-4 chat-bubble shadow-md';
-            
-            const bubbleStyle = isUser
-                ? 'background: linear-gradient(135deg, var(--club-med-brown) 0%, var(--club-med-yellow) 100%);'
-                : 'border: 1px solid var(--club-med-beige);';
-            
+            messageDiv.className = `message-row ${isUser ? 'message-row--user' : 'message-row--hubby'} fade-in`;
+
+            const existingMessages = messagesContainer.querySelectorAll('.message-row').length;
+            messageDiv.style.animationDelay = `${Math.min(existingMessages * 0.1, 0.6)}s`;
+
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${isUser ? 'chat-bubble--user' : 'chat-bubble--hubby'}`;
+
             const { skipSignoff = false } = options;
             const rawContent = typeof content === 'string' ? content : resolveLocalizedContent(content, currentLang);
             const normalizedContent = typeof rawContent === 'string' ? rawContent : '';
             const formattedContent = (isUser || skipSignoff) ? normalizedContent : appendAssistantSignoff(normalizedContent);
 
-            messageDiv.innerHTML = `
-                <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style="${avatarStyle}">
-                    <span class="text-white font-bold text-lg">${isUser ? 'U' : 'H'}</span>
-                </div>
-                <div class="${bubbleClass}" style="${bubbleStyle}">
-                    <div class="${isUser ? 'text-white' : ''} message-content" style="${isUser ? '' : 'color: var(--club-med-primary);'}">${formattedContent}</div>
-                </div>
-            `;
+            const iconMarkup = isUser ? '' : HUBBY_BUBBLE_ICON;
+            bubble.innerHTML = `${iconMarkup}<div class="message-content">${formattedContent}</div>`;
 
+            messageDiv.appendChild(bubble);
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
@@ -1697,15 +2382,15 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                 const tagline = meta.tagline[currentLang];
 
                 return `
-                    <button data-category-btn data-category="${categoryKey}" class="w-full flex items-center justify-between px-4 py-3 bg-white/90 border border-[var(--club-med-beige)] rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
-                        <div class="flex items-center gap-3 text-left">
-                            <span class="text-2xl">${meta.icon}</span>
+                    <button data-category-btn data-category="${categoryKey}" type="button" class="hubby-info-card hubby-info-card--action">
+                        <div class="hubby-info-header">
+                            <span class="hubby-info-icon" aria-hidden="true">${meta.icon}</span>
                             <div>
-                                <p class="text-sm font-semibold text-[var(--club-med-primary)]">${label}</p>
-                                <p class="text-xs text-gray-500">${tagline}</p>
+                                <p class="hubby-info-title">${label}</p>
+                                <p class="hubby-info-subtitle">${tagline}</p>
                             </div>
                         </div>
-                        <span class="text-xl text-[var(--club-med-primary)]">➜</span>
+                        <span class="hubby-info-arrow" aria-hidden="true">➜</span>
                     </button>
                 `;
             }).join('');
@@ -1715,8 +2400,8 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                     <div class="space-y-1">
                         <p class="text-xs uppercase tracking-wide text-[var(--club-med-primary)]/60">${currentLang === 'fr' ? 'Hubby recommande' : 'Hubby recommends'}</p>
                         <h3 class="text-xl font-newsreader font-semibold text-[var(--club-med-primary)]">${introTitle}</h3>
-                        <p class="text-sm text-gray-600">${introSubtitle}</p>
-                        <p class="text-xs text-gray-500">${helperText}</p>
+                        <p class="text-sm text-[var(--club-med-primary)]/80">${introSubtitle}</p>
+                        <p class="text-xs text-[var(--club-med-primary)]/60">${helperText}</p>
                     </div>
                     <div class="grid gap-3 sm:grid-cols-2">${categoriesHtml}</div>
                 </div>
@@ -1739,17 +2424,17 @@ Stay up to date with internal Club Med news and upcoming events.<br>
 
             const activities = (activitiesData[currentLang] && activitiesData[currentLang][categoryKey]) || [];
             const cardsHtml = activities.map(activity => `
-                <div class="bg-white/90 border border-[var(--club-med-beige)] rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-200">
-                    <div class="flex items-center gap-3">
-                        <span class="text-2xl">${activity.icon}</span>
-                        <h4 class="text-lg font-semibold text-[var(--club-med-primary)]">${activity.title}</h4>
+                <div class="hubby-info-card">
+                    <div class="hubby-info-header">
+                        <span class="hubby-info-icon" aria-hidden="true">${activity.icon}</span>
+                        <h4 class="hubby-info-title">${activity.title}</h4>
                     </div>
-                    <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
+                    <div class="hubby-info-meta">
                         <span>📅 ${activity.day}</span>
                         <span>🕒 ${activity.time}</span>
                         <span>📍 ${activity.location}</span>
                     </div>
-                    <p class="mt-3 text-sm text-gray-700 leading-relaxed">${activity.description}</p>
+                    <p class="hubby-info-subtitle">${activity.description}</p>
                 </div>
             `).join('');
 
@@ -1760,14 +2445,14 @@ Stay up to date with internal Club Med news and upcoming events.<br>
 
             container.innerHTML = `
                 <div class="space-y-4" data-activities-view="list">
-                    <button data-back-btn class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--club-med-primary)] hover:text-[var(--club-med-brown)] transition-colors">
+                    <button data-back-btn class="inline-flex items-center gap-2 text-sm font-semibold text-[var(--club-med-primary)] hover:text-[var(--club-med-brown)] transition-colors" type="button">
                         <span>⬅️</span>
                         <span>${backLabel}</span>
                     </button>
                     <div class="space-y-1">
                         <h3 class="text-xl font-newsreader font-semibold text-[var(--club-med-primary)]">${meta.icon} ${meta.label[currentLang]}</h3>
-                        <p class="text-sm text-gray-600">${meta.listSubtitle[currentLang]}</p>
-                        <p class="text-xs text-gray-500">${listIntro}</p>
+                        <p class="text-sm text-[var(--club-med-primary)]/80">${meta.listSubtitle[currentLang]}</p>
+                        <p class="text-xs text-[var(--club-med-primary)]/60">${listIntro}</p>
                     </div>
                     <div class="space-y-3">${cardsHtml}</div>
                 </div>
@@ -1843,7 +2528,7 @@ Stay up to date with internal Club Med news and upcoming events.<br>
         }
 
         function validateQuickQuestionKeys() {
-            document.querySelectorAll('.quick-question-btn').forEach(btn => {
+            document.querySelectorAll('.quick-reply').forEach(btn => {
                 const key = btn.dataset.question;
 
                 if (!key) {
@@ -1928,7 +2613,7 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             });
 
             // Quick question buttons
-            document.querySelectorAll('.quick-question-btn').forEach(btn => {
+            document.querySelectorAll('.quick-reply').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const question = this.dataset.question;
                     handleQuickQuestion(question);
