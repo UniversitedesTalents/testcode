@@ -82,24 +82,18 @@
     <script>
         (function () {
             const populationButtons = document.querySelectorAll('.population-card');
-            const announcement = document.getElementById('population-selection');
+            const chatbotPage = 'chatbot.html';
 
-            if (!populationButtons.length || !announcement) {
+            if (!populationButtons.length) {
                 return;
             }
 
             populationButtons.forEach((button) => {
                 button.addEventListener('click', () => {
-                    populationButtons.forEach((item) => {
-                        item.classList.remove('is-selected');
-                        item.setAttribute('aria-pressed', 'false');
-                    });
-
-                    button.classList.add('is-selected');
-                    button.setAttribute('aria-pressed', 'true');
-
                     const populationCode = button.dataset.population;
-                    announcement.innerHTML = `Population <strong>${populationCode}</strong> sélectionnée. Retrouvez les informations spécifiques dans votre espace dédié.`;
+                    const url = `${chatbotPage}?population=${encodeURIComponent(populationCode)}`;
+
+                    window.location.href = url;
                 });
             });
         })();
