@@ -82,92 +82,269 @@
 
     <script>
         (function () {
+            const quickQuestionBlueprints = {
+                programme: {
+                    label: 'Programme complet',
+                    keywords: ['programme', 'programme complet', 'planning', 'agenda'],
+                    message: (population) => `Peux-tu me partager le programme complet pour ${population.shortName} ?`,
+                    response: (population) => `Le programme ${population.shortName} est disponible dans Hubby, rubrique « Programme ». Sélectionne le filtre ${population.shortName} pour retrouver l’ensemble de tes rendez-vous personnalisés.`
+                },
+                group: {
+                    label: 'Mon groupe',
+                    keywords: ['mon groupe', 'groupe', 'participants', 'team', 'équipe'],
+                    message: (population) => `Qui fait partie de mon groupe ${population.shortName} ?`,
+                    response: (population) => `Dans Hubby, ouvre l’espace « Mon groupe ». Tu y retrouveras tous les participants ${population.shortName}, leurs rôles et les moyens de contact pour rester connectés.`
+                },
+                infos: {
+                    label: 'Infos pratiques',
+                    keywords: ['infos', 'pratiques', 'logistique', 'transfert', 'navette', 'hébergement'],
+                    message: () => 'Peux-tu me résumer les infos pratiques ?',
+                    response: () => `Les infos pratiques regroupent les transferts, les horaires de restauration et les points d’accueil. Je peux t’envoyer le mémo par e-mail si tu le souhaites.`
+                },
+                clubMedLife: {
+                    label: 'Club Med Life',
+                    keywords: ['club med life', 'life', 'showroom'],
+                    message: () => 'Qu’est-ce que Club Med Life propose ?',
+                    response: () => `L’espace Club Med Life met en avant les innovations brand & produit. Passe au showroom dédié pour découvrir les expériences immersives pendant les pauses.`
+                },
+                activities: {
+                    label: 'Activités',
+                    keywords: ['activités', 'atelier', 'découverte', 'expérience'],
+                    message: (population) => `Quelles activités sont prévues pour ${population.shortName} ?`,
+                    response: () => `Consulte toutes les activités et ateliers depuis Hubby, rubrique « Activités ». Réserve un créneau pour garantir ta place.`
+                },
+                vivaEngage: {
+                    label: 'Viva Engage',
+                    keywords: ['viva engage', 'communauté', 'social', 'viva'],
+                    message: () => 'Comment rejoindre Viva Engage ?',
+                    response: () => `Rejoins la communauté « Academy Days » sur Viva Engage pour partager tes moments forts, poser des questions aux speakers et retrouver les replays.`
+                }
+            };
+
+            function createQuickQuestions(overrides = {}) {
+                return Object.keys(quickQuestionBlueprints).map((key) => {
+                    const base = quickQuestionBlueprints[key];
+                    const override = overrides[key] || {};
+
+                    return {
+                        key,
+                        label: override.label || base.label,
+                        keywords: override.keywords || base.keywords,
+                        message: override.message || base.message,
+                        response: override.response || base.response,
+                        link: override.link || base.link
+                    };
+                });
+            }
+
             const populationContent = {
-                CDG: {
+                CDG: () => ({
+                    code: 'CDG',
+                    shortName: 'CDG',
                     name: 'Population CDG',
                     description: 'Votre agenda stratégique et les moments clés vous attendent ici.',
-                    quickQuestions: [
-                        'Quels sont les ateliers de leadership aujourd\'hui ?',
-                        'Où se déroule le dîner de gala ?',
-                        'Quels speakers interviennent ce matin ?'
-                    ],
+                    quickQuestions: createQuickQuestions({
+                        programme: {
+                            response: (population) => `Le programme ${population.shortName} débute par le briefing exécutif à 8h30 en salle Horizon, suivi des ateliers leadership et du dîner networking. Retrouve tout le détail dans Hubby, filtre ${population.shortName}.`
+                        },
+                        group: {
+                            response: () => 'Ton groupe CDG rassemble les directeurs de zone et le Comex accompagnateur. Dans « Mon groupe », accède aux bios express et au canal WhatsApp dédié.'
+                        },
+                        infos: {
+                            response: () => 'Pour CDG : navettes privées toutes les 20 minutes depuis le lobby, accès prioritaire aux salles Horizon & Latitude et desk Hubby Premium pour toute requête.'
+                        },
+                        clubMedLife: {
+                            response: () => 'La session Club Med Life dédiée CDG est programmée à 17h dans le showroom Latitude avec présentation des orientations stratégiques 2025.'
+                        },
+                        activities: {
+                            response: () => 'Les ateliers leadership, la table ronde Comex et la visite terrain stratégique t’attendent. Confirme tes présences avant 14h dans « Activités ».'
+                        },
+                        vivaEngage: {
+                            response: () => 'Sur Viva Engage, rejoins la communauté « Leaders CDG » pour partager vos insights et suivre les décisions prises en plénière.'
+                        }
+                    }),
                     keyPoints: [
                         'Briefing exécutif à 8h30 – salle Horizon.',
                         'Navettes privées disponibles toutes les 20 minutes.',
                         'Dîner networking avec le Comex à 20h.'
-                    ]
-                },
-                LC: {
+                    ],
+                    fallbackResponse: 'Je transmets ta demande à l’équipe Hubby CDG et je reviens vers toi très vite.'
+                }),
+                LC: () => ({
+                    code: 'LC',
+                    shortName: 'LC',
                     name: 'Population LC',
                     description: 'Retrouvez vos points de rendez-vous et les sessions clients.',
-                    quickQuestions: [
-                        'Quel est l\'itinéraire du parcours client ?',
-                        'Où puis-je récupérer mes supports marketing ?',
-                        'Quel est le prochain atelier produit ?'
-                    ],
+                    quickQuestions: createQuickQuestions({
+                        programme: {
+                            response: (population) => `Le programme ${population.shortName} démarre par l’accueil clients à 9h à l’amphithéâtre Azur, se poursuit par les parcours expérience et se conclut par la soirée immersive. Retrouve le détail dans Hubby, filtre ${population.shortName}.`
+                        },
+                        group: {
+                            response: () => 'Ton groupe LC rassemble les account managers et les équipes commerciales. L’onglet « Mon groupe » liste vos binômes clients et le GM Coach associé.'
+                        },
+                        infos: {
+                            response: () => 'Navettes clients depuis l’aéroport toutes les 30 minutes, kits de présentation disponibles au desk Hubby et signalétique dédiée vers l’amphithéâtre Azur.'
+                        },
+                        clubMedLife: {
+                            response: () => 'Club Med Life propose un tour guidé du village expérientiel à 16h30 avec les équipes produit et CRM.'
+                        },
+                        activities: {
+                            response: () => 'Réserve tes ateliers parcours client, les démos CRM et la soirée immersive directement dans la rubrique « Activités ».'
+                        },
+                        vivaEngage: {
+                            response: () => 'Partage les retours clients dans la communauté Viva Engage « Client Experience » et récupère les supports à chaud.'
+                        }
+                    }),
                     keyPoints: [
                         'Accueil clients à 9h – amphithéâtre Azur.',
                         'Corner marketing ouvert de 14h à 18h.',
                         'Soirée expérience immersive à partir de 19h.'
-                    ]
-                },
-                CDV: {
-                    name: 'Population CDV',
-                    description: 'Suivez le planning des villages et les points d\'attention opérationnels.',
-                    quickQuestions: [
-                        'Quelle est la réunion opérationnelle du jour ?',
-                        'Quels sont les temps forts à partager avec mon équipe ?',
-                        'Où trouver le support logistique ?'
                     ],
+                    fallbackResponse: 'Je transmets ta demande à l’équipe Hubby LC et je te recontacte rapidement.'
+                }),
+                CDV: () => ({
+                    code: 'CDV',
+                    shortName: 'CDV',
+                    name: 'Population CDV',
+                    description: 'Suivez le planning des villages et les points d’attention opérationnels.',
+                    quickQuestions: createQuickQuestions({
+                        programme: {
+                            response: (population) => `Le programme ${population.shortName} commence par le brief opérationnel à 8h en salle Latitude, enchaîne avec les ateliers terrain et se termine par la visite du village à 15h. Consulte-le dans Hubby, filtre ${population.shortName}.`
+                        },
+                        group: {
+                            response: () => 'Ton groupe CDV réunit les chefs de village et leurs assistants. Dans « Mon groupe », retrouve les fiches GM Coach et les contacts logistique.'
+                        },
+                        infos: {
+                            response: () => 'Desk terrain disponible dès 7h30, assistance logistique sur la passerelle arrière et hotline Hubby dédiée aux opérations.'
+                        },
+                        clubMedLife: {
+                            response: () => 'Le parcours Club Med Life met l’accent sur les innovations village & expérience GM. Passe sur le showroom dès 14h pour la démonstration terrain.'
+                        },
+                        activities: {
+                            response: () => 'Les ateliers best practices villages et la visite terrain immersive sont à confirmer dans « Activités » avant midi.'
+                        },
+                        vivaEngage: {
+                            response: () => 'Rejoins la communauté Viva Engage « Villages en action » pour partager vos bonnes pratiques et récupérer les supports opérationnels.'
+                        }
+                    }),
                     keyPoints: [
                         'Brief opérationnel à 8h – salle Latitude.',
                         'Point logistique disponible via le desk Hubby.',
                         'Visite terrain organisée à 15h.'
-                    ]
-                },
-                LKT: {
-                    name: 'Population LKT',
-                    description: 'Planifiez vos sessions de formation et d\'échanges best practices.',
-                    quickQuestions: [
-                        'Quel atelier formation commence maintenant ?',
-                        'Comment rejoindre la masterclass digitale ?',
-                        'Quels sont les intervenants de l\'après-midi ?'
                     ],
+                    fallbackResponse: 'Je transmets ta demande à l’équipe Hubby CDV et je reviens vers toi dès que possible.'
+                }),
+                LKT: () => ({
+                    code: 'LKT',
+                    shortName: 'LKT',
+                    name: 'Population LKT',
+                    description: 'Planifiez vos sessions de formation et d’échanges best practices.',
+                    quickQuestions: createQuickQuestions({
+                        programme: {
+                            response: (population) => `Le programme ${population.shortName} prévoit la formation à 10h en salle Compass, la masterclass digitale et les échanges best practices en fin de journée. Le détail est dans Hubby, filtre ${population.shortName}.`
+                        },
+                        group: {
+                            response: () => 'Ton groupe LKT regroupe les formateurs et ambassadeurs Learning. Dans « Mon groupe », consulte les rôles et contacts pédagogiques.'
+                        },
+                        infos: {
+                            response: () => 'Les salles Compass et Horizon B sont ouvertes 15 minutes avant chaque session, avec assistance technique sur place.'
+                        },
+                        clubMedLife: {
+                            response: () => 'Club Med Life te propose un focus innovations formation avec démo immersive à 16h en salle Compass.'
+                        },
+                        activities: {
+                            response: () => 'Les ateliers pédagogiques et les labs digitaux sont accessibles via « Activités ». Pense à valider ta présence pour recevoir les supports.'
+                        },
+                        vivaEngage: {
+                            response: () => 'Sur Viva Engage, rejoins la communauté « Learning Tribe » pour partager vos bonnes pratiques et accéder aux replays des masterclasses.'
+                        }
+                    }),
                     keyPoints: [
                         'Rendez-vous formation à 10h – salle Compass.',
                         'Masterclass digitale en salle Horizon B.',
                         'Afterwork thématique à 18h30.'
-                    ]
-                },
-                MKT: {
+                    ],
+                    fallbackResponse: 'Je transmets ta demande à l’équipe Hubby LKT et je reviens vers toi rapidement.'
+                }),
+                MKT: () => ({
+                    code: 'MKT',
+                    shortName: 'MKT',
                     name: 'Population MKT',
                     description: 'Les actus communication et les rendez-vous influence sont ici.',
-                    quickQuestions: [
-                        'Quelle est la session social media du jour ?',
-                        'Où rencontrer l\'équipe influence ?',
-                        'Quels contenus sont à mettre en avant ?'
-                    ],
+                    quickQuestions: createQuickQuestions({
+                        programme: {
+                            response: (population) => `Le programme ${population.shortName} inclut le workshop storytelling à 11h, les sessions contenus l’après-midi et la rencontre influence à 19h. Retrouve tout le déroulé dans Hubby, filtre ${population.shortName}.`
+                        },
+                        group: {
+                            response: () => 'Ton groupe MKT réunit les équipes communication, brand et influence. L’onglet « Mon groupe » détaille vos squads et canaux de contact.'
+                        },
+                        infos: {
+                            response: () => 'Studio photo disponible de 14h à 17h, corner brand au foyer Riviera et hotline production via Hubby.'
+                        },
+                        clubMedLife: {
+                            response: () => 'Club Med Life te dévoile les assets 2025 et les campagnes signature. Rendez-vous dans le showroom brand entre 15h et 17h.'
+                        },
+                        activities: {
+                            response: () => 'Pense à réserver les ateliers contenus, les sessions influence et le tour inspiration dans « Activités ».'
+                        },
+                        vivaEngage: {
+                            response: () => 'La communauté Viva Engage « Brand Stories » centralise vos partages, moodboards et replays des talks communication.'
+                        }
+                    }),
                     keyPoints: [
                         'Workshop storytelling à 11h – salle Riviera.',
                         'Studio photo disponible de 14h à 17h.',
                         'Session influenceurs à 19h.'
-                    ]
-                },
-                'MKT+': {
+                    ],
+                    fallbackResponse: 'Je transmets ta demande à l’équipe Hubby MKT et je te tiens informé rapidement.'
+                }),
+                'MKT+': () => ({
+                    code: 'MKT+',
+                    shortName: 'MKT+',
                     name: 'Population MKT+',
                     description: 'Votre agenda premium et les accès exclusifs sont disponibles ici.',
-                    quickQuestions: [
-                        'Quels sont les accès privilégiés aujourd\'hui ?',
-                        'Comment rejoindre le salon privé ?',
-                        'Quel est le programme VIP ?'
-                    ],
+                    quickQuestions: createQuickQuestions({
+                        programme: {
+                            response: (population) => `Le programme ${population.shortName} prévoit les sessions premium le matin, les rendez-vous one-to-one l’après-midi et le dîner signature à 20h30. Retrouve les créneaux dans Hubby, filtre ${population.shortName}.`
+                        },
+                        group: {
+                            response: () => 'Ton groupe MKT+ rassemble les partenaires premium et les experts brand. Dans « Mon groupe », accède aux contacts conciergerie et aux agendas partagés.'
+                        },
+                        infos: {
+                            response: () => 'Salon privé ouvert dès 9h sur la terrasse Lagoon, conciergerie dédiée via Hubby et transferts personnalisés sur demande.'
+                        },
+                        clubMedLife: {
+                            response: () => 'La visite Club Med Life pour MKT+ propose un parcours exclusif avec démo produits signature et rencontres avec les designers.'
+                        },
+                        activities: {
+                            response: () => 'Les expériences premium (mixologie, ateliers signature, backstage) se réservent dans « Activités ». Places limitées, pense à confirmer rapidement.'
+                        },
+                        vivaEngage: {
+                            response: () => 'Sur Viva Engage, rejoins la communauté « Premium Circle » pour suivre les annonces exclusives et récupérer les replays privés.'
+                        }
+                    }),
                     keyPoints: [
                         'Salon privé ouvert dès 9h – terrasse Lagoon.',
                         'Conciergerie dédiée joignable via Hubby.',
                         'Dîner signature avec le Chef à 20h30.'
-                    ]
-                }
+                    ],
+                    fallbackResponse: 'Je transmets ta demande à l’équipe Hubby MKT+ et je reviens vers toi sans attendre.'
+                })
             };
+
+            const defaultPopulation = () => ({
+                code: 'GEN',
+                shortName: 'tous les participants',
+                name: 'Hubby vous accompagne.',
+                description: 'Posez vos questions et retrouvez les informations clés du séminaire.',
+                quickQuestions: createQuickQuestions(),
+                keyPoints: [
+                    'Consultez le planning dans Hubby pour ne rien manquer.',
+                    'Les équipes Hubby sont disponibles sur place de 8h à 22h.',
+                    'Contact WhatsApp dédié&nbsp;: +33 6 00 00 00 00.'
+                ],
+                fallbackResponse: 'Je note ta demande et je reviens vers toi au plus vite avec les informations adaptées.'
+            });
 
             const params = new URLSearchParams(window.location.search);
             const populationCode = params.get('population');
@@ -180,20 +357,25 @@
             const chatForm = document.querySelector('[data-chat-form]');
             const messageInput = chatForm.querySelector('input');
 
-            const population = populationContent[populationCode] || {
-                name: 'Hubby vous accompagne.',
-                description: 'Posez vos questions et retrouvez les informations clés du séminaire.',
-                quickQuestions: [
-                    'Quel est le programme d\'aujourd\'hui ?',
-                    'Où se trouve la prochaine activité ?',
-                    'Comment contacter la conciergerie ?'
-                ],
-                keyPoints: [
-                    'Consultez le planning dans Hubby pour ne rien manquer.',
-                    'Les équipes Hubby sont disponibles sur place de 8h à 22h.',
-                    'Contact WhatsApp dédié&nbsp;: +33 6 00 00 00 00.'
-                ]
-            };
+            const populationFactory = populationContent[populationCode];
+            const population = populationFactory ? populationFactory() : defaultPopulation();
+
+            const quickQuestionConfigs = (population.quickQuestions || []).map((question) => {
+                const message = typeof question.message === 'function' ? question.message(population) : (question.message || question.label);
+                const response = typeof question.response === 'function' ? question.response(population) : question.response;
+                const link = typeof question.link === 'function' ? question.link(population) : question.link;
+                const keywords = (question.keywords && question.keywords.length ? question.keywords : [question.label])
+                    .map((keyword) => keyword.toLowerCase());
+
+                return {
+                    ...question,
+                    label: question.label,
+                    message,
+                    response,
+                    link,
+                    keywords
+                };
+            });
 
             titleEl.textContent = population.name;
             descriptionEl.innerHTML = population.description;
@@ -207,25 +389,24 @@
             resetList(quickListEl);
             resetList(keyPointsEl);
 
-            population.quickQuestions.forEach((question) => {
+            quickQuestionConfigs.forEach((config) => {
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = 'quick-question-button';
-                button.textContent = question;
+                button.textContent = config.label;
                 button.addEventListener('click', () => {
-                    appendMessage('user', question);
-                    simulateHubbyResponse(question);
+                    handleQuickQuestion(config);
                 });
                 quickListEl.appendChild(button);
             });
 
-            population.keyPoints.forEach((point) => {
+            (population.keyPoints || []).forEach((point) => {
                 const item = document.createElement('li');
                 item.innerHTML = point;
                 keyPointsEl.appendChild(item);
             });
 
-            if (populationCode && populationContent[populationCode]) {
+            if (populationCode && populationFactory) {
                 appendMessage('hubby', `Ravi de vous retrouver, ${population.name}. Voici les informations qui vous concernent.`);
             }
 
@@ -264,18 +445,42 @@
                 chatThreadEl.scrollTop = chatThreadEl.scrollHeight;
             }
 
-            function simulateHubbyResponse(question) {
-                let response = "Je note votre demande et je vous reviens rapidement avec plus d'informations.";
+            function handleQuickQuestion(config) {
+                const userMessage = config.message || config.label;
+                appendMessage('user', userMessage);
+                respondToConfig(config);
+            }
 
-                if (/programme/i.test(question)) {
-                    response = 'Le programme complet est disponible dans votre agenda Hubby et s\'adapte à votre population. Souhaitez-vous le recevoir par e-mail&nbsp;?';
-                } else if (/où|ou /i.test(question)) {
-                    response = 'Vous pouvez retrouver le lieu exact dans la carte interactive de l\'app. Une signalétique Hubby vous guidera sur place.';
-                } else if (/contact|contacter/i.test(question)) {
-                    response = 'La conciergerie Hubby est joignable sur WhatsApp au +33 6 00 00 00 00 ou directement au desk dans le lobby.';
+            function respondToConfig(config) {
+                if (config.response) {
+                    appendMessage('hubby', config.response);
+                    return;
                 }
 
-                appendMessage('hubby', response);
+                if (config.link) {
+                    appendMessage('hubby', `Voici la page dédiée&nbsp;: <a href="${config.link}" target="_blank" rel="noopener">${config.label}</a>`);
+                    return;
+                }
+
+                appendMessage('hubby', population.fallbackResponse);
+            }
+
+            function simulateHubbyResponse(question) {
+                const normalizedQuestion = question.toLowerCase();
+                const matchingConfig = quickQuestionConfigs.find((config) => {
+                    if (config.message && config.message.toLowerCase() === normalizedQuestion) {
+                        return true;
+                    }
+
+                    return config.keywords.some((keyword) => normalizedQuestion.includes(keyword));
+                });
+
+                if (matchingConfig) {
+                    respondToConfig(matchingConfig);
+                    return;
+                }
+
+                appendMessage('hubby', population.fallbackResponse);
             }
         })();
     </script>
