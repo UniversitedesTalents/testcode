@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubby – Votre assistant pendant les Academy Days</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <header class="site-header" role="banner">
+            <span class="header-band" aria-hidden="true"></span>
+            <div class="header-inner">
+                <div class="brand">
+                    <a class="brand-logo" href="index.html">Hubby</a>
+                    <p class="brand-subtitle">Assistant Academy Days Club Med 2025</p>
+                </div>
+                <a class="back-link" href="index.html">&larr; Retour à l'accueil</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="chatbot" aria-labelledby="chatbot-title">
+                <div class="chatbot-inner">
+                    <header class="chatbot-header">
+                        <div>
+                            <p class="chatbot-tag">Espace conversation</p>
+                            <h1 id="chatbot-title" data-population-name>
+                                Hubby vous accompagne.
+                            </h1>
+                        </div>
+                        <p class="chatbot-subtitle" data-population-description>
+                            Posez vos questions et retrouvez les informations clés du séminaire.
+                        </p>
+                    </header>
+
+                    <div class="chat-layout">
+                        <section class="chat-panel" aria-label="Fil de discussion Hubby">
+                            <div class="chat-thread" data-chat-thread>
+                                <article class="message message--hubby">
+                                    <h2 class="message-author">Hubby</h2>
+                                    <p>Bonjour&nbsp;! Je suis là pour vous guider pendant les Academy Days. Sélectionnez une question rapide ou écrivez votre demande.</p>
+                                </article>
+                            </div>
+                            <form class="chat-input" data-chat-form>
+                                <label for="message-input" class="visually-hidden">Votre message</label>
+                                <input id="message-input" name="message" type="text" placeholder="Écrivez votre message..." autocomplete="off" required>
+                                <button type="submit">Envoyer</button>
+                            </form>
+                        </section>
+
+                        <aside class="assistant-panel" aria-label="Actions rapides et informations">
+                            <section class="quick-questions" aria-labelledby="quick-questions-title">
+                                <h2 id="quick-questions-title">Questions rapides</h2>
+                                <div class="quick-questions-list" data-quick-questions>
+                                    <!-- Boutons insérés via JavaScript -->
+                                </div>
+                            </section>
+
+                            <section class="key-points" aria-labelledby="key-points-title">
+                                <h2 id="key-points-title">Informations clés</h2>
+                                <ul class="key-points-list" data-key-points>
+                                    <!-- Éléments insérés via JavaScript -->
+                                </ul>
+                            </section>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer" role="contentinfo">
+            <div class="footer-inner">
+                <p class="footer-title">Hubby – Assistant Academy Days Club Med 2025</p>
+                <p class="footer-subtext">Besoin d’un coup de main&nbsp;? Écris-nous sur WhatsApp ou retrouve-nous au centre de conciergerie Club Med.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            const populationContent = {
+                CDG: {
+                    name: 'Population CDG',
+                    description: 'Votre agenda stratégique et les moments clés vous attendent ici.',
+                    quickQuestions: [
+                        'Quels sont les ateliers de leadership aujourd\'hui ?',
+                        'Où se déroule le dîner de gala ?',
+                        'Quels speakers interviennent ce matin ?'
+                    ],
+                    keyPoints: [
+                        'Briefing exécutif à 8h30 – salle Horizon.',
+                        'Navettes privées disponibles toutes les 20 minutes.',
+                        'Dîner networking avec le Comex à 20h.'
+                    ]
+                },
+                LC: {
+                    name: 'Population LC',
+                    description: 'Retrouvez vos points de rendez-vous et les sessions clients.',
+                    quickQuestions: [
+                        'Quel est l\'itinéraire du parcours client ?',
+                        'Où puis-je récupérer mes supports marketing ?',
+                        'Quel est le prochain atelier produit ?'
+                    ],
+                    keyPoints: [
+                        'Accueil clients à 9h – amphithéâtre Azur.',
+                        'Corner marketing ouvert de 14h à 18h.',
+                        'Soirée expérience immersive à partir de 19h.'
+                    ]
+                },
+                CDV: {
+                    name: 'Population CDV',
+                    description: 'Suivez le planning des villages et les points d\'attention opérationnels.',
+                    quickQuestions: [
+                        'Quelle est la réunion opérationnelle du jour ?',
+                        'Quels sont les temps forts à partager avec mon équipe ?',
+                        'Où trouver le support logistique ?'
+                    ],
+                    keyPoints: [
+                        'Brief opérationnel à 8h – salle Latitude.',
+                        'Point logistique disponible via le desk Hubby.',
+                        'Visite terrain organisée à 15h.'
+                    ]
+                },
+                LKT: {
+                    name: 'Population LKT',
+                    description: 'Planifiez vos sessions de formation et d\'échanges best practices.',
+                    quickQuestions: [
+                        'Quel atelier formation commence maintenant ?',
+                        'Comment rejoindre la masterclass digitale ?',
+                        'Quels sont les intervenants de l\'après-midi ?'
+                    ],
+                    keyPoints: [
+                        'Rendez-vous formation à 10h – salle Compass.',
+                        'Masterclass digitale en salle Horizon B.',
+                        'Afterwork thématique à 18h30.'
+                    ]
+                },
+                MKT: {
+                    name: 'Population MKT',
+                    description: 'Les actus communication et les rendez-vous influence sont ici.',
+                    quickQuestions: [
+                        'Quelle est la session social media du jour ?',
+                        'Où rencontrer l\'équipe influence ?',
+                        'Quels contenus sont à mettre en avant ?'
+                    ],
+                    keyPoints: [
+                        'Workshop storytelling à 11h – salle Riviera.',
+                        'Studio photo disponible de 14h à 17h.',
+                        'Session influenceurs à 19h.'
+                    ]
+                },
+                'MKT+': {
+                    name: 'Population MKT+',
+                    description: 'Votre agenda premium et les accès exclusifs sont disponibles ici.',
+                    quickQuestions: [
+                        'Quels sont les accès privilégiés aujourd\'hui ?',
+                        'Comment rejoindre le salon privé ?',
+                        'Quel est le programme VIP ?'
+                    ],
+                    keyPoints: [
+                        'Salon privé ouvert dès 9h – terrasse Lagoon.',
+                        'Conciergerie dédiée joignable via Hubby.',
+                        'Dîner signature avec le Chef à 20h30.'
+                    ]
+                }
+            };
+
+            const params = new URLSearchParams(window.location.search);
+            const populationCode = params.get('population');
+
+            const titleEl = document.querySelector('[data-population-name]');
+            const descriptionEl = document.querySelector('[data-population-description]');
+            const quickListEl = document.querySelector('[data-quick-questions]');
+            const keyPointsEl = document.querySelector('[data-key-points]');
+            const chatThreadEl = document.querySelector('[data-chat-thread]');
+            const chatForm = document.querySelector('[data-chat-form]');
+            const messageInput = chatForm.querySelector('input');
+
+            const population = populationContent[populationCode] || {
+                name: 'Hubby vous accompagne.',
+                description: 'Posez vos questions et retrouvez les informations clés du séminaire.',
+                quickQuestions: [
+                    'Quel est le programme d\'aujourd\'hui ?',
+                    'Où se trouve la prochaine activité ?',
+                    'Comment contacter la conciergerie ?'
+                ],
+                keyPoints: [
+                    'Consultez le planning dans Hubby pour ne rien manquer.',
+                    'Les équipes Hubby sont disponibles sur place de 8h à 22h.',
+                    'Contact WhatsApp dédié&nbsp;: +33 6 00 00 00 00.'
+                ]
+            };
+
+            titleEl.textContent = population.name;
+            descriptionEl.innerHTML = population.description;
+
+            const resetList = (element) => {
+                while (element.firstChild) {
+                    element.removeChild(element.firstChild);
+                }
+            };
+
+            resetList(quickListEl);
+            resetList(keyPointsEl);
+
+            population.quickQuestions.forEach((question) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'quick-question-button';
+                button.textContent = question;
+                button.addEventListener('click', () => {
+                    appendMessage('user', question);
+                    simulateHubbyResponse(question);
+                });
+                quickListEl.appendChild(button);
+            });
+
+            population.keyPoints.forEach((point) => {
+                const item = document.createElement('li');
+                item.innerHTML = point;
+                keyPointsEl.appendChild(item);
+            });
+
+            if (populationCode && populationContent[populationCode]) {
+                appendMessage('hubby', `Ravi de vous retrouver, ${population.name}. Voici les informations qui vous concernent.`);
+            }
+
+            chatForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const message = messageInput.value.trim();
+
+                if (!message) {
+                    return;
+                }
+
+                appendMessage('user', message);
+                simulateHubbyResponse(message);
+                messageInput.value = '';
+                messageInput.focus();
+            });
+
+            function appendMessage(author, text) {
+                const message = document.createElement('article');
+                message.className = `message message--${author}`;
+
+                const heading = document.createElement('h2');
+                heading.className = 'message-author';
+                heading.textContent = author === 'hubby' ? 'Hubby' : 'Vous';
+
+                const paragraph = document.createElement('p');
+                if (author === 'hubby') {
+                    paragraph.innerHTML = text;
+                } else {
+                    paragraph.textContent = text;
+                }
+
+                message.appendChild(heading);
+                message.appendChild(paragraph);
+                chatThreadEl.appendChild(message);
+                chatThreadEl.scrollTop = chatThreadEl.scrollHeight;
+            }
+
+            function simulateHubbyResponse(question) {
+                let response = "Je note votre demande et je vous reviens rapidement avec plus d'informations.";
+
+                if (/programme/i.test(question)) {
+                    response = 'Le programme complet est disponible dans votre agenda Hubby et s\'adapte à votre population. Souhaitez-vous le recevoir par e-mail&nbsp;?';
+                } else if (/où|ou /i.test(question)) {
+                    response = 'Vous pouvez retrouver le lieu exact dans la carte interactive de l\'app. Une signalétique Hubby vous guidera sur place.';
+                } else if (/contact|contacter/i.test(question)) {
+                    response = 'La conciergerie Hubby est joignable sur WhatsApp au +33 6 00 00 00 00 ou directement au desk dans le lobby.';
+                }
+
+                appendMessage('hubby', response);
+            }
+        })();
+    </script>
+</body>
+</html>
