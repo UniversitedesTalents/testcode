@@ -46,7 +46,7 @@
             touch-action: manipulation;
             line-height: 1.6;
             color: var(--club-med-text);
-            background: linear-gradient(180deg, #F9F8F4 0%, #EDE5D6 45%, #F9F8F4 100%);
+            background: var(--club-med-offwhite);
             position: relative;
         }
 
@@ -363,7 +363,7 @@
 
         .chat-screen {
             min-height: 100vh;
-            background-color: var(--club-med-sand);
+            background-color: var(--club-med-offwhite);
             display: flex;
             flex-direction: column;
             animation: backgroundFade 0.4s ease both;
@@ -453,12 +453,14 @@
             padding: 2.5rem 1.5rem 3rem;
             display: flex;
             justify-content: center;
+            background: linear-gradient(180deg, rgba(237, 229, 214, 0.45) 0%, rgba(249, 248, 244, 0.95) 65%);
         }
 
         .chat-window {
             background: var(--club-med-offwhite);
-            border-radius: 16px;
-            box-shadow: 0 22px 40px rgba(30, 40, 72, 0.15);
+            border-radius: 18px;
+            border: 1px solid rgba(253, 190, 0, 0.45);
+            box-shadow: 0 24px 48px rgba(30, 40, 72, 0.12);
             width: 100%;
             max-width: 960px;
             display: flex;
@@ -473,7 +475,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 1.5rem 2rem 1.25rem;
-            background: linear-gradient(180deg, rgba(237, 229, 214, 0.35) 0%, transparent 100%);
+            background: var(--club-med-sand);
+            border-bottom: 1px solid rgba(253, 190, 0, 0.5);
             gap: 1rem;
         }
 
@@ -505,8 +508,8 @@
 
         .chat-back-button:hover,
         .chat-back-button:focus-visible {
-            background: rgba(253, 190, 0, 0.14);
-            color: var(--club-med-brown);
+            background: rgba(253, 190, 0, 0.18);
+            color: var(--club-med-primary);
             transform: translateY(-1px);
             outline: none;
         }
@@ -518,15 +521,17 @@
         }
 
         .chat-population-badge {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: var(--club-med-offwhite);
-            box-shadow: 0 8px 20px rgba(30, 40, 72, 0.18);
+            color: var(--club-med-primary);
+            background-color: var(--club-med-gold);
+            border: 2px solid var(--club-med-offwhite);
+            box-shadow: 0 6px 16px rgba(30, 40, 72, 0.15);
         }
 
         .chat-population-meta {
@@ -536,8 +541,8 @@
         }
 
         .chat-population-label {
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1.05rem;
+            font-weight: 700;
             color: var(--club-med-primary);
         }
 
@@ -562,11 +567,12 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 0 2rem 2rem;
+            padding: 2rem 2rem 2.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
             scroll-behavior: smooth;
+            background: linear-gradient(180deg, rgba(249, 248, 244, 0.75) 0%, rgba(237, 229, 214, 0.35) 100%);
         }
 
         .chat-messages::-webkit-scrollbar {
@@ -580,7 +586,7 @@
 
         .message-row {
             display: flex;
-            gap: 0.9rem;
+            gap: 1rem;
             align-items: flex-start;
             animation: messageFade 0.45s ease both;
         }
@@ -596,45 +602,48 @@
         .chat-bubble {
             position: relative;
             max-width: min(520px, 100%);
-            padding: 1.1rem 1.25rem;
-            border-radius: 22px;
-            box-shadow: 0 12px 28px rgba(30, 40, 72, 0.08);
-            line-height: 1.6;
-            backdrop-filter: blur(2px);
-            transition: transform 0.2s ease;
+            padding: 1.25rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            line-height: 1.65;
+            background: var(--club-med-offwhite);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .chat-bubble:hover {
             transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
 
         .chat-bubble--hubby {
-            background: var(--club-med-primary);
-            color: var(--club-med-offwhite);
-            border-radius: 24px 24px 24px 14px;
-            padding-left: 3.1rem;
+            background: var(--club-med-offwhite);
+            color: var(--club-med-primary);
+            border: 1px solid rgba(253, 190, 0, 0.6);
+            padding-left: 3.25rem;
         }
 
         .chat-bubble--user {
             background: var(--club-med-terracotta);
             color: var(--club-med-offwhite);
-            border-radius: 24px 24px 14px 24px;
+            border: 1px solid rgba(167, 82, 40, 0.65);
             animation: bubblePop 0.3s ease both;
         }
 
         .chat-bubble--typing {
-            background: rgba(30, 40, 72, 0.08);
-            border-radius: 20px;
-            padding: 0.85rem 1.1rem;
+            background: var(--club-med-offwhite);
+            color: var(--club-med-primary);
+            border: 1px solid rgba(253, 190, 0, 0.35);
+            border-radius: 16px;
+            padding: 0.9rem 1.2rem;
             box-shadow: none;
         }
 
         .bubble-icon {
             position: absolute;
-            left: 1.2rem;
-            top: 1rem;
-            width: 26px;
-            height: 26px;
+            left: 1.35rem;
+            top: 1.25rem;
+            width: 24px;
+            height: 24px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -706,27 +715,28 @@
         }
 
         .date-filter-btn {
-            border: 1px solid transparent;
+            border: 1px solid rgba(253, 190, 0, 0.6);
             border-radius: 999px;
-            padding: 0.55rem 1.35rem;
+            padding: 0.6rem 1.5rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--club-med-primary);
             background: var(--club-med-sand);
             cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+            transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         .date-filter-btn:hover,
         .date-filter-btn:focus-visible {
             outline: none;
-            border-color: var(--club-med-gold);
+            box-shadow: 0 6px 16px rgba(253, 190, 0, 0.25);
+            transform: translateY(-1px);
         }
 
         .date-filter-btn--active {
-            background: var(--club-med-primary);
-            color: var(--club-med-offwhite);
-            box-shadow: 0 12px 24px rgba(30, 40, 72, 0.18);
+            background: var(--club-med-gold);
+            color: var(--club-med-primary);
+            box-shadow: 0 10px 22px rgba(253, 190, 0, 0.35);
             transform: translateY(-1px);
         }
 
@@ -741,7 +751,7 @@
         .quick-reply {
             border: none;
             border-radius: 999px;
-            padding: 0.7rem 1.5rem;
+            padding: 0.75rem 1.75rem;
             font-weight: 600;
             font-size: 0.95rem;
             display: inline-flex;
@@ -750,29 +760,17 @@
             cursor: pointer;
             background: var(--club-med-gold);
             color: var(--club-med-primary);
-            box-shadow: 0 12px 20px rgba(253, 190, 0, 0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, filter 0.2s ease;
+            box-shadow: 0 6px 18px rgba(253, 190, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, filter 0.3s ease;
             animation: quickReplySlide 0.45s ease both;
-        }
-
-        .quick-reply--secondary {
-            background: var(--club-med-terracotta);
-            color: var(--club-med-primary);
-            box-shadow: 0 12px 24px rgba(167, 82, 40, 0.25);
         }
 
         .quick-reply:hover,
         .quick-reply:focus-visible {
             transform: translateY(-2px);
-            background: #ffcf33;
-            box-shadow: 0 16px 28px rgba(253, 190, 0, 0.32);
+            box-shadow: 0 12px 26px rgba(253, 190, 0, 0.38);
+            filter: brightness(1.06);
             outline: none;
-        }
-
-        .quick-reply--secondary:hover,
-        .quick-reply--secondary:focus-visible {
-            background: #b86135;
-            box-shadow: 0 16px 32px rgba(167, 82, 40, 0.32);
         }
 
         .quick-reply-icon {
@@ -812,7 +810,7 @@
         }
 
         .chat-input-field::placeholder {
-            color: #7A746D;
+            color: rgba(30, 40, 72, 0.55);
         }
 
         .chat-send {
@@ -844,57 +842,75 @@
         }
 
         .hubby-info-card {
-            background: var(--club-med-offwhite);
-            border: 1px solid var(--club-med-gold);
+            background: var(--club-med-sand);
+            border: 1px solid rgba(253, 190, 0, 0.7);
             border-radius: 12px;
-            padding: 1.25rem 1.5rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
-            box-shadow: 0 16px 32px rgba(30, 40, 72, 0.12);
+            gap: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .hubby-info-card .hubby-info-header {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
         }
 
         .hubby-info-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
-            font-size: 1.35rem;
-            color: var(--club-med-gold);
+            width: 32px;
+            height: 32px;
+            font-size: 1.5rem;
+            color: var(--club-med-terracotta);
         }
 
         .hubby-info-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--club-med-gold);
+            width: 28px;
+            height: 28px;
+            fill: var(--club-med-terracotta);
         }
 
         .hubby-info-title {
             font-weight: 700;
-            color: var(--club-med-primary);
-            font-size: 1.05rem;
+            color: var(--club-med-terracotta);
+            font-size: 1.15rem;
+            margin: 0;
         }
 
         .hubby-info-subtitle {
-            font-size: 0.9rem;
-            color: #6C6C6C;
-            margin: 0;
+            font-size: 0.95rem;
+            color: rgba(30, 40, 72, 0.75);
+            margin: 0.3rem 0 0;
+        }
+
+        .hubby-info-description {
+            color: var(--club-med-primary);
+            line-height: 1.65;
+            font-size: 0.98rem;
+        }
+
+        .hubby-info-description p {
+            margin: 0.5rem 0 0;
         }
 
         .hubby-info-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.65rem;
+            gap: 0.5rem;
             font-size: 0.9rem;
-            color: #6C6C6C;
-            margin: 0.5rem 0;
+            color: var(--club-med-primary);
+            margin: 0.25rem 0 0;
+        }
+
+        .hubby-info-meta span {
+            background: rgba(253, 190, 0, 0.22);
+            border-radius: 999px;
+            padding: 0.35rem 0.8rem;
+            font-weight: 600;
         }
 
         .hubby-info-card--action {
@@ -904,21 +920,23 @@
             gap: 1rem;
             cursor: pointer;
             text-align: left;
-            border: 1px solid var(--club-med-gold);
+            border: 1px solid rgba(253, 190, 0, 0.7);
             appearance: none;
             width: 100%;
+            background: var(--club-med-sand);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .hubby-info-card--action:hover,
         .hubby-info-card--action:focus-visible {
             transform: translateY(-2px);
-            box-shadow: 0 22px 36px rgba(30, 40, 72, 0.18);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
             outline: none;
         }
 
         .hubby-info-arrow {
             font-size: 1.25rem;
-            color: var(--club-med-primary);
+            color: var(--club-med-terracotta);
         }
 
         .hubby-info-card--action .hubby-info-header {
@@ -935,7 +953,7 @@
             color: var(--club-med-offwhite);
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
         }
 
         .hubby-info-action:hover,
@@ -944,6 +962,68 @@
             color: var(--club-med-primary);
             transform: translateY(-1px);
             outline: none;
+        }
+
+        .hubby-info-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+            color: var(--club-med-gold);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .hubby-info-link::after {
+            content: '➜';
+            font-size: 0.95rem;
+        }
+
+        .hubby-info-link:hover,
+        .hubby-info-link:focus-visible {
+            color: var(--club-med-terracotta);
+            text-decoration: underline;
+        }
+
+        .community-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .community-card {
+            background-color: var(--club-med-sand);
+            color: var(--club-med-primary);
+            border: 1px solid rgba(253, 190, 0, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .community-card h3,
+        .community-card strong {
+            color: var(--club-med-terracotta);
+            font-weight: 600;
+            margin: 0 0 0.35rem;
+        }
+
+        .community-card p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .community-card a {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--club-med-gold);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .community-card a:hover,
+        .community-card a:focus-visible {
+            color: var(--club-med-terracotta);
+            text-decoration: underline;
         }
 
         @keyframes headerSlideDown {
@@ -1359,7 +1439,7 @@
                     <div class="chat-population">
                         <div id="selectedPopIcon" class="chat-population-badge">LC</div>
                         <div class="chat-population-meta">
-                            <span id="selectedPopName" class="chat-population-label">LC Assistant</span>
+                            <span id="selectedPopName" class="chat-population-label">LC</span>
                             <button id="changePopulationBtn" class="chat-population-change" type="button" data-fr="Changer de population" data-en="Change population">Changer de population</button>
                         </div>
                     </div>
@@ -1506,6 +1586,100 @@
             </span>
         `;
 
+        function buildInfoCardMarkup({ icon, title, subtitle = '', body = '', link = null }) {
+            const subtitleHtml = subtitle ? `<p class="hubby-info-subtitle">${subtitle}</p>` : '';
+            const bodyHtml = body ? `<div class="hubby-info-description">${body}</div>` : '';
+            const linkHtml = link && link.href && link.label
+                ? `<a class="hubby-info-link" href="${link.href}" target="_blank" rel="noopener">${link.label}</a>`
+                : '';
+
+            return `
+                <div class="hubby-info-card">
+                    <div class="hubby-info-header">
+                        <span class="hubby-info-icon" aria-hidden="true">${icon}</span>
+                        <div>
+                            <p class="hubby-info-title">${title}</p>
+                            ${subtitleHtml}
+                        </div>
+                    </div>
+                    ${bodyHtml}
+                    ${linkHtml}
+                </div>
+            `;
+        }
+
+        const vivaCommunityData = [
+            {
+                icon: '🤖',
+                title: { fr: 'AI Learning Club', en: 'AI Learning Club' },
+                description: {
+                    fr: 'Explorez les usages de l’intelligence artificielle dans la formation.',
+                    en: 'Explore how artificial intelligence is transforming learning experiences.'
+                },
+                link: {
+                    href: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all',
+                    label: { fr: 'Accéder à la communauté', en: 'Visit the community' }
+                }
+            },
+            {
+                icon: '🌱',
+                title: { fr: 'Forever Young', en: 'Forever Young' },
+                description: {
+                    fr: 'Découvrez les initiatives qui façonnent le futur du learning au Club Med.',
+                    en: 'Discover the initiatives shaping the future of learning at Club Med.'
+                },
+                link: {
+                    href: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new',
+                    label: { fr: 'Rejoindre la communauté', en: 'Join the community' }
+                }
+            },
+            {
+                icon: '🗞️',
+                title: { fr: 'Club Med News & Events', en: 'Club Med News & Events' },
+                description: {
+                    fr: 'Restez informé des actualités internes et des prochains événements.',
+                    en: 'Stay informed about internal news and upcoming events.'
+                },
+                link: {
+                    href: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new',
+                    label: { fr: 'Consulter les news', en: 'Read the updates' }
+                }
+            }
+        ];
+
+        function getVivaEngageMarkup(lang) {
+            const headerTitle = lang === 'fr'
+                ? 'Communautés Viva Engage'
+                : 'Viva Engage Communities';
+            const headerSubtitle = lang === 'fr'
+                ? 'Partagez, apprenez et connectez-vous avec la communauté Club Med.'
+                : 'Share, learn and connect with the Club Med community.';
+
+            const cards = vivaCommunityData.map(item => {
+                const linkLabel = item.link.label[lang] || item.link.label.fr;
+                return `
+                    <div class="community-card">
+                        <h3>${item.icon} ${item.title[lang] || item.title.fr}</h3>
+                        <p>${item.description[lang] || item.description.fr}</p>
+                        <a href="${item.link.href}" target="_blank" rel="noopener">${linkLabel}</a>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="hubby-info-card">
+                    <div class="hubby-info-header">
+                        <span class="hubby-info-icon" aria-hidden="true">💬</span>
+                        <div>
+                            <p class="hubby-info-title">${headerTitle}</p>
+                            <p class="hubby-info-subtitle">${headerSubtitle}</p>
+                        </div>
+                    </div>
+                    <div class="community-list">${cards}</div>
+                </div>
+            `;
+        }
+
         const translations = {
             fr: {
                 welcomeTitle: "👋 Bonjour ! Je suis votre assistant Hubby personnalisé",
@@ -1526,152 +1700,181 @@
         };
 
         function getClubMedLiveContent(lang) {
-            const fallback = {
-                fr: "🎬 Sélectionnez un jour pour découvrir le programme du Club Med Live.",
-                en: "🎬 Select a day to see the Club Med Live lineup."
-            };
+            const defaultSubtitle = lang === 'fr'
+                ? 'Programmation en un coup d’œil'
+                : 'Discover the line-up';
+            const fallbackBody = lang === 'fr'
+                ? 'Sélectionnez un jour pour afficher la programmation du Club Med Live.'
+                : 'Select a day to reveal the Club Med Live schedule.';
 
             if (!currentDay || currentDay === 'all') {
-                return fallback[lang] || fallback.fr;
+                return buildInfoCardMarkup({
+                    icon: '🎬',
+                    title: 'Club Med Live',
+                    subtitle: defaultSubtitle,
+                    body: fallbackBody
+                });
             }
 
-            const lineups = {
+            const lineupData = {
                 day1: {
-                    fr: `
-                        <div class="space-y-2">
-                            <p><strong>Lundi 18 Novembre :</strong></p>
-                            <p>
-                                🎵 <b>Club Med Live – Soirée d’ouverture</b><br>
-                                📍 Salle Atlas<br>
-                                🕗 21h00 – <b>Zavmusic</b> : musique électronique innovante.<br>
-                                🕙 22h30 – <b>Fleur de Mur</b> : performance artistique immersive mêlant musique et visuels.
-                            </p>
-                        </div>
-                    `,
-                    en: `
-                        <div class="space-y-2">
-                            <p><strong>Monday 18 November:</strong></p>
-                            <p>
-                                🎵 <b>Club Med Live – Opening Night</b><br>
-                                📍 Atlas Hall<br>
-                                🕗 9:00 PM – <b>Zavmusic</b>: innovative electronic soundscapes.<br>
-                                🕙 10:30 PM – <b>Fleur de Mur</b>: immersive art performance with visuals and sound.
-                            </p>
-                        </div>
-                    `
+                    fr: {
+                        subtitle: 'Lundi 18 novembre • Soirée d’ouverture',
+                        body: `
+                            <p>📍 Salle Atlas</p>
+                            <p>🕗 21h00 – <strong>Zavmusic</strong> : musique électronique innovante.</p>
+                            <p>🕙 22h30 – <strong>Fleur de Mur</strong> : performance artistique immersive.</p>
+                        `
+                    },
+                    en: {
+                        subtitle: 'Monday 18 November • Opening Night',
+                        body: `
+                            <p>📍 Atlas Hall</p>
+                            <p>🕗 9:00 PM – <strong>Zavmusic</strong>: innovative electronic soundscapes.</p>
+                            <p>🕙 10:30 PM – <strong>Fleur de Mur</strong>: immersive art performance.</p>
+                        `
+                    }
                 },
                 day2: {
-                    fr: `
-                        <div class="space-y-2">
-                            <p><strong>Mardi 19 Novembre :</strong></p>
-                            <p>
-                                🎶 <b>Club Med Live – Ambiance fusion</b><br>
-                                📍 Terrasse Agdal<br>
-                                🕗 20h30 – <b>DJ K-Sido</b> : mix électronique énergique et festif.<br>
-                                🕙 22h00 – <b>Sax Vibes</b> : saxophone jazz moderne, rythmes lounge et électro.
-                            </p>
-                        </div>
-                    `,
-                    en: `
-                        <div class="space-y-2">
-                            <p><strong>Tuesday 19 November:</strong></p>
-                            <p>
-                                🎶 <b>Club Med Live – Fusion Night</b><br>
-                                📍 Agdal Terrace<br>
-                                🕗 8:30 PM – <b>DJ K-Sido</b>: energetic electronic mix to light up the night.<br>
-                                🕙 10:00 PM – <b>Sax Vibes</b>: smooth modern jazz saxophone with electro rhythms.
-                            </p>
-                        </div>
-                    `
+                    fr: {
+                        subtitle: 'Mardi 19 novembre • Ambiance fusion',
+                        body: `
+                            <p>📍 Terrasse Agdal</p>
+                            <p>🕗 20h30 – <strong>DJ K-Sido</strong> : mix électronique énergique et festif.</p>
+                            <p>🕙 22h00 – <strong>Sax Vibes</strong> : jazz moderne et rythmes lounge.</p>
+                        `
+                    },
+                    en: {
+                        subtitle: 'Tuesday 19 November • Fusion Night',
+                        body: `
+                            <p>📍 Agdal Terrace</p>
+                            <p>🕗 8:30 PM – <strong>DJ K-Sido</strong>: energetic electronic mix to light up the night.</p>
+                            <p>🕙 10:00 PM – <strong>Sax Vibes</strong>: smooth modern jazz with electro rhythms.</p>
+                        `
+                    }
                 },
                 day3: {
-                    fr: `
-                        <div class="space-y-2">
-                            <p><strong>Mercredi 20 Novembre :</strong></p>
-                            <p>
-                                🌟 <b>Club Med Live – Soirée de clôture</b><br>
-                                📍 Piscine principale<br>
-                                🕗 20h30 – <b>ASMA</b> : chanteuse pop moderne et élégante.<br>
-                                🕙 22h00 – <b>Mat Duval</b> & <b>Brikxart</b> : fusion de musique live et d’art urbain.<br>
-                                🎻 <b>Quartet</b> : ensemble musical classique pour la touche finale.
-                            </p>
-                        </div>
-                    `,
-                    en: `
-                        <div class="space-y-2">
-                            <p><strong>Wednesday 20 November:</strong></p>
-                            <p>
-                                🌟 <b>Club Med Live – Closing Night</b><br>
-                                📍 Main Pool Area<br>
-                                🕗 8:30 PM – <b>ASMA</b>: modern pop vocalist with a refined touch.<br>
-                                🕙 10:00 PM – <b>Mat Duval</b> & <b>Brikxart</b>: live music meets urban art.<br>
-                                🎻 <b>Quartet</b>: classical ensemble for a graceful finale.
-                            </p>
-                        </div>
-                    `
+                    fr: {
+                        subtitle: 'Mercredi 20 novembre • Soirée de clôture',
+                        body: `
+                            <p>📍 Piscine principale</p>
+                            <p>🕗 20h30 – <strong>ASMA</strong> : pop moderne élégante.</p>
+                            <p>🕙 22h00 – <strong>Mat Duval & Brikxart</strong> : musique live et art urbain.</p>
+                            <p>🎻 <strong>Quartet</strong> : ensemble classique pour un final raffiné.</p>
+                        `
+                    },
+                    en: {
+                        subtitle: 'Wednesday 20 November • Closing Night',
+                        body: `
+                            <p>📍 Main Pool Area</p>
+                            <p>🕗 8:30 PM – <strong>ASMA</strong>: refined modern pop.</p>
+                            <p>🕙 10:00 PM – <strong>Mat Duval & Brikxart</strong>: live music meets urban art.</p>
+                            <p>🎻 <strong>Quartet</strong>: classical ensemble for a graceful finale.</p>
+                        `
+                    }
                 }
             };
 
-            const lineup = lineups[currentDay];
+            const lineup = lineupData[currentDay];
             if (!lineup) {
-                return fallback[lang] || fallback.fr;
+                return buildInfoCardMarkup({
+                    icon: '🎬',
+                    title: 'Club Med Live',
+                    subtitle: defaultSubtitle,
+                    body: fallbackBody
+                });
             }
 
-            const content = lineup[lang] || lineup.fr || fallback.fr;
-            return typeof content === 'string' ? content.trim() : fallback.fr;
+            const localized = lineup[lang] || lineup.fr;
+            return buildInfoCardMarkup({
+                icon: '🎬',
+                title: 'Club Med Live',
+                subtitle: localized.subtitle,
+                body: localized.body
+            });
         }
 
         const vivaEngageResponses = {
-            fr: `
-💭 <b>Explorez les communautés Viva Engage !</b><br><br>
-🌐 Ces espaces sont faits pour partager, apprendre et échanger avec d’autres participants des Academy Days et de la communauté Club Med.<br><br>
-🤖 <b>AI Learning Club</b><br>
-Explorez les usages de l’intelligence artificielle dans la formation.<br>
-🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" class="text-blue-600 underline">Accéder à la communauté</a><br><br>
-🌱 <b>Forever Young</b><br>
-Découvrez les initiatives autour du projet “Forever Young” et l’avenir du learning au Club Med.<br>
-🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" class="text-blue-600 underline">Rejoindre la communauté</a><br><br>
-🗞️ <b>Club Med News & Events</b><br>
-Restez informé des actualités et événements internes du Club Med.<br>
-🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" class="text-blue-600 underline">Consulter les news</a><br><br>
-✨ Rejoignez, commentez, partagez vos inspirations — la communauté vous attend !
-            `.trim(),
-            en: `
-💭 <b>Discover Viva Engage communities!</b><br><br>
-🌐 These spaces are designed to share, learn, and connect with other Academy Days participants and the Club Med community.<br><br>
-🤖 <b>AI Learning Club</b><br>
-Explore how AI can transform learning experiences.<br>
-🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all" target="_blank" class="text-blue-600 underline">Visit the community</a><br><br>
-🌱 <b>Forever Young</b><br>
-Dive into initiatives shaping the future of learning at Club Med.<br>
-🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new" target="_blank" class="text-blue-600 underline">Join the community</a><br><br>
-🗞️ <b>Club Med News & Events</b><br>
-Stay up to date with internal Club Med news and upcoming events.<br>
-🔗 <a href="https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new" target="_blank" class="text-blue-600 underline">Read the updates</a><br><br>
-✨ Join, comment, and share your inspirations — the community awaits you!
-            `.trim()
+            fr: () => getVivaEngageMarkup('fr'),
+            en: () => getVivaEngageMarkup('en')
         };
 
         const baseAgentMessages = {
             programme: {
-                fr: "📘 Consultez le programme complet des Academy Days à Marrakech en cliquant ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir le programme</a>.",
-                en: "📘 Check the full Academy Days program here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme' target='_blank' class='text-blue-700 underline hover:text-blue-900'>View program</a>."
+                fr: buildInfoCardMarkup({
+                    icon: '🗓️',
+                    title: 'Programme général',
+                    subtitle: 'Toutes les expériences jour par jour',
+                    body: 'Consultez le programme complet des Academy Days 2025 à Marrakech et préparez vos temps forts.',
+                    link: {
+                        href: 'https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme',
+                        label: 'Ouvrir le programme'
+                    }
+                }),
+                en: buildInfoCardMarkup({
+                    icon: '🗓️',
+                    title: 'Full program',
+                    subtitle: 'Every Academy Days highlight at a glance',
+                    body: 'Browse the complete Academy Days 2025 schedule in Marrakech and get ready for each moment.',
+                    link: {
+                        href: 'https://clubmed.sharepoint.com/sites/AcademyDays2025/Programme',
+                        label: 'View the program'
+                    }
+                })
             },
             groupe: {
-                fr: "👥 Découvrez votre groupe et les membres associés ici : <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>Voir mon groupe</a>.",
-                en: "👥 Find your group and members here: <a href='https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes' target='_blank' class='text-blue-700 underline hover:text-blue-900'>See my group</a>."
+                fr: buildInfoCardMarkup({
+                    icon: '👥',
+                    title: 'Votre groupe',
+                    subtitle: 'Retrouvez les membres et vos points de contact',
+                    body: 'Accédez à la liste de votre population et identifiez les personnes clés pour coordonner vos actions.',
+                    link: {
+                        href: 'https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes',
+                        label: 'Voir mon groupe'
+                    }
+                }),
+                en: buildInfoCardMarkup({
+                    icon: '👥',
+                    title: 'Your group',
+                    subtitle: 'Meet the members and key contacts',
+                    body: 'Open the dedicated page to review your population and coordinate with your peers.',
+                    link: {
+                        href: 'https://clubmed.sharepoint.com/sites/AcademyDays2025/Groupes',
+                        label: 'See my group'
+                    }
+                })
             },
             infos: {
-                fr: "📍 Les informations pratiques seront mises à jour quotidiennement dans Hubby.",
-                en: "📍 Practical information will be updated daily within Hubby."
+                fr: buildInfoCardMarkup({
+                    icon: '📍',
+                    title: 'Infos pratiques',
+                    subtitle: 'Logistique, transports, expériences sur place',
+                    body: 'Retrouvez chaque jour les dernières mises à jour sur les horaires, points de rendez-vous et contacts utiles directement dans Hubby.'
+                }),
+                en: buildInfoCardMarkup({
+                    icon: '📍',
+                    title: 'Practical info',
+                    subtitle: 'Logistics, transfers and on-site highlights',
+                    body: 'Check Hubby every day for the latest schedules, meeting points and helpful contacts.'
+                })
             },
             live: {
                 fr: () => getClubMedLiveContent('fr'),
                 en: () => getClubMedLiveContent('en')
             },
             activites: {
-                fr: "⚽ Des activités collectives sont prévues chaque jour à partir de 17h.",
-                en: "⚽ Team activities are scheduled every afternoon from 5pm."
+                fr: buildInfoCardMarkup({
+                    icon: '🏃‍♀️',
+                    title: 'Activités Club Med',
+                    subtitle: 'Choisissez une ambiance et découvrez les suggestions',
+                    body: 'Sélectionnez votre univers préféré pour révéler trois expériences préparées pour vous. Vous pouvez changer de catégorie à tout moment.'
+                }),
+                en: buildInfoCardMarkup({
+                    icon: '🏃‍♀️',
+                    title: 'Club Med activities',
+                    subtitle: 'Pick a mood and reveal curated ideas',
+                    body: 'Choose the vibe that inspires you to unlock three tailored experiences. Switch categories whenever you like.'
+                })
             },
             viva: {
                 fr: vivaEngageResponses.fr,
@@ -2177,16 +2380,13 @@ Stay up to date with internal Club Med news and upcoming events.<br>
 
             document.querySelectorAll('.population-card').forEach(card => {
                 const code = card.dataset.population;
-                const population = academyData.populations[code];
-                if (population) {
-                    const label = `${code} – ${population.fullName[lang]}`;
-                    card.setAttribute('aria-label', label);
+                if (academyData.populations[code]) {
+                    card.setAttribute('aria-label', code);
                 }
             });
 
             if (selectedPopulation) {
-                const activePopulation = academyData.populations[selectedPopulation];
-                document.getElementById('selectedPopName').textContent = activePopulation.fullName[currentLang];
+                document.getElementById('selectedPopName').textContent = selectedPopulation;
             }
 
             if (activitiesViewState.active && activitiesViewState.container && document.body.contains(activitiesViewState.container)) {
@@ -2201,12 +2401,10 @@ Stay up to date with internal Club Med news and upcoming events.<br>
         function selectPopulation(popCode) {
             selectedPopulation = popCode;
             currentAgent = getAgentId(popCode);
-            const population = academyData.populations[popCode];
-            
             // Update chat header
             document.getElementById('selectedPopIcon').textContent = popCode;
-            document.getElementById('selectedPopIcon').style.backgroundColor = population.color;
-            document.getElementById('selectedPopName').textContent = population.fullName[currentLang];
+            document.getElementById('selectedPopIcon').style.backgroundColor = '';
+            document.getElementById('selectedPopName').textContent = popCode;
             
             // Switch to chat screen
             document.getElementById('populationScreen').style.display = 'none';
@@ -2285,49 +2483,7 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             }
         }
 
-        function appendAssistantSignoff(content) {
-            const closingWord = currentLang === 'fr' ? 'merci' : 'thank you';
-            const punctuationRegex = /[.!?]$/;
-            const tempContainer = document.createElement('div');
-            tempContainer.innerHTML = content;
-
-            const existingText = tempContainer.textContent.trim().toLowerCase();
-            if (existingText.endsWith(closingWord)) {
-                return content;
-            }
-
-            function appendToLastNode(node) {
-                if (!node) return false;
-                for (let i = node.childNodes.length - 1; i >= 0; i--) {
-                    const child = node.childNodes[i];
-                    if (child.nodeType === Node.TEXT_NODE) {
-                        const trimmedText = child.textContent.trim();
-                        if (!trimmedText) {
-                            continue;
-                        }
-
-                        const needsPunctuation = !punctuationRegex.test(trimmedText);
-                        const suffix = ` ${closingWord}${needsPunctuation ? '.' : ''}`;
-                        child.textContent = child.textContent.replace(/\s*$/, '') + suffix;
-                        return true;
-                    }
-                    if (child.nodeType === Node.ELEMENT_NODE && appendToLastNode(child)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            if (!appendToLastNode(tempContainer)) {
-                const paragraph = document.createElement('p');
-                paragraph.textContent = closingWord.charAt(0).toUpperCase() + closingWord.slice(1) + '.';
-                tempContainer.appendChild(paragraph);
-            }
-
-            return tempContainer.innerHTML;
-        }
-
-        function addMessage(content, isUser = false, options = {}) {
+        function addMessage(content, isUser = false) {
             removeTypingIndicator();
 
             const messagesContainer = document.getElementById('chatMessages');
@@ -2340,10 +2496,9 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             const bubble = document.createElement('div');
             bubble.className = `chat-bubble ${isUser ? 'chat-bubble--user' : 'chat-bubble--hubby'}`;
 
-            const { skipSignoff = false } = options;
             const rawContent = typeof content === 'string' ? content : resolveLocalizedContent(content, currentLang);
             const normalizedContent = typeof rawContent === 'string' ? rawContent : '';
-            const formattedContent = (isUser || skipSignoff) ? normalizedContent : appendAssistantSignoff(normalizedContent);
+            const formattedContent = normalizedContent;
 
             const iconMarkup = isUser ? '' : HUBBY_BUBBLE_ICON;
             bubble.innerHTML = `${iconMarkup}<div class="message-content">${formattedContent}</div>`;
@@ -2427,14 +2582,18 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                 <div class="hubby-info-card">
                     <div class="hubby-info-header">
                         <span class="hubby-info-icon" aria-hidden="true">${activity.icon}</span>
-                        <h4 class="hubby-info-title">${activity.title}</h4>
+                        <div>
+                            <p class="hubby-info-title">${activity.title}</p>
+                        </div>
                     </div>
                     <div class="hubby-info-meta">
                         <span>📅 ${activity.day}</span>
                         <span>🕒 ${activity.time}</span>
                         <span>📍 ${activity.location}</span>
                     </div>
-                    <p class="hubby-info-subtitle">${activity.description}</p>
+                    <div class="hubby-info-description">
+                        <p>${activity.description}</p>
+                    </div>
                 </div>
             `).join('');
 
@@ -2485,7 +2644,7 @@ Stay up to date with internal Club Med news and upcoming events.<br>
         }
 
         function presentActivitiesExperience() {
-            const messageDiv = addMessage('', false, { skipSignoff: true });
+            const messageDiv = addMessage('', false);
             const container = messageDiv ? messageDiv.querySelector('.message-content') : null;
 
             if (!container) {
