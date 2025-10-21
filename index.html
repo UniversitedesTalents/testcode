@@ -1032,17 +1032,42 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             agent3: cloneBaseAgentMessages()
         };
 
+        const fallbackResponses = {
+            fr: "Désolé, je n’ai pas encore cette information.",
+            en: "Sorry, I don't have that information yet."
+        };
+
         function getAgentResponse(agentId, lang, key) {
             const agentBucket = responses[agentId] || responses.agent1;
-            const localizedResponses = agentBucket[lang] || agentBucket.fr || responses.agent1.fr;
-            const response = localizedResponses[key];
-            const resolved = resolveLocalizedContent(response, lang);
+
+            if (!agentBucket) {
+                console.warn(`[Hubby] No responses configured for agent "${agentId}".`);
+                return fallbackResponses[lang] ?? fallbackResponses.fr;
+            }
+
+            const responseEntry = agentBucket[key];
+
+            if (!responseEntry) {
+                console.warn(`[Hubby] Missing response key "${key}" for agent "${agentId}".`);
+                return fallbackResponses[lang] ?? fallbackResponses.fr;
+            }
+
+            const resolved = resolveLocalizedContent(responseEntry, lang);
 
             if (resolved) {
                 return resolved;
             }
 
-            return resolveLocalizedContent(localizedResponses.default, lang) || '';
+            const defaultEntry = agentBucket.default;
+            if (defaultEntry) {
+                const defaultResolved = resolveLocalizedContent(defaultEntry, lang);
+                if (defaultResolved) {
+                    return defaultResolved;
+                }
+            }
+
+            console.warn(`[Hubby] Empty response for key "${key}" on agent "${agentId}".`);
+            return fallbackResponses[lang] ?? fallbackResponses.fr;
         }
 
         const keywordMap = [
@@ -1557,6 +1582,25 @@ Stay up to date with internal Club Med news and upcoming events.<br>
             }, 1200);
         }
 
+        function validateQuickQuestionKeys() {
+            document.querySelectorAll('.quick-question-btn').forEach(btn => {
+                const key = btn.dataset.question;
+
+                if (!key) {
+                    console.warn('[Hubby] Quick question button missing "data-question" attribute.', btn);
+                    return;
+                }
+
+                if (key === 'activites') {
+                    return;
+                }
+
+                if (!baseAgentMessages[key]) {
+                    console.warn(`[Hubby] Quick question key "${key}" has no matching agent response.`);
+                }
+            });
+        }
+
         function sendMessage() {
             const messageInput = document.getElementById('messageInput');
             const message = messageInput.value.trim();
@@ -1584,6 +1628,8 @@ Stay up to date with internal Club Med news and upcoming events.<br>
 
         // Event listeners setup
         document.addEventListener('DOMContentLoaded', function() {
+            validateQuickQuestionKeys();
+
             // Language buttons - Population screen
             document.getElementById('langFr').addEventListener('click', () => updateLanguage('fr'));
             document.getElementById('langEn').addEventListener('click', () => updateLanguage('en'));
