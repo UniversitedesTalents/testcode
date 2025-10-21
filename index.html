@@ -1289,7 +1289,7 @@
         }
     </style>
 </head>
-<body class="page-body">
+<body class="page-body lang-fr">
     
     <!-- Population Selection Screen -->
     <div id="populationScreen" class="min-h-screen flex flex-col">
@@ -1488,6 +1488,246 @@
         let selectedDateFilter = 'all';
         let currentAgent = null;
         let currentDay = null;
+
+        const keywords = {
+            event: ["event", "events", "événement", "evenement", "soirée", "soirées", "party", "cocktail", "club med live"],
+            programme: ["programme", "planning", "agenda", "schedule", "plan", "journee", "day plan"],
+            transport: ["transport", "transports", "bus", "navette", "shuttle", "airport", "flight"],
+            groupe: ["groupe", "mon groupe", "team", "participants", "group"],
+            activites: ["activités", "activites", "activities", "workshop", "sport", "animation", "team building"],
+            infos: ["info", "infos pratiques", "information", "practical", "details", "hotel", "accommodation", "logement", "dress code"],
+            viva: ["viva", "viva engage", "community", "communauté"]
+        };
+
+        const jours = {
+            fr: {
+                lundi: "lun 18",
+                mardi: "mar 19",
+                mercredi: "mer 20"
+            },
+            en: {
+                monday: "mon 18",
+                tuesday: "tue 19",
+                wednesday: "wed 20"
+            }
+        };
+
+        const dayLabelToId = {
+            'lun 18': 'day1',
+            'mon 18': 'day1',
+            'mar 19': 'day2',
+            'tue 19': 'day2',
+            'mer 20': 'day3',
+            'wed 20': 'day3'
+        };
+
+        const dayNumberToId = {
+            '18': 'day1',
+            '19': 'day2',
+            '20': 'day3'
+        };
+
+        const dayMetadata = {
+            day1: { labels: { fr: 'Lun 18', en: 'Mon 18' } },
+            day2: { labels: { fr: 'Mar 19', en: 'Tue 19' } },
+            day3: { labels: { fr: 'Mer 20', en: 'Wed 20' } }
+        };
+
+        function normalizeForSearch(text) {
+            if (!text) {
+                return '';
+            }
+
+            return text
+                .toString()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+        }
+
+        function similarity(a, b) {
+            a = normalizeForSearch(a);
+            b = normalizeForSearch(b);
+
+            if (!a.length || !b.length) {
+                return 0;
+            }
+
+            let matches = 0;
+            const limit = Math.min(a.length, b.length);
+            for (let i = 0; i < limit; i++) {
+                if (a[i] === b[i]) {
+                    matches++;
+                }
+            }
+
+            return matches / Math.max(a.length, b.length, 1);
+        }
+
+        function resolveDayMeta(day) {
+            if (!day) {
+                return null;
+            }
+
+            if (typeof day === 'string') {
+                const normalized = normalizeForSearch(day);
+                const dayId = dayLabelToId[normalized] || dayNumberToId[normalized];
+                if (dayId && dayMetadata[dayId]) {
+                    return { id: dayId, labels: { ...dayMetadata[dayId].labels } };
+                }
+                return null;
+            }
+
+            if (typeof day === 'object') {
+                if (day.id && dayMetadata[day.id]) {
+                    return { id: day.id, labels: { ...dayMetadata[day.id].labels } };
+                }
+
+                if (day.label) {
+                    return resolveDayMeta(day.label);
+                }
+
+                if (day.labels) {
+                    const referenceLabel = day.labels.fr || day.labels.en;
+                    if (referenceLabel) {
+                        return resolveDayMeta(referenceLabel);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function formatDayLabel(day, lang) {
+            const meta = resolveDayMeta(day);
+            if (!meta) {
+                return '';
+            }
+
+            const label = meta.labels?.[lang] || meta.labels?.fr;
+            return label ? label.toUpperCase() : '';
+        }
+
+        function detectDayFromQuery(normalizedQuery, tokens, lang) {
+            const languagesToCheck = [];
+
+            if (lang) {
+                languagesToCheck.push(lang);
+            }
+
+            if (lang === 'fr') {
+                languagesToCheck.push('en');
+            } else if (lang === 'en') {
+                languagesToCheck.push('fr');
+            } else {
+                languagesToCheck.push('fr', 'en');
+            }
+
+            const seenLanguages = new Set();
+            const uniqueLanguages = languagesToCheck.filter(languageKey => {
+                if (!languageKey || seenLanguages.has(languageKey)) {
+                    return false;
+                }
+                seenLanguages.add(languageKey);
+                return true;
+            });
+
+            const searchInLanguage = (languageKey) => {
+                const days = jours[languageKey] || {};
+
+                for (const [word, label] of Object.entries(days)) {
+                    const normalizedWord = normalizeForSearch(word);
+                    if (normalizedQuery.includes(normalizedWord) || tokens.some(token => similarity(token, normalizedWord) > 0.7)) {
+                        const meta = resolveDayMeta(label);
+                        if (meta) {
+                            return meta;
+                        }
+                    }
+                }
+
+                for (const label of Object.values(days)) {
+                    const normalizedLabel = normalizeForSearch(label);
+                    if (normalizedQuery.includes(normalizedLabel)) {
+                        const meta = resolveDayMeta(label);
+                        if (meta) {
+                            return meta;
+                        }
+                    }
+                }
+
+                return null;
+            };
+
+            for (const languageKey of uniqueLanguages) {
+                const meta = searchInLanguage(languageKey);
+                if (meta) {
+                    return meta;
+                }
+            }
+
+            const numberMatch = normalizedQuery.match(/\b(18|19|20)(?:(?:h|:)[0-9]{0,2})?\b/);
+            if (numberMatch) {
+                const metaFromNumber = resolveDayMeta(numberMatch[1]);
+                if (metaFromNumber) {
+                    return metaFromNumber;
+                }
+            }
+
+            const wordNumberMatch = normalizedQuery.match(/\b(?:jour|day)\s*(?:du|of)?\s*(18|19|20)\b/);
+            if (wordNumberMatch) {
+                const metaFromWordNumber = resolveDayMeta(wordNumberMatch[1]);
+                if (metaFromWordNumber) {
+                    return metaFromWordNumber;
+                }
+            }
+
+            return null;
+        }
+
+        function getContext(query, lang) {
+            const normalizedQuery = normalizeForSearch(query);
+            const tokens = normalizedQuery.split(/[^a-z0-9]+/).filter(Boolean);
+
+            let bestCategory = 'default';
+            let bestScore = 0;
+
+            for (const [key, values] of Object.entries(keywords)) {
+                let categoryScore = 0;
+
+                for (const value of values) {
+                    const normalizedValue = normalizeForSearch(value);
+                    if (!normalizedValue) {
+                        continue;
+                    }
+
+                    if (normalizedQuery.includes(normalizedValue)) {
+                        categoryScore = Math.max(categoryScore, 1);
+                        break;
+                    }
+
+                    let valueScore = 0;
+                    for (const token of tokens) {
+                        valueScore = Math.max(valueScore, similarity(token, normalizedValue));
+                    }
+
+                    categoryScore = Math.max(categoryScore, valueScore);
+                }
+
+                if (categoryScore > bestScore) {
+                    bestCategory = key;
+                    bestScore = categoryScore;
+                }
+            }
+
+            const detectedCategory = bestScore >= 0.7 ? bestCategory : 'default';
+            const detectedDay = detectDayFromQuery(normalizedQuery, tokens, lang);
+
+            return { category: detectedCategory, day: detectedDay };
+        }
+
+        function displayBotResponse(message) {
+            addMessage(message);
+        }
 
         // Academy Days 2025 Data
         const academyData = {
@@ -2172,7 +2412,7 @@
             return String(rawContent);
         }
 
-        const responses = {
+        const agentResponses = {
             agent1: cloneBaseAgentMessages(),
             agent2: cloneBaseAgentMessages(),
             agent3: cloneBaseAgentMessages()
@@ -2184,7 +2424,7 @@
         };
 
         function getAgentResponse(agentId, lang, key) {
-            const agentBucket = responses[agentId] || responses.agent1;
+            const agentBucket = agentResponses[agentId] || agentResponses.agent1;
 
             if (!agentBucket) {
                 console.warn(`[Hubby] No responses configured for agent "${agentId}".`);
@@ -2214,32 +2454,6 @@
 
             console.warn(`[Hubby] Empty response for key "${key}" on agent "${agentId}".`);
             return fallbackResponses[lang] ?? fallbackResponses.fr;
-        }
-
-        const keywordMap = [
-            { key: 'programme', patterns: ['programme', 'program'] },
-            { key: 'groupe', patterns: ['groupe', 'group', 'team'] },
-            { key: 'infos', patterns: ['info', 'infos', 'information', 'pratique', 'practical'] },
-            { key: 'live', patterns: ['live'] },
-            { key: 'activites', patterns: ['activite', 'activité', 'activites', 'activities', 'activity', 'sport'] },
-            { key: 'viva', patterns: ['viva', 'engage'] }
-        ];
-
-        function normalizeText(text) {
-            return text
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase();
-        }
-
-        function detectResponseKeyFromMessage(message) {
-            const normalizedMessage = normalizeText(message);
-            for (const entry of keywordMap) {
-                if (entry.patterns.some(pattern => normalizedMessage.includes(pattern))) {
-                    return entry.key;
-                }
-            }
-            return null;
         }
 
         function getAgentId(population) {
@@ -2280,7 +2494,11 @@
 
         function updateLanguage(lang) {
             currentLang = lang;
-            
+
+            document.body.classList.toggle('lang-fr', lang === 'fr');
+            document.body.classList.toggle('lang-en', lang === 'en');
+            document.documentElement.setAttribute('lang', lang);
+
             // Update language buttons - Population screen
             const frBtn = document.getElementById('langFr');
             const enBtn = document.getElementById('langEn');
@@ -2601,6 +2819,100 @@
             renderActivitiesCategories(container);
         }
 
+        function showSectionResponse(responseKey) {
+            const agentId = getAgentId(selectedPopulation);
+            currentAgent = agentId;
+            const responseContent = getAgentResponse(agentId, currentLang, responseKey);
+            addMessage(responseContent);
+        }
+
+        function openSection(sectionKey, day) {
+            const dayMeta = resolveDayMeta(day);
+
+            switch (sectionKey) {
+                case 'events':
+                    setDateFilter(dayMeta ? dayMeta.id : 'all');
+                    clearActivitiesViewState();
+                    showSectionResponse('live');
+                    break;
+                case 'programme':
+                    if (dayMeta) {
+                        setDateFilter(dayMeta.id);
+                    } else {
+                        setDateFilter('all');
+                    }
+                    clearActivitiesViewState();
+                    showSectionResponse('programme');
+                    break;
+                case 'activites':
+                    clearActivitiesViewState();
+                    presentActivitiesExperience();
+                    break;
+                case 'mon-groupe':
+                    clearActivitiesViewState();
+                    showSectionResponse('groupe');
+                    break;
+                case 'infos':
+                case 'infos-pratiques':
+                    clearActivitiesViewState();
+                    showSectionResponse('infos');
+                    break;
+                case 'viva-engage':
+                    clearActivitiesViewState();
+                    showSectionResponse('viva');
+                    break;
+                default:
+                    if (dayMeta) {
+                        setDateFilter(dayMeta.id);
+                    }
+                    clearActivitiesViewState();
+                    showSectionResponse(sectionKey);
+                    break;
+            }
+        }
+
+        const responses = {
+            event: {
+                text_fr: "Voici les événements et soirées des Academy Days 🎉",
+                text_en: "Here are the events and evening programs 🎉",
+                action: (day) => openSection('events', day)
+            },
+            programme: {
+                text_fr: "Voici le programme complet des journées 🗓️",
+                text_en: "Here’s the full daily schedule 🗓️",
+                action: (day) => openSection('programme', day)
+            },
+            transport: {
+                text_fr: "Voici les informations sur les navettes et les transports 🚐",
+                text_en: "Here’s the information about shuttles and transport 🚐",
+                action: () => openSection('infos')
+            },
+            groupe: {
+                text_fr: "Voici la composition de ton groupe et les contacts clés 👥",
+                text_en: "Here’s your group and key contacts 👥",
+                action: () => openSection('mon-groupe')
+            },
+            activites: {
+                text_fr: "Découvre les activités et ateliers proposés 🌴",
+                text_en: "Discover the available activities and workshops 🌴",
+                action: (day) => openSection('activites', day)
+            },
+            infos: {
+                text_fr: "Voici les infos pratiques : repas, logement, tenue 🏠",
+                text_en: "Here are the practical details: meals, accommodation, dress code 🏠",
+                action: () => openSection('infos-pratiques')
+            },
+            viva: {
+                text_fr: "Rejoins la communauté Viva Engage pour échanger 💬",
+                text_en: "Join the Viva Engage community to connect 💬",
+                action: () => openSection('viva-engage')
+            },
+            default: {
+                text_fr: "Peux-tu préciser ta demande ?",
+                text_en: "Can you please clarify your request?"
+            }
+        };
+
         function handleQuickQuestion(questionKey) {
             const questionTexts = {
                 programme: { fr: "📖 Programme complet", en: "📖 Full Program Book" },
@@ -2651,26 +2963,42 @@
         function sendMessage() {
             const messageInput = document.getElementById('messageInput');
             const message = messageInput.value.trim();
-            if (message) {
-                addMessage(message, true);
-                messageInput.value = '';
-                showTypingIndicator();
+            if (!message) {
+                return;
+            }
 
-                setTimeout(() => {
+            const lang = document.body.classList.contains('lang-en') ? 'en' : 'fr';
+            if (currentLang !== lang) {
+                currentLang = lang;
+            }
+
+            addMessage(message, true);
+            messageInput.value = '';
+            showTypingIndicator();
+
+            setTimeout(() => {
+                const { category, day } = getContext(message, lang);
+                const answer = responses[category] || responses.default;
+                const focusLabel = day ? formatDayLabel(day, lang) : '';
+                const shouldShowFocus = Boolean(day && focusLabel && (category === 'event' || category === 'programme'));
+                const botMessage = shouldShowFocus
+                    ? (lang === 'en'
+                        ? `${answer.text_en} (focus on ${focusLabel})`
+                        : `${answer.text_fr} (focus sur ${focusLabel})`)
+                    : (lang === 'en' ? answer.text_en : answer.text_fr);
+
+                displayBotResponse(botMessage);
+
+                if (answer.action) {
+                    answer.action(day);
+                } else if (category === 'default') {
+                    clearActivitiesViewState();
                     const agentId = getAgentId(selectedPopulation);
                     currentAgent = agentId;
-                    const detectedKey = detectResponseKeyFromMessage(message);
-                    const responseKey = detectedKey || 'default';
-                    if (responseKey === 'activites') {
-                        presentActivitiesExperience();
-                        return;
-                    }
-
-                    clearActivitiesViewState();
-                    const response = getAgentResponse(agentId, currentLang, responseKey);
-                    addMessage(response);
-                }, 1500);
-            }
+                    const fallback = getAgentResponse(agentId, currentLang, 'default');
+                    addMessage(fallback);
+                }
+            }, 900);
         }
 
         // Event listeners setup
