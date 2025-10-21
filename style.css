@@ -1,43 +1,48 @@
 .language-switcher-wrapper {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    margin-left: auto;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    align-self: center;
+    margin: 0;
 }
 
 .language-switcher {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: #EDE5D6;
-    border: 2px solid #FFFFFF;
-    border-radius: 9999px;
-    padding: 0.25rem 0.5rem;
-    box-shadow: none;
+    gap: 4px;
+    padding: 0.2rem 0.35rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(6px);
 }
 
 .language-button {
     background: transparent;
     border: none;
     border-radius: 50%;
-    color: var(--club-med-primary);
+    color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    font-size: 0.95rem;
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
     font-weight: 600;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .language-button--active {
-    background: var(--club-med-primary);
-    color: var(--club-med-offwhite);
+    background: var(--club-med-gold);
+    color: var(--club-med-primary);
+}
+
+.language-button:hover {
+    transform: translateY(-1px);
 }
 
 .language-button:focus-visible {
@@ -46,13 +51,24 @@
 }
 
 .language-flag {
-    font-size: 1rem;
+    font-size: 0.75rem;
     line-height: 1;
 }
 
 @media (max-width: 900px) {
     .language-switcher-wrapper {
-        width: 100%;
+        position: static;
+        transform: none;
         justify-content: center;
+        margin-top: 1rem;
+    }
+
+    .language-switcher {
+        background: rgba(30, 40, 72, 0.1);
+        border: 1px solid rgba(30, 40, 72, 0.2);
+    }
+
+    .language-button {
+        color: var(--club-med-primary);
     }
 }
