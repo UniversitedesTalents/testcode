@@ -37,36 +37,35 @@
                         <div class="hero-card-body hero-appear-left">
                             <h1 id="hero-title" class="hero-heading">Vivez pleinement les Academy Days Club Med.</h1>
                             <p class="hero-intro">Je suis Hubby, ton assistant digital dédié. Je t’aide à orchestrer chaque moment du séminaire, à retrouver les bonnes informations et à vivre une expérience mémorable.</p>
-                            <div class="hero-actions" role="group" aria-label="Accès rapide">
-                                <a class="button button-primary" href="#populations">Explorer les populations</a>
-                                <a class="button button-secondary" href="#contact">Contacter la conciergerie</a>
-                            </div>
                             <details class="population-accordion" id="populations" open>
                                 <summary class="population-accordion-summary">Choisissez votre population</summary>
                                 <div class="population-accordion-panel">
-                                    <a class="population-card" href="#" data-population="CDG" aria-label="Population CDG">
+                                    <button class="population-card" type="button" data-population="CDG" aria-label="Population CDG" aria-pressed="false">
                                         <span class="population-code">CDG</span>
-                                    </a>
-                                    <a class="population-card" href="#" data-population="LC" aria-label="Population LC">
+                                    </button>
+                                    <button class="population-card" type="button" data-population="LC" aria-label="Population LC" aria-pressed="false">
                                         <span class="population-code">LC</span>
-                                    </a>
-                                    <a class="population-card" href="#" data-population="CDV" aria-label="Population CDV">
+                                    </button>
+                                    <button class="population-card" type="button" data-population="CDV" aria-label="Population CDV" aria-pressed="false">
                                         <span class="population-code">CDV</span>
-                                    </a>
-                                    <a class="population-card" href="#" data-population="LKT" aria-label="Population LKT">
+                                    </button>
+                                    <button class="population-card" type="button" data-population="LKT" aria-label="Population LKT" aria-pressed="false">
                                         <span class="population-code">LKT</span>
-                                    </a>
-                                    <a class="population-card" href="#" data-population="MKT" aria-label="Population MKT">
+                                    </button>
+                                    <button class="population-card" type="button" data-population="MKT" aria-label="Population MKT" aria-pressed="false">
                                         <span class="population-code">MKT</span>
-                                    </a>
-                                    <a class="population-card" href="#" data-population="MKT+" aria-label="Population MKT plus">
+                                    </button>
+                                    <button class="population-card" type="button" data-population="MKT+" aria-label="Population MKT plus" aria-pressed="false">
                                         <span class="population-code">MKT+</span>
-                                    </a>
+                                    </button>
                                 </div>
                             </details>
+                            <p class="population-selection" id="population-selection" aria-live="polite">
+                                Sélectionnez votre population pour accéder rapidement aux informations dédiées.
+                            </p>
                         </div>
-                        <div class="hero-visual hero-appear-right" aria-hidden="true">
-                            <img src="hubby-hero.jpg" alt="" loading="lazy">
+                        <div class="hero-visual hero-appear-right">
+                            <img src="hubby-hero.jpg" alt="Vue extérieure du resort Club Med avec piscine" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -80,5 +79,30 @@
             </div>
         </footer>
     </div>
+    <script>
+        (function () {
+            const populationButtons = document.querySelectorAll('.population-card');
+            const announcement = document.getElementById('population-selection');
+
+            if (!populationButtons.length || !announcement) {
+                return;
+            }
+
+            populationButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    populationButtons.forEach((item) => {
+                        item.classList.remove('is-selected');
+                        item.setAttribute('aria-pressed', 'false');
+                    });
+
+                    button.classList.add('is-selected');
+                    button.setAttribute('aria-pressed', 'true');
+
+                    const populationCode = button.dataset.population;
+                    announcement.innerHTML = `Population <strong>${populationCode}</strong> sélectionnée. Retrouvez les informations spécifiques dans votre espace dédié.`;
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
