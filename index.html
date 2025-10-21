@@ -16,8 +16,11 @@
             <div class="header-inner">
                 <div class="brand">
                     <span class="brand-logo" aria-label="Hubby">Hubby</span>
-                    <p class="brand-subtitle">Assistant Academy Days Club Med 2025</p>
+                    <p class="brand-subtitle" data-i18n-key="brandSubtitle">Assistant Academy Days Club Med 2025</p>
                 </div>
+                <button type="button" class="translation-toggle" id="translation-toggle" aria-pressed="false">
+                    English
+                </button>
             </div>
         </header>
 
@@ -26,10 +29,10 @@
                 <div class="hero-inner">
                     <div class="hero-card">
                         <div class="hero-card-body hero-appear-left">
-                            <h1 id="hero-title" class="hero-heading">Vivez pleinement les Academy Days Club Med.</h1>
-                            <p class="hero-intro">Je suis Hubby, ton assistant digital dédié. Je t’aide à orchestrer chaque moment du séminaire, à retrouver les bonnes informations et à vivre une expérience mémorable.</p>
+                            <h1 id="hero-title" class="hero-heading" data-i18n-key="heroTitle">Vivez pleinement les Academy Days Club Med.</h1>
+                            <p class="hero-intro" data-i18n-key="heroIntro">Je suis Hubby, ton assistant digital dédié. Je t’aide à orchestrer chaque moment du séminaire, à retrouver les bonnes informations et à vivre une expérience mémorable.</p>
                             <details class="population-accordion" id="populations">
-                                <summary class="population-accordion-summary">Choisissez votre population</summary>
+                                <summary class="population-accordion-summary" data-i18n-key="populationSummary">Choisissez votre population</summary>
                                 <div class="population-accordion-panel">
                                     <button class="population-card" type="button" data-population="CDG" aria-label="Population CDG" aria-pressed="false">
                                         <span class="population-code">CDG</span>
@@ -51,7 +54,7 @@
                                     </button>
                                 </div>
                             </details>
-                            <p class="population-selection" id="population-selection" aria-live="polite">
+                            <p class="population-selection" id="population-selection" aria-live="polite" data-i18n-key="populationSelection">
                                 Sélectionnez votre population pour accéder rapidement aux informations dédiées.
                             </p>
                         </div>
@@ -65,8 +68,8 @@
 
         <footer class="site-footer" id="conciergerie" role="contentinfo">
             <div class="footer-inner">
-                <p class="footer-title">Hubby – Assistant Academy Days Club Med 2025</p>
-                <p class="footer-subtext" id="contact">Besoin d’un coup de main&nbsp;? Écris-nous sur WhatsApp ou retrouve-nous au centre de conciergerie Club Med.</p>
+                <p class="footer-title" data-i18n-key="footerTitle">Hubby – Assistant Academy Days Club Med 2025</p>
+                <p class="footer-subtext" id="contact" data-i18n-key="footerSubtext">Besoin d’un coup de main&nbsp;? Écris-nous sur WhatsApp ou retrouve-nous au centre de conciergerie Club Med.</p>
             </div>
         </footer>
     </div>
@@ -74,6 +77,91 @@
         (function () {
             const populationButtons = document.querySelectorAll('.population-card');
             const chatbotPage = 'chatbot.html';
+            const htmlElement = document.documentElement;
+            const translationToggle = document.getElementById('translation-toggle');
+            const TRANSLATION_STORAGE_KEY = 'hubby-language';
+            const translations = {
+                fr: {
+                    htmlLang: 'fr',
+                    toggleLabel: 'English',
+                    toggleAriaLabel: 'Afficher la page en anglais',
+                    ariaPressed: 'false',
+                    content: {
+                        brandSubtitle: 'Assistant Academy Days Club Med 2025',
+                        heroTitle: 'Vivez pleinement les Academy Days Club Med.',
+                        heroIntro: 'Je suis Hubby, ton assistant digital dédié. Je t’aide à orchestrer chaque moment du séminaire, à retrouver les bonnes informations et à vivre une expérience mémorable.',
+                        populationSummary: 'Choisissez votre population',
+                        populationSelection: 'Sélectionnez votre population pour accéder rapidement aux informations dédiées.',
+                        footerTitle: 'Hubby – Assistant Academy Days Club Med 2025',
+                        footerSubtext: 'Besoin d\'un coup de main\u00a0? Écris-nous sur WhatsApp ou retrouve-nous au centre de conciergerie Club Med.'
+                    }
+                },
+                en: {
+                    htmlLang: 'en',
+                    toggleLabel: 'Français',
+                    toggleAriaLabel: 'Switch the page to French',
+                    ariaPressed: 'true',
+                    content: {
+                        brandSubtitle: 'Assistant for Club Med Academy Days 2025',
+                        heroTitle: 'Experience the Club Med Academy Days to the fullest.',
+                        heroIntro: "I'm Hubby, your dedicated digital assistant. I help you orchestrate every moment of the seminar, find the right information, and enjoy a memorable experience.",
+                        populationSummary: 'Choose your group',
+                        populationSelection: 'Select your group to quickly access the dedicated information.',
+                        footerTitle: 'Hubby – Club Med Academy Days 2025 Assistant',
+                        footerSubtext: 'Need a hand? Message us on WhatsApp or meet us at the Club Med concierge desk.'
+                    }
+                }
+            };
+
+            function applyTranslations(language) {
+                const dictionary = translations[language] || translations.fr;
+                const { content, htmlLang: langAttribute, toggleLabel, toggleAriaLabel, ariaPressed } = dictionary;
+
+                htmlElement.setAttribute('lang', langAttribute);
+
+                Object.entries(content).forEach(([key, value]) => {
+                    const element = document.querySelector(`[data-i18n-key="${key}"]`);
+                    if (element) {
+                        element.textContent = value;
+                    }
+                });
+
+                if (translationToggle) {
+                    translationToggle.textContent = toggleLabel;
+                    translationToggle.setAttribute('aria-label', toggleAriaLabel);
+                    translationToggle.setAttribute('aria-pressed', ariaPressed);
+                }
+            }
+
+            function persistLanguage(language) {
+                try {
+                    window.localStorage.setItem(TRANSLATION_STORAGE_KEY, language);
+                } catch (error) {
+                    // Storage may be unavailable; fail silently.
+                }
+            }
+
+            function getPersistedLanguage() {
+                try {
+                    return window.localStorage.getItem(TRANSLATION_STORAGE_KEY);
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function toggleLanguage() {
+                const currentLanguage = htmlElement.getAttribute('lang') === 'en' ? 'en' : 'fr';
+                const nextLanguage = currentLanguage === 'fr' ? 'en' : 'fr';
+                applyTranslations(nextLanguage);
+                persistLanguage(nextLanguage);
+            }
+
+            if (translationToggle) {
+                translationToggle.addEventListener('click', toggleLanguage);
+            }
+
+            const savedLanguage = getPersistedLanguage();
+            applyTranslations(savedLanguage === 'en' ? 'en' : 'fr');
 
             if (!populationButtons.length) {
                 return;
