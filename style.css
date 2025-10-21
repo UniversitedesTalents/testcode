@@ -3,30 +3,34 @@
     align-items: center;
     justify-content: flex-end;
     margin-left: auto;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    align-self: center;
 }
 
 .language-switcher {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    background: var(--club-med-offwhite);
+    gap: 8px;
+    background: #EDE5D6;
+    border: 2px solid #FFFFFF;
     border-radius: 9999px;
-    padding: 0.25rem 0.4rem;
+    padding: 0.25rem 0.5rem;
+    box-shadow: none;
 }
 
 .language-button {
     background: transparent;
     border: none;
-    border-radius: 9999px;
+    border-radius: 50%;
     color: var(--club-med-primary);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    width: 26px;
+    height: 26px;
+    font-size: 0.95rem;
     font-weight: 600;
-    min-height: 38px;
-    min-width: 38px;
-    padding: 0.3rem 0.55rem;
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
 }
@@ -42,7 +46,7 @@
 }
 
 .language-flag {
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1;
 }
 

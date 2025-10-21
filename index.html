@@ -78,9 +78,9 @@
         .hero-header {
             background-color: var(--club-med-primary);
             color: var(--club-med-offwhite);
-            padding: 2.5rem 1.5rem;
+            padding: 2rem 1.5rem 2.75rem;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             animation: heroReveal 0.5s ease both;
         }
 
@@ -90,21 +90,14 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 25%;
+            height: 40px;
             background: var(--club-med-terracotta);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             z-index: 0;
         }
 
         .hero-header::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 22%;
-            height: 140px;
-            background: var(--club-med-primary);
-            clip-path: polygon(0% 70%, 12% 55%, 28% 75%, 44% 48%, 60% 68%, 76% 42%, 100% 60%, 100% 100%, 0% 100%);
-            z-index: 0;
+            content: none;
         }
 
         .hero-inner {
@@ -120,37 +113,42 @@
 
         .hero-brand {
             display: flex;
-            align-items: center;
-            gap: 1.25rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
         }
 
-        .hero-trident {
-            width: 40px;
-            height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
         }
 
         .hero-title {
             font-family: 'Newsreader', serif;
-            font-size: 3rem;
+            font-size: clamp(1.4rem, 3vw, 2rem);
             font-weight: 700;
             letter-spacing: -0.02em;
             margin: 0;
-            color: var(--club-med-offwhite);
+            color: #FFFFFF;
             animation: fadeIn 0.6s ease both;
         }
 
         .hero-subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--club-med-gold);
-            margin: 0.35rem 0 0;
+            margin: 0.1rem 0 0;
+            letter-spacing: 0.02em;
         }
 
         .population-content {
             flex: 1;
             padding: 3rem 1.5rem 2rem;
+            margin-top: -10px;
+            background: var(--club-med-offwhite);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
         }
 
         .population-wrapper {
@@ -163,22 +161,20 @@
 
         .welcome-panel {
             background-color: var(--club-med-offwhite);
-            border: 1px solid var(--club-med-gold);
+            border-left: 4px solid var(--club-med-gold);
             border-radius: 12px;
-            padding: 2.5rem 2rem;
-            box-shadow: var(--shadow-soft);
-            text-align: center;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 12px 24px rgba(30, 40, 72, 0.08);
+            text-align: left;
             color: var(--club-med-primary);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Crect width='160' height='160' fill='%23F9F8F4'/%3E%3Cpath d='M0 120h160v1H0zM0 40h160v1H0z' fill='%23EDE5D6' opacity='0.35'/%3E%3C/svg%3E");
-            background-size: 160px 160px;
-            background-repeat: repeat;
             animation: welcomeReveal 0.6s ease both;
             animation-delay: 0.5s;
         }
 
         .welcome-panel p {
             margin: 0.35rem 0;
-            font-size: 1.25rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
             animation: fadeUp 0.6s ease both;
         }
 
@@ -313,6 +309,7 @@
             padding: 2.75rem 1.5rem 2.25rem;
             font-size: 0.95rem;
             color: rgba(30, 40, 72, 0.85);
+            margin-bottom: 32px;
         }
 
         .site-footer::before {
@@ -373,46 +370,45 @@
             background-color: var(--club-med-primary);
             color: var(--club-med-offwhite);
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 16px 32px rgba(30, 40, 72, 0.25);
+            overflow: visible;
+            box-shadow: 0 16px 32px rgba(30, 40, 72, 0.2);
             animation: headerSlideDown 0.5s ease both;
         }
 
         .chat-header-band {
             height: 40px;
             background-color: var(--club-med-terracotta);
-            display: flex;
-            align-items: center;
-            padding: 0 1.75rem;
-        }
-
-        .chat-trident {
-            width: 32px;
-            height: 32px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-trident svg {
-            width: 28px;
-            height: 28px;
-            fill: var(--club-med-gold);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .chat-header-main {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1.5rem;
             padding: 1.75rem 1.75rem 1.5rem;
         }
 
+        .chat-identity {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
         .chat-logo {
-            font-size: 2.75rem;
+            font-size: clamp(1.5rem, 3vw, 2rem);
             font-weight: 600;
             letter-spacing: -0.03em;
             margin: 0;
             animation: logoFadeIn 0.6s ease both;
+            color: #FFFFFF;
+        }
+
+        .chat-subtitle {
+            font-size: 0.95rem;
+            color: var(--club-med-gold);
+            margin: 0;
+            letter-spacing: 0.02em;
         }
 
         .chat-language-switch {
@@ -1106,20 +1102,22 @@
             .hero-inner {
                 flex-direction: column;
                 align-items: center;
-                gap: 1.25rem;
+                gap: 1.1rem;
+                text-align: center;
             }
 
             .hero-brand {
                 width: 100%;
-                justify-content: center;
+                align-items: center;
             }
 
-            .hero-title {
-                text-align: center;
-            }
-
+            .hero-title,
             .hero-subtitle {
                 text-align: center;
+            }
+
+            .language-switcher-wrapper {
+                margin-left: 0;
             }
 
             .population-content {
@@ -1128,12 +1126,17 @@
 
             .chat-header-main {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                text-align: center;
                 gap: 1rem;
             }
 
+            .chat-identity {
+                align-items: center;
+            }
+
             .chat-language-switch {
-                align-self: flex-start;
+                align-self: center;
             }
 
             .chat-context {
@@ -1162,36 +1165,35 @@
 
         @media (max-width: 640px) {
             .hero-header {
-                padding: 2.25rem 1.25rem;
+                padding: 2rem 1rem 2.25rem;
             }
 
-            .hero-title {
-                font-size: 2.25rem;
-            }
-
-            .hero-trident {
-                width: 32px;
-                height: 32px;
+            .hero-subtitle {
+                font-size: 0.9rem;
             }
 
             .welcome-panel {
-                padding: 2rem 1.5rem;
+                padding: 1rem 1.1rem;
             }
 
             .welcome-panel p {
-                font-size: 1.05rem;
+                font-size: 0.95rem;
+            }
+
+            .population-wrapper {
+                gap: 2rem;
             }
 
             .population-section {
-                padding: 3rem 1.25rem;
+                padding: 2.5rem 1rem;
             }
 
             .population-section h2 {
-                font-size: 2rem;
+                font-size: 1.9rem;
             }
 
             .population-section p {
-                font-size: 1.05rem;
+                font-size: 1rem;
             }
 
             .population-grid {
@@ -1209,25 +1211,17 @@
             }
 
             .population-content {
-                padding: 2.75rem 1rem 2.25rem;
+                padding: 2.5rem 1rem 2rem;
             }
 
             .chat-header-band {
-                height: 32px;
-            }
-
-            .chat-trident {
-                display: none;
+                height: 36px;
             }
 
             .chat-header-main {
                 align-items: center;
                 text-align: center;
                 gap: 0.75rem;
-            }
-
-            .chat-logo {
-                font-size: 2.2rem;
             }
 
             .chat-language-switch {
@@ -1258,7 +1252,7 @@
             }
 
             .chat-shell {
-                padding: 1.5rem 0.75rem 2.25rem;
+                padding: 1.75rem 1rem 2.25rem;
             }
 
             .chat-window {
@@ -1266,11 +1260,11 @@
             }
 
             .chat-messages {
-                padding: 0 1rem 1.5rem;
+                padding: 0 1.1rem 1.45rem;
             }
 
             .chat-panel {
-                padding: 1.25rem 1rem 1.5rem;
+                padding: 1.25rem 1rem 1.6rem;
                 gap: 1.25rem;
             }
 
@@ -1341,11 +1335,6 @@
         <header class="hero-header">
             <div class="hero-inner">
                 <div class="hero-brand">
-                    <span class="hero-trident" aria-hidden="true">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="32" height="32">
-                            <path fill="var(--club-med-gold)" d="M16 3c-2.21 0-4 1.79-4 4 0 2.76 2.64 4.76 4 7.5 1.36-2.74 4-4.74 4-7.5 0-2.21-1.79-4-4-4Zm0 26c2.21 0 4-1.79 4-4 0-2.04-1.26-3.81-2.4-5.59-.48-.75-.93-1.49-1.3-2.29-.37.8-.82 1.54-1.29 2.29C13.26 21.19 12 22.96 12 25c0 2.21 1.79 4 4 4ZM8 16.5c0 1.93 1.34 3.53 3.12 4.08-.34-.73-.6-1.49-.76-2.28-.28-1.33-.35-2.64-.35-3.8 0-1.58.16-3.01.42-4.31C8.85 11.05 8 12.18 8 13.5Zm16 0c0-1.32-.85-2.45-2.42-3.31.26 1.3.42 2.73.42 4.31 0 1.16-.07 2.47-.36 3.8-.17.79-.43 1.55-.77 2.28 1.78-.55 3.13-2.15 3.13-4.08Z"/>
-                        </svg>
-                    </span>
                     <div class="hero-text">
                         <h1 class="hero-title">Hubby</h1>
                         <p class="hero-subtitle" data-fr="Assistant Academy Days Club Med 2025" data-en="Assistant Academy Days Club Med 2025">Assistant Academy Days Club Med 2025</p>
@@ -1369,7 +1358,7 @@
             <div class="population-wrapper">
                 <section class="welcome-section">
                     <div class="welcome-panel">
-                        <p data-fr="🌞 Bienvenue à Marrakech pour les Academy Days Club Med 2025." data-en="🌞 Welcome to Marrakech for the Club Med Academy Days 2025.">🌞 Bienvenue à Marrakech pour les Academy Days Club Med 2025.</p>
+                        <p data-fr="Bienvenue à Marrakech pour les Academy Days Club Med 2025." data-en="Welcome to Marrakech for the Club Med Academy Days 2025.">Bienvenue à Marrakech pour les Academy Days Club Med 2025.</p>
                         <p class="welcome-highlighted-line" data-fr="Je suis Hubby, ton assistant digital." data-en="I’m Hubby, your digital assistant."><span class="welcome-highlight">Je suis Hubby, ton assistant digital.</span></p>
                         <p data-fr="Mon rôle : t’aider à vivre pleinement cette expérience," data-en="My mission: to help you make the most of this experience,">Mon rôle : t’aider à vivre pleinement cette expérience,</p>
                         <p data-fr="en t’accompagnant à chaque étape des Academy Days." data-en="guiding you through every step of the Academy Days.">en t’accompagnant à chaque étape des Academy Days.</p>
@@ -1410,15 +1399,12 @@
     <!-- Chat Interface Screen -->
     <div id="chatScreen" class="chat-interface chat-screen" style="display: none;">
         <header class="chat-header">
-            <div class="chat-header-band">
-                <span class="chat-trident" aria-hidden="true">
-                    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.999 3c.347 0 .688.14.937.39l5.333 5.333a1.326 1.326 0 0 1-1.875 1.875l-2.402-2.4v9.82c0 .846.336 1.657.934 2.256l2.898 2.897a1.326 1.326 0 1 1-1.875 1.876l-2.35-2.35-.434 7.4a1.326 1.326 0 0 1-2.65 0l-.433-7.4-2.35 2.35a1.326 1.326 0 0 1-1.876-1.876l2.898-2.897a3.19 3.19 0 0 0 .934-2.256v-9.82l-2.402 2.4a1.326 1.326 0 0 1-1.875-1.875l5.333-5.333c.25-.25.59-.39.937-.39Z" fill="currentColor"/>
-                    </svg>
-                </span>
-            </div>
+            <div class="chat-header-band"></div>
             <div class="chat-header-main">
-                <h1 class="chat-logo font-newsreader">Hubby</h1>
+                <div class="chat-identity">
+                    <h1 class="chat-logo font-newsreader">Hubby</h1>
+                    <p class="chat-subtitle" data-fr="Assistant Academy Days Club Med 2025" data-en="Assistant Academy Days Club Med 2025">Assistant Academy Days Club Med 2025</p>
+                </div>
                 <div class="chat-language-switch" role="group" aria-label="Sélection de la langue">
                     <button id="langFrChat" class="chat-language-button is-active" type="button" aria-label="Français" aria-pressed="true">FR</button>
                     <button id="langEnChat" class="chat-language-button" type="button" aria-label="English" aria-pressed="false">GB</button>
