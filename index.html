@@ -8,346 +8,242 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
+        :root {
+            --club-med-primary: #1E2848;
+            --club-med-terracotta: #A75228;
+            --club-med-gold: #FDBE00;
+            --club-med-sand: #EDE5D6;
+            --club-med-offwhite: #F9F8F4;
+            --club-med-sage: #A7BFB9;
+            --club-med-text: #1E2848;
+            --club-med-muted: #6C6C6C;
+            --club-med-beige: var(--club-med-sand);
+            --club-med-brown: var(--club-med-terracotta);
+            --club-med-yellow: var(--club-med-gold);
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
             box-sizing: border-box;
+        }
+
+        body {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             touch-action: manipulation;
             line-height: 1.6;
-            color: var(--club-med-primary);
+            color: var(--club-med-text);
+            background-color: var(--club-med-sand);
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 120px;
+            height: 120px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none'%3E%3Cpath fill='%23FDBE00' d='M32 4c-4.418 0-8 3.582-8 8 0 5.73 5.174 9.696 8 15.296C34.826 21.696 40 17.73 40 12c0-4.418-3.582-8-8-8Zm0 48c4.418 0 8-3.582 8-8 0-3.972-2.52-7.409-4.8-10.86-.948-1.503-1.844-2.977-2.64-4.561-.796 1.584-1.692 3.058-2.64 4.56C26.52 36.591 24 40.028 24 44c0 4.418 3.582 8 8 8ZM12 28.6c0 3.866 2.688 7.068 6.236 8.154-.67-1.462-1.19-2.98-1.522-4.554C16.636 29.46 16.49 26.892 16.49 24c0-3.17.32-6.02.84-8.624C14.71 16.494 12 20.061 12 24.6Zm40.01-4.999c0-4.539-2.71-8.106-5.33-9.224.52 2.604.84 5.454.84 8.624 0 2.892-.146 5.46-.225 8.2-.332 1.573-.852 3.09-1.521 4.553 3.547-1.086 6.236-4.288 6.236-8.153Z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .font-newsreader {
             font-family: 'Newsreader', serif;
         }
 
-        :root {
-            --club-med-primary: #1E2848;
-            --club-med-beige: #EDE5D6;
-            --club-med-gold: #FDBE00;
-            --club-med-yellow: var(--club-med-gold);
-            --club-med-sage: #A7BFB9;
-            --club-med-offwhite: #F9F8F4;
-            --club-med-brown: #9D432C;
-        }
-
         .page-body {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--club-med-offwhite) 0%, #f1ede2 40%, rgba(167, 191, 185, 0.45) 100%);
             display: flex;
             flex-direction: column;
-            animation: pageFadeIn 0.6s ease-out both;
+            animation: fadeUp 0.5s ease both;
         }
 
-        @keyframes pageFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Enhanced mobile interactions */
-        .mobile-tap {
-            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
-            tap-highlight-color: rgba(0,0,0,0.1);
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        
-        .mobile-button {
-            min-height: 48px;
-            min-width: 48px;
-            touch-action: manipulation;
-            transition: all 0.2s ease;
-        }
-        
-        .mobile-button:active {
-            transform: scale(0.98);
-            opacity: 0.8;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .hero-header {
+            background-color: var(--club-med-primary);
+            color: var(--club-med-offwhite);
+            padding: 2.5rem 1.5rem;
         }
 
-        .resort-header {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(30, 40, 72, 0.95) 0%, rgba(30, 40, 72, 0.88) 55%, rgba(237, 229, 214, 0.85) 100%);
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 20px 50px rgba(30, 40, 72, 0.25);
+        .hero-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
         }
 
-        .resort-header::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 20%, rgba(253, 190, 0, 0.18), transparent 60%),
-                        radial-gradient(circle at 80% 10%, rgba(167, 191, 185, 0.25), transparent 55%);
-            pointer-events: none;
+        .hero-brand {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
         }
 
-        .club-med-logo {
-            width: 42px;
-            height: 42px;
-            border-radius: 9999px;
-            background: rgba(249, 248, 244, 0.18);
+        .hero-trident {
+            width: 40px;
+            height: 40px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-            backdrop-filter: blur(8px);
         }
 
-        .club-med-logo svg {
-            width: 26px;
-            height: 26px;
-        }
-
-        .header-title {
-            position: relative;
+        .hero-title {
             font-family: 'Newsreader', serif;
+            font-size: 2.75rem;
             font-weight: 700;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.02em;
+            margin: 0;
+            color: var(--club-med-offwhite);
+            animation: fadeIn 0.6s ease both;
         }
 
-        .header-title-text {
-            position: relative;
-            z-index: 1;
-            color: #ffffff;
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.45), 0 0 40px rgba(253, 190, 0, 0.25), 0 6px 22px rgba(0, 0, 0, 0.35);
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--club-med-gold);
+            margin: 0.35rem 0 0;
         }
 
-        .header-title-shadow {
-            position: absolute;
-            inset: 0;
-            color: rgba(255, 255, 255, 0.18);
-            transform: translate(4px, 6px);
-            filter: blur(4px);
-            pointer-events: none;
+        .population-content {
+            flex: 1;
+            padding: 3rem 1.5rem 2rem;
         }
 
-        .subtitle-fade-in {
-            animation: subtitleFade 1s ease forwards;
-            animation-delay: 0.3s;
-            opacity: 0;
+        .population-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
         }
 
-        @keyframes subtitleFade {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .welcome-section,
+        .population-section {
+            animation: fadeUp 0.6s ease both;
         }
 
-        .location-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.35rem 0.85rem;
-            border-radius: 9999px;
-            background: rgba(249, 248, 244, 0.15);
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.85rem;
-            letter-spacing: 0.02em;
-        }
-
-        .population-area {
-            position: relative;
-            padding: 3rem 2rem 3.5rem;
-            border-radius: 36px;
-            background: rgba(249, 248, 244, 0.95);
-            box-shadow: 0 28px 60px rgba(30, 40, 72, 0.18);
-            overflow: hidden;
-            backdrop-filter: blur(12px);
-        }
-
-        .population-area::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='p' x='0' y='0' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 20h40M20 0v40' stroke='%23A7BFB9' stroke-width='0.8' stroke-opacity='0.25'/%3E%3Ccircle cx='20' cy='20' r='4' fill='%23FDBE00' fill-opacity='0.15'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='160' height='160' fill='url(%23p)'/%3E%3C/svg%3E");
-            opacity: 0.05;
-            pointer-events: none;
-        }
-
-        .population-area > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .population-intro h2 {
+        .welcome-panel {
+            background-color: var(--club-med-offwhite);
+            border: 1px solid var(--club-med-gold);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
             color: var(--club-med-primary);
         }
 
-        .population-intro p {
-            color: rgba(30, 40, 72, 0.7);
-            max-width: 640px;
-            margin-inline: auto;
+        .welcome-panel p {
+            margin: 0.35rem 0;
+            font-size: 1.125rem;
+        }
+
+        .population-section {
+            text-align: center;
+        }
+
+        .population-section h2 {
+            font-family: 'Newsreader', serif;
+            font-size: 2.25rem;
+            color: var(--club-med-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .population-section p {
+            font-size: 1.125rem;
+            color: var(--club-med-muted);
+            margin: 0 auto 2.5rem;
+            max-width: 540px;
+        }
+
+        .population-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            justify-items: center;
         }
 
         .population-card {
-            position: relative;
-            border-radius: 16px;
-            background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(237, 229, 214, 0.85));
-            box-shadow: 0 4px 14px rgba(30, 40, 72, 0.12);
-            padding: 1.5rem 1rem;
-            text-align: center;
+            width: 100%;
+            max-width: 220px;
+            background-color: var(--club-med-offwhite);
+            border: 1px solid var(--club-med-sand);
+            border-radius: 12px;
+            padding: 1.75rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--shadow-soft);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
             cursor: pointer;
-            transition: transform 0.4s ease, box-shadow 0.4s ease, border 0.4s ease, filter 0.4s ease;
-            border: 1px solid rgba(30, 40, 72, 0.12);
-            transform: translateY(12px);
-            opacity: 0;
-            animation: cardCascade 0.7s ease forwards;
-        }
-
-        .population-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            border: 1px solid rgba(253, 190, 0, 0);
-            transition: border-color 0.4s ease;
-            pointer-events: none;
+            background-clip: padding-box;
         }
 
         .population-card:hover,
         .population-card:focus-visible {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 18px 40px rgba(30, 40, 72, 0.22);
+            outline: none;
+            box-shadow: 0 6px 18px rgba(253, 190, 0, 0.25);
+            transform: translateY(-4px);
         }
 
-        .population-card:hover::after,
-        .population-card:focus-visible::after {
-            border-color: rgba(253, 190, 0, 0.75);
-            box-shadow: 0 0 0 1px rgba(253, 190, 0, 0.25);
-        }
-
-        .population-card-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .population-icon {
-            width: 56px;
-            height: 56px;
+        .population-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 9999px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
             letter-spacing: 0.08em;
-            color: #ffffff;
-            box-shadow: 0 12px 25px rgba(30, 40, 72, 0.25);
+            color: var(--club-med-offwhite);
         }
 
-        .population-name {
-            font-family: 'Newsreader', serif;
-            font-size: 1.05rem;
+        .population-card[data-population="CDG"] .population-circle,
+        .population-card[data-population="MKT"] .population-circle {
+            background-color: var(--club-med-primary);
+        }
+
+        .population-card[data-population="LC"] .population-circle,
+        .population-card[data-population="MKT+"] .population-circle {
+            background-color: var(--club-med-sage);
             color: var(--club-med-primary);
         }
 
-        .population-caption {
-            font-size: 0.8rem;
-            color: rgba(30, 40, 72, 0.6);
+        .population-card[data-population="CDV"] .population-circle {
+            background-color: var(--club-med-gold);
+            color: var(--club-med-primary);
         }
 
-        @keyframes cardCascade {
-            from { opacity: 0; transform: translateY(22px); }
-            to { opacity: 1; transform: translateY(0); }
+        .population-card[data-population="LKT"] .population-circle {
+            background-color: var(--club-med-terracotta);
         }
 
-        .population-card:nth-child(1) { animation-delay: 0.1s; }
-        .population-card:nth-child(2) { animation-delay: 0.18s; }
-        .population-card:nth-child(3) { animation-delay: 0.26s; }
-        .population-card:nth-child(4) { animation-delay: 0.34s; }
-        .population-card:nth-child(5) { animation-delay: 0.42s; }
-        .population-card:nth-child(6) { animation-delay: 0.5s; }
-
-        @media (prefers-reduced-motion: reduce) {
-            .page-body,
-            .subtitle-fade-in,
-            .population-card {
-                animation: none;
-                opacity: 1;
-                transform: none;
-            }
+        .site-footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem 2rem;
+            font-size: 0.95rem;
+            color: var(--club-med-muted);
         }
 
-        .card-theme-navy .population-icon { background: var(--club-med-primary); }
-        .card-theme-gold .population-icon { background: var(--club-med-gold); color: var(--club-med-primary); }
-        .card-theme-sage .population-icon { background: var(--club-med-sage); color: var(--club-med-primary); }
-        .card-theme-beige .population-icon { background: var(--club-med-beige); color: var(--club-med-primary); box-shadow: 0 10px 20px rgba(167, 191, 185, 0.3); }
-
-        .welcome-video-card {
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 28px;
-            border: 1px solid rgba(30, 40, 72, 0.08);
-            box-shadow: 0 20px 45px rgba(30, 40, 72, 0.12);
-            transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+        .mobile-tap {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .welcome-video-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 26px 55px rgba(30, 40, 72, 0.18);
+        .mobile-button {
+            min-height: 44px;
+            min-width: 44px;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-        .welcome-video-card:hover .welcome-video-thumb {
-            box-shadow: 0 18px 40px rgba(253, 190, 0, 0.35);
-            transform: translateY(-2px);
-        }
-
-        .welcome-video-card .confetti-icon {
-            font-size: 1.4rem;
-            color: var(--club-med-gold);
-        }
-
-        .welcome-video-panel {
-            background: linear-gradient(135deg, rgba(249, 248, 244, 0.9), rgba(237, 229, 214, 0.9));
-        }
-
-        .welcome-video-thumb {
-            background: radial-gradient(circle at top, rgba(253, 190, 0, 0.2), rgba(30, 40, 72, 0.85));
-            color: #fff;
-            box-shadow: 0 12px 28px rgba(30, 40, 72, 0.2);
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
-        }
-
-        .share-button {
-            background: linear-gradient(135deg, var(--club-med-primary) 0%, rgba(30, 40, 72, 0.85) 50%, rgba(30, 40, 72, 0.95) 100%);
-            box-shadow: 0 20px 36px rgba(30, 40, 72, 0.25);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .share-button:hover {
-            box-shadow: 0 26px 48px rgba(30, 40, 72, 0.3);
-            transform: translateY(-2px) scale(1.03);
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-
-        .slide-up {
-            animation: slideUp 0.8s ease-out;
+        .mobile-button:active {
+            transform: scale(0.97);
+            opacity: 0.85;
         }
 
         .chat-bubble {
@@ -357,7 +253,7 @@
         }
 
         .chat-bubble a {
-            color: #1e2848;
+            color: var(--club-med-primary);
             font-weight: 600;
             text-decoration: none;
         }
@@ -366,56 +262,12 @@
             text-decoration: underline;
         }
 
-        @media (min-width: 768px) {
-            .chat-bubble {
-                max-width: 85%;
-            }
-        }
-        
-        /* Chat interface styles */
-        .chat-interface.active {
-            display: flex !important;
-            animation: slideUp 0.8s ease-out;
-        }
-        
-        /* Quick questions grid */
-        .quick-questions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 8px;
-        }
-        
-        @media (min-width: 768px) {
-            .quick-questions-grid {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                gap: 12px;
-            }
-        }
-        
-        .quick-question-btn {
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-        }
-        
-        @media (min-width: 768px) {
-            .quick-question-btn {
-                padding: 14px 18px;
-                font-size: 15px;
-            }
-        }
-        
         .typing-indicator {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        
+
         .typing-dot {
             width: 8px;
             height: 8px;
@@ -423,42 +275,147 @@
             background-color: #9CA3AF;
             animation: typing 1.4s infinite ease-in-out;
         }
-        
+
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
         .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        .quick-questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .quick-question-btn {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .quick-question-btn:hover,
+        .quick-question-btn:focus-visible {
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(30, 40, 72, 0.15);
+        }
+
+        .chat-interface.active {
+            display: flex !important;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         @keyframes typing {
             0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
             40% { transform: scale(1); opacity: 1; }
         }
 
+        @media (max-width: 900px) {
+            .hero-inner {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.25rem;
+            }
+
+            .hero-brand {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-title {
+                text-align: center;
+            }
+
+            .hero-subtitle {
+                text-align: center;
+            }
+
+            .population-content {
+                padding-top: 2.5rem;
+            }
+        }
+
         @media (max-width: 640px) {
-            .resort-header {
-                border-bottom-left-radius: 28px;
-                border-bottom-right-radius: 28px;
-                padding-inline: 1.5rem;
+            .hero-header {
+                padding: 2rem 1.25rem;
             }
 
-            .club-med-logo {
-                width: 36px;
-                height: 36px;
+            .hero-title {
+                font-size: 2rem;
             }
 
-            .header-title {
-                font-size: 1.85rem;
+            .hero-trident {
+                width: 32px;
+                height: 32px;
             }
 
-            .event-subtitle {
-                font-size: 0.95rem;
+            .welcome-panel {
+                padding: 2rem 1.5rem;
             }
 
-            .population-area {
-                padding: 2.25rem 1.5rem 2.75rem;
-                border-radius: 26px;
+            .welcome-panel p {
+                font-size: 1rem;
+            }
+
+            .population-section h2 {
+                font-size: 2rem;
+            }
+
+            .population-section p {
+                font-size: 1rem;
+            }
+
+            .population-grid {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
             }
 
             .population-card {
-                padding: 1.25rem 1rem;
+                max-width: 200px;
+            }
+
+            .population-circle {
+                width: 58px;
+                height: 58px;
+                font-size: 1rem;
+            }
+
+            .population-content {
+                padding: 2.5rem 1rem 2rem;
+            }
+        }
+
+        @media (min-width: 640px) {
+            .population-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .population-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .page-body,
+            .hero-title,
+            .welcome-section,
+            .population-section,
+            .chat-interface.active {
+                animation: none !important;
             }
         }
     </style>
@@ -468,165 +425,73 @@
     <!-- Population Selection Screen -->
     <div id="populationScreen" class="min-h-screen flex flex-col">
         <!-- Header -->
-        <header class="resort-header text-white p-6 sm:p-8 shadow-2xl">
-            <div class="container mx-auto max-w-4xl">
-                <div class="relative sm:flex sm:items-center sm:justify-between sm:gap-6">
-                    <div class="language-switcher-wrapper sm:static sm:justify-end mt-2 mr-2 sm:mt-0 sm:mr-0">
-                        <div class="language-switcher">
-                            <button id="langFr" class="language-button mobile-button mobile-tap language-button--active" aria-label="Français">
-                                <span class="language-flag">🇫🇷</span>
-                            </button>
-                            <button id="langEn" class="language-button mobile-button mobile-tap" aria-label="English">
-                                <span class="language-flag">🇬🇧</span>
-                            </button>
-                        </div>
+        <header class="hero-header">
+            <div class="hero-inner">
+                <div class="hero-brand">
+                    <span class="hero-trident" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="32" height="32">
+                            <path fill="var(--club-med-gold)" d="M16 3c-2.21 0-4 1.79-4 4 0 2.76 2.64 4.76 4 7.5 1.36-2.74 4-4.74 4-7.5 0-2.21-1.79-4-4-4Zm0 26c2.21 0 4-1.79 4-4 0-2.04-1.26-3.81-2.4-5.59-.48-.75-.93-1.49-1.3-2.29-.37.8-.82 1.54-1.29 2.29C13.26 21.19 12 22.96 12 25c0 2.21 1.79 4 4 4ZM8 16.5c0 1.93 1.34 3.53 3.12 4.08-.34-.73-.6-1.49-.76-2.28-.28-1.33-.35-2.64-.35-3.8 0-1.58.16-3.01.42-4.31C8.85 11.05 8 12.18 8 13.5Zm16 0c0-1.32-.85-2.45-2.42-3.31.26 1.3.42 2.73.42 4.31 0 1.16-.07 2.47-.36 3.8-.17.79-.43 1.55-.77 2.28 1.78-.55 3.13-2.15 3.13-4.08Z"/>
+                        </svg>
+                    </span>
+                    <div class="hero-text">
+                        <h1 class="hero-title">Hubby</h1>
+                        <p class="hero-subtitle" data-fr="Assistant Academy Days Club Med 2025" data-en="Assistant Academy Days Club Med 2025">Assistant Academy Days Club Med 2025</p>
                     </div>
-                    <div class="flex flex-col items-center text-center gap-3 pt-16 pb-6 sm:py-8 sm:pt-4 sm:items-start sm:text-left">
-                        <div class="flex items-center justify-center sm:justify-start gap-4">
-                            <span class="club-med-logo" aria-hidden="true">
-                                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16 3c-2.209 0-4 1.79-4 4 0 2.762 2.641 4.756 4 7.5 1.359-2.744 4-4.738 4-7.5 0-2.21-1.791-4-4-4Zm0 26c2.209 0 4-1.79 4-4 0-2.041-1.263-3.812-2.4-5.593-.474-.751-.921-1.49-1.29-2.285-.37.795-.817 1.534-1.292 2.285C13.262 21.188 12 22.959 12 25c0 2.21 1.791 4 4 4Zm-8-12.5c0 1.933 1.344 3.531 3.118 4.077-.335-.732-.595-1.49-.761-2.277-.284-1.33-.357-2.635-.357-3.8 0-1.585.16-3.01.42-4.312C8.855 11.047 8 12.18 8 13.5Zm16 0c0-1.32-.855-2.453-2.42-3.312.26 1.302.42 2.727.42 4.312 0 1.165-.073 2.47-.357 3.8-.166.787-.426 1.545-.762 2.277C22.656 20.031 24 18.433 24 16.5Z" fill="#FDBE00"/>
-                                </svg>
-                            </span>
-                            <div class="relative">
-                                <h1 class="header-title text-[2.65rem] sm:text-5xl font-black tracking-tight leading-tight">
-                                    <span class="header-title-text">Hubby</span>
-                                    <span class="header-title-shadow" aria-hidden="true">Hubby</span>
-                                </h1>
-                            </div>
-                        </div>
-                        <div class="mt-4 space-y-2 text-white/90">
-                            <p class="event-subtitle subtitle-fade-in text-base md:text-lg font-medium" data-fr="Assistant Academy Days Club Med 2025" data-en="Assistant Academy Days Club Med 2025">Assistant Academy Days Club Med 2025</p>
-                            <div class="flex items-center justify-center sm:justify-start">
-                                <span class="location-chip">
-                                    <span aria-hidden="true">📍</span>
-                                    <span data-fr="18-20 Novembre • Marrakech" data-en="November 18-20 • Marrakech">18-20 Novembre • Marrakech</span>
-                                </span>
-                            </div>
-                        </div>
+                </div>
+                <div class="language-switcher-wrapper">
+                    <div class="language-switcher">
+                        <button id="langFr" class="language-button mobile-button mobile-tap language-button--active" aria-label="Français">
+                            <span class="language-flag">🇫🇷</span>
+                        </button>
+                        <button id="langEn" class="language-button mobile-button mobile-tap" aria-label="English">
+                            <span class="language-flag">🇬🇧</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- Population Selection Content -->
-        <div class="flex-1 flex items-center justify-center px-4 py-10 sm:py-12">
-            <div class="container mx-auto max-w-5xl">
-                <div class="population-area">
-                    <div class="population-intro text-center mb-10 fade-in">
-                        <h2 class="text-3xl md:text-4xl font-bold font-newsreader mb-4" data-fr="👥 Choisissez votre population" data-en="👥 Choose your population">👥 Choisissez votre population</h2>
-                        <p class="text-lg md:text-xl" data-fr="Sélectionnez votre groupe pour accéder à votre assistant personnalisé" data-en="Select your group to access your personalized assistant">Sélectionnez votre groupe pour accéder à votre assistant personnalisé</p>
+        <main class="population-content">
+            <div class="population-wrapper">
+                <section class="welcome-section">
+                    <div class="welcome-panel">
+                        <p data-fr="🌞 Bienvenue à Marrakech pour les Academy Days Club Med 2025." data-en="🌞 Welcome to Marrakech for the Club Med Academy Days 2025.">🌞 Bienvenue à Marrakech pour les Academy Days Club Med 2025.</p>
+                        <p data-fr="Je suis Hubby, ton assistant digital." data-en="I’m Hubby, your digital assistant.">Je suis Hubby, ton assistant digital.</p>
+                        <p data-fr="Mon rôle : t’aider à vivre pleinement cette expérience," data-en="My mission: to help you make the most of this experience,">Mon rôle : t’aider à vivre pleinement cette expérience,</p>
+                        <p data-fr="en t’accompagnant à chaque étape des Academy Days." data-en="guiding you through every step of the Academy Days.">en t’accompagnant à chaque étape des Academy Days.</p>
                     </div>
+                </section>
 
-                    <!-- Welcome Video Section -->
-                    <div class="mb-10">
-                        <button id="welcomeVideoToggle" class="welcome-video-card w-full text-left p-6 sm:p-7 mobile-tap">
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                                <div class="flex items-center gap-4">
-                                    <div class="welcome-video-thumb w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl">
-                                        <span class="text-3xl">▶️</span>
-                                    </div>
-                                    <div class="space-y-1">
-                                        <h3 class="text-xl font-bold font-newsreader" style="color: var(--club-med-primary);">
-                                            <span class="confetti-icon" aria-hidden="true">🎉</span>
-                                            <span data-fr="Bienvenue aux Academy Days" data-en="Welcome to Academy Days">Bienvenue aux Academy Days</span>
-                                        </h3>
-                                        <p class="text-base" style="color: rgba(30, 40, 72, 0.7);" data-fr="Message de bienvenue officiel • 2 min" data-en="Official welcome message • 2 min">Message de bienvenue officiel • 2 min</p>
-                                    </div>
-                                </div>
-                                <div id="welcomeVideoArrow" class="flex items-center justify-center text-2xl transition-transform duration-200" style="color: var(--club-med-primary);">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                <section class="population-section">
+                    <h2 data-fr="Choisissez votre population" data-en="Choose your population">Choisissez votre population</h2>
+                    <p data-fr="Sélectionnez votre groupe pour accéder à votre assistant personnalisé." data-en="Select your group to access your personalized assistant.">Sélectionnez votre groupe pour accéder à votre assistant personnalisé.</p>
+
+                    <div class="population-grid">
+                        <button type="button" class="population-card mobile-tap" data-population="CDG" aria-label="CDG">
+                            <span class="population-circle">CDG</span>
                         </button>
-                        <div id="welcomeVideoContent" class="hidden welcome-video-panel p-6 sm:p-7 rounded-3xl mt-4">
-                            <div class="bg-black rounded-3xl overflow-hidden shadow-2xl flex justify-center items-center">
-                                <iframe
-                                    width="560"
-                                    height="315"
-                                    src="https://www.youtube-nocookie.com/embed/kISmhSu5COU?si=ZceKyPMAyfgVwFlr"
-                                    title="YouTube video player"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    referrerpolicy="strict-origin-when-cross-origin"
-                                    allowfullscreen
-                                    class="rounded-3xl max-w-full h-auto"
-                                    style="min-height: 280px;">
-                                </iframe>
-                            </div>
-                        </div>
+                        <button type="button" class="population-card mobile-tap" data-population="LC" aria-label="LC">
+                            <span class="population-circle">LC</span>
+                        </button>
+                        <button type="button" class="population-card mobile-tap" data-population="CDV" aria-label="CDV">
+                            <span class="population-circle">CDV</span>
+                        </button>
+                        <button type="button" class="population-card mobile-tap" data-population="LKT" aria-label="LKT">
+                            <span class="population-circle">LKT</span>
+                        </button>
+                        <button type="button" class="population-card mobile-tap" data-population="MKT" aria-label="MKT">
+                            <span class="population-circle">MKT</span>
+                        </button>
+                        <button type="button" class="population-card mobile-tap" data-population="MKT+" aria-label="MKT+">
+                            <span class="population-circle">MKT+</span>
+                        </button>
                     </div>
-
-                    <!-- Population Cards -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 max-w-4xl mx-auto">
-                        <!-- CDG -->
-                        <div class="population-card card-theme-navy mobile-tap" data-population="CDG" tabindex="0" role="button">
-                            <div class="population-card-inner">
-                                <div class="population-icon">CDG</div>
-                                <p class="population-name" data-fr="Chef de Groupe" data-en="Group Leader">Chef de Groupe</p>
-                                <p class="population-caption" data-fr="Stratégie & leadership" data-en="Strategy & leadership">Stratégie & leadership</p>
-                            </div>
-                        </div>
-
-                        <!-- LC -->
-                        <div class="population-card card-theme-sage mobile-tap" data-population="LC" tabindex="0" role="button">
-                            <div class="population-card-inner">
-                                <div class="population-icon">LC</div>
-                                <p class="population-name" data-fr="Leader Club" data-en="Club Leader">Leader Club</p>
-                                <p class="population-caption" data-fr="Ambiance & inspiration" data-en="Energy & inspiration">Ambiance & inspiration</p>
-                            </div>
-                        </div>
-
-                        <!-- CDV -->
-                        <div class="population-card card-theme-gold mobile-tap" data-population="CDV" tabindex="0" role="button">
-                            <div class="population-card-inner">
-                                <div class="population-icon">CDV</div>
-                                <p class="population-name" data-fr="Chef de Village" data-en="Village Chief">Chef de Village</p>
-                                <p class="population-caption" data-fr="Hospitalité signature" data-en="Signature hospitality">Hospitalité signature</p>
-                            </div>
-                        </div>
-
-                        <!-- LKT -->
-                        <div class="population-card card-theme-beige mobile-tap" data-population="LKT" tabindex="0" role="button">
-                            <div class="population-card-inner">
-                                <div class="population-icon">LKT</div>
-                                <p class="population-name" data-fr="Leader Kitesurf" data-en="Kitesurf Leader">Leader Kitesurf</p>
-                                <p class="population-caption" data-fr="Énergie & glisse" data-en="Ride the energy">Énergie & glisse</p>
-                            </div>
-                        </div>
-
-                        <!-- MKT -->
-                        <div class="population-card card-theme-navy mobile-tap" data-population="MKT" tabindex="0" role="button">
-                            <div class="population-card-inner">
-                                <div class="population-icon">MKT</div>
-                                <p class="population-name" data-fr="Marketing" data-en="Marketing">Marketing</p>
-                                <p class="population-caption" data-fr="Créativité & rayonnement" data-en="Creativity & reach">Créativité & rayonnement</p>
-                            </div>
-                        </div>
-
-                        <!-- MKT+ -->
-                        <div class="population-card card-theme-sage mobile-tap" data-population="MKT+" tabindex="0" role="button">
-                            <div class="population-card-inner">
-                                <div class="population-icon">MKT+</div>
-                                <p class="population-name" data-fr="Marketing Plus" data-en="Marketing Plus">Marketing Plus</p>
-                                <p class="population-caption" data-fr="Vision & innovation" data-en="Vision & innovation">Vision & innovation</p>
-                            </div>
-                        </div>
-                    </div>
-
-                <!-- Share Button -->
-                <div class="mt-12 text-center">
-                    <button id="shareButton" class="mobile-button mobile-tap share-button text-white px-6 py-4 rounded-2xl font-medium flex items-center gap-3 mx-auto">
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        <span data-fr="Inviter mes collègues" data-en="Invite my colleagues">Inviter mes collègues</span>
-                    </button>
-                </div>
+                </section>
             </div>
-        </div>
+        </main>
+
+        <footer class="site-footer">© Club Med 2025 – Université des Talents</footer>
     </div>
 
     <!-- Chat Interface Screen -->
@@ -661,12 +526,6 @@
                             <button id="langEnChat" class="mobile-button mobile-tap px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200" style="color: var(--club-med-primary);">
                                 🇬🇧
                             </button>
-                        </div>
-                        <div class="bg-white bg-opacity-25 backdrop-blur-sm rounded-lg px-2 py-1">
-                            <div class="flex items-center space-x-1">
-                                <div class="w-2 h-2 rounded-full pulse-animation" style="background-color: var(--club-med-yellow);"></div>
-                                <span class="text-xs font-medium text-white">En ligne</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1477,6 +1336,15 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                 messageInput.placeholder = translations[lang].placeholder;
             }
 
+            document.querySelectorAll('.population-card').forEach(card => {
+                const code = card.dataset.population;
+                const population = academyData.populations[code];
+                if (population) {
+                    const label = `${code} – ${population.fullName[lang]}`;
+                    card.setAttribute('aria-label', label);
+                }
+            });
+
             if (selectedPopulation) {
                 const activePopulation = academyData.populations[selectedPopulation];
                 document.getElementById('selectedPopName').textContent = activePopulation.fullName[currentLang];
@@ -1519,46 +1387,6 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                 <p class="mb-2" style="color: var(--club-med-primary);">${t.welcomeIntro}</p>
                 <p class="font-medium" style="color: var(--club-med-brown);">${t.welcomeEnd}</p>
             `;
-        }
-
-        function toggleWelcomeVideo() {
-            const content = document.getElementById('welcomeVideoContent');
-            const arrow = document.getElementById('welcomeVideoArrow');
-            
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                content.classList.add('fade-in');
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.add('hidden');
-                content.classList.remove('fade-in');
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        function shareToTeams() {
-            const shareText = currentLang === 'fr' ? 
-                'Rejoignez-moi aux Academy Days 2025 à Marrakech ! Découvrez votre assistant Hubby personnalisé : ' :
-                'Join me at Academy Days 2025 in Marrakech! Discover your personalized Hubby assistant: ';
-            
-            const shareUrl = window.location.origin + window.location.pathname;
-            
-            // Try to use Web Share API if available
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Academy Days 2025 - Hubby Assistant',
-                    text: shareText,
-                    url: shareUrl
-                }).catch(console.error);
-            } else {
-                // Fallback: copy to clipboard
-                const fullText = shareText + shareUrl;
-                navigator.clipboard.writeText(fullText).then(() => {
-                    showNotification(translations[currentLang].linkCopied);
-                }).catch(() => {
-                    showNotification('Erreur lors de la copie');
-                });
-            }
         }
 
         function goBackToPopulationSelection() {
@@ -1950,12 +1778,6 @@ Stay up to date with internal Club Med news and upcoming events.<br>
                     }
                 });
             });
-
-            // Welcome video toggle
-            document.getElementById('welcomeVideoToggle').addEventListener('click', toggleWelcomeVideo);
-
-            // Share button
-            document.getElementById('shareButton').addEventListener('click', shareToTeams);
 
             // Back button
             document.getElementById('backButton').addEventListener('click', goBackToPopulationSelection);
