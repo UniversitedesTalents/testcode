@@ -53,9 +53,22 @@ body {
 }
 
 .hubby-title {
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--terracotta);
+  letter-spacing: 0.04em;
+  position: relative;
+}
+
+.hubby-title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 0 rgba(179, 90, 66, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  animation: haloGlow 1.4s ease-out forwards 0.2s;
 }
 
 .lang-toggle {
@@ -262,6 +275,21 @@ body {
   40% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes haloGlow {
+  0% {
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(179, 90, 66, 0.4);
+  }
+  40% {
+    opacity: 1;
+    box-shadow: 0 0 24px rgba(179, 90, 66, 0.35);
+  }
+  100% {
+    opacity: 0;
+    box-shadow: 0 0 12px rgba(179, 90, 66, 0.2);
   }
 }
 
