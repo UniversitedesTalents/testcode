@@ -1,11 +1,11 @@
 :root {
-  --clubmed-blue: #006fba;
   --deep-blue: #1e2848;
-  --vibrant-yellow: #fdbe00;
   --terracotta: #b35a42;
   --soft-green: #a7bfb9;
   --warm-beige: #d7cdc1;
   --off-white: #f5f5f5;
+  --soft-shadow: rgba(0, 0, 0, 0.05);
+  --text-muted: #6e7485;
 }
 
 * {
@@ -16,118 +16,170 @@
 
 body {
   font-family: 'Newsreader', serif;
-  background: linear-gradient(160deg, var(--warm-beige), var(--off-white));
+  background: linear-gradient(to bottom, var(--off-white), var(--warm-beige));
   color: var(--deep-blue);
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.5s ease;
+  padding: 32px;
+  transition: opacity 0.4s ease;
 }
 
 body.fade-out {
   opacity: 0;
 }
 
-.home-container {
-  text-align: center;
+.home {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hubby-card {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px var(--soft-shadow);
+  padding: 72px clamp(32px, 5vw, 64px);
   max-width: 520px;
-  padding: 80px 40px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
-  border-radius: 28px;
-  box-shadow: 0 30px 80px rgba(30, 40, 72, 0.12);
+  width: min(100%, 520px);
+  text-align: center;
+  animation: fadeUp 0.8s ease-out both;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 40px;
 }
 
 .hubby-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(0.25rem, 1vw, 0.5rem);
-  font-size: clamp(3rem, 8vw, 5rem);
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
-.hubby-logo span {
-  display: inline-block;
-  text-shadow: 0 8px 18px rgba(30, 40, 72, 0.18);
-}
-
-.hubby-logo span:nth-child(1) {
-  color: var(--clubmed-blue);
-}
-
-.hubby-logo span:nth-child(2) {
-  color: var(--vibrant-yellow);
-}
-
-.hubby-logo span:nth-child(3) {
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  font-weight: 700;
   color: var(--terracotta);
+  letter-spacing: 0.04em;
+  position: relative;
 }
 
-.hubby-logo span:nth-child(4) {
-  color: var(--soft-green);
-}
-
-.hubby-logo span:nth-child(5) {
-  color: var(--deep-blue);
+.hubby-logo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 0 rgba(179, 90, 66, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  animation: haloGlow 1.4s ease-out forwards 0.2s;
 }
 
 .tagline {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: rgba(30, 40, 72, 0.75);
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  color: var(--deep-blue);
+  opacity: 0.8;
+  font-style: italic;
 }
 
 .population-selector {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
   gap: 16px;
+  justify-items: center;
 }
 
 .population-selector button {
   border: none;
-  border-radius: 18px;
-  padding: 18px 12px;
+  border-radius: 999px;
+  padding: 14px 18px;
   background: var(--deep-blue);
-  color: white;
-  font-size: 1rem;
-  letter-spacing: 0.06em;
+  color: #ffffff;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transition: background 0.3s ease, transform 0.3s ease;
   cursor: pointer;
+  width: 100%;
 }
 
 .population-selector button:hover,
 .population-selector button:focus {
   outline: none;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(30, 40, 72, 0.18);
-  background: #1a2440;
+  background: #2a3b65;
 }
 
-.population-selector button:active {
-  transform: translateY(0);
-  box-shadow: none;
+.card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-footer p {
+.event-credit {
   font-size: 0.95rem;
-  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(30, 40, 72, 0.6);
 }
 
-@media (max-width: 600px) {
-  .home-container {
+.signature {
+  font-size: 0.75rem;
+  color: var(--terracotta);
+  opacity: 0.9;
+  font-style: italic;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes haloGlow {
+  0% {
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(179, 90, 66, 0.4);
+  }
+  40% {
+    opacity: 1;
+    box-shadow: 0 0 24px rgba(179, 90, 66, 0.35);
+  }
+  100% {
+    opacity: 0;
+    box-shadow: 0 0 12px rgba(179, 90, 66, 0.2);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 24px;
+  }
+
+  .hubby-card {
     padding: 60px 28px;
-    gap: 36px;
+    gap: 32px;
+  }
+
+  .hubby-logo {
+    font-size: clamp(2rem, 10vw, 3rem);
   }
 
   .population-selector {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .hubby-card {
+    padding: 48px 24px;
+  }
+
+  .population-selector {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+
+  .population-selector button {
+    font-size: 0.9rem;
+    padding: 12px 16px;
   }
 }
