@@ -1,0 +1,101 @@
+:root {
+  --deep-blue: #1e2848;
+  --vibrant-yellow: #fdbe00;
+  --soft-green: #a7bfb9;
+  --warm-beige: #d7cdc1;
+  --off-white: #f5f5f5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Newsreader', serif;
+  background: linear-gradient(160deg, var(--warm-beige), var(--off-white));
+  color: var(--deep-blue);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+}
+
+body.fade-out {
+  opacity: 0;
+}
+
+.home-container {
+  text-align: center;
+  max-width: 520px;
+  padding: 80px 40px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(30, 40, 72, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.hubby-logo {
+  font-size: clamp(3rem, 8vw, 5rem);
+  letter-spacing: 0.08em;
+}
+
+.tagline {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: rgba(30, 40, 72, 0.75);
+}
+
+.population-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.population-selector button {
+  border: none;
+  border-radius: 18px;
+  padding: 18px 12px;
+  background: var(--deep-blue);
+  color: white;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  cursor: pointer;
+}
+
+.population-selector button:hover,
+.population-selector button:focus {
+  outline: none;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(30, 40, 72, 0.18);
+  background: #1a2440;
+}
+
+.population-selector button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+footer p {
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(30, 40, 72, 0.6);
+}
+
+@media (max-width: 600px) {
+  .home-container {
+    padding: 60px 28px;
+    gap: 36px;
+  }
+
+  .population-selector {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+}
