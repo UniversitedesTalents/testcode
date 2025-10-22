@@ -3,281 +3,798 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hubby – Votre assistant pendant les Academy Days</title>
+    <title>Hubby – Chat assistant Club Med</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="page">
-        <header class="site-header" role="banner">
-            <span class="header-band" aria-hidden="true"></span>
-            <div class="header-inner">
-                <div class="brand">
-                    <a class="brand-logo" href="index.html">Hubby</a>
-                    <p class="brand-subtitle">Assistant Academy Days Club Med 2025</p>
-                </div>
-                <a class="back-link" href="index.html">&larr; Retour à l'accueil</a>
+<body class="chat-page">
+    <div class="chat-app">
+        <header class="chat-header">
+            <button id="backButton" class="back-btn" type="button" aria-label="Retour">
+                ←
+            </button>
+            <div class="title-area">
+                <h1 class="hubby-title">Hubby</h1>
+                <div class="pop-chip" id="selectedPopIcon" aria-live="polite"></div>
+            </div>
+            <div class="lang-toggle" role="group" aria-label="Choisir la langue">
+                <button id="langFrChat" type="button" data-lang="fr" class="lang-btn is-active">FR</button>
+                <button id="langEnChat" type="button" data-lang="en" class="lang-btn">EN</button>
             </div>
         </header>
 
-        <main>
-            <section class="chatbot" aria-labelledby="chatbot-title">
-                <div class="chatbot-inner">
-                    <header class="chatbot-header">
-                        <div>
-                            <p class="chatbot-tag">Espace conversation</p>
-                            <h1 id="chatbot-title" data-population-name>
-                                Hubby vous accompagne.
-                            </h1>
-                        </div>
-                        <p class="chatbot-subtitle" data-population-description>
-                            Posez vos questions et retrouvez les informations clés du séminaire.
-                        </p>
-                    </header>
-
-                    <div class="chat-layout">
-                        <section class="chat-panel" aria-label="Fil de discussion Hubby">
-                            <div class="chat-thread" data-chat-thread>
-                                <article class="message message--hubby">
-                                    <h2 class="message-author">Hubby</h2>
-                                    <p>Bonjour&nbsp;! Je suis là pour vous guider pendant les Academy Days. Sélectionnez une question rapide ou écrivez votre demande.</p>
-                                </article>
-                            </div>
-                            <form class="chat-input" data-chat-form>
-                                <label for="message-input" class="visually-hidden">Votre message</label>
-                                <input id="message-input" name="message" type="text" placeholder="Écrivez votre message..." autocomplete="off" required>
-                                <button type="submit">Envoyer</button>
-                            </form>
-                        </section>
-
-                        <aside class="assistant-panel" aria-label="Actions rapides et informations">
-                            <section class="quick-questions" aria-labelledby="quick-questions-title">
-                                <h2 id="quick-questions-title">Questions rapides</h2>
-                                <div class="quick-questions-list" data-quick-questions>
-                                    <!-- Boutons insérés via JavaScript -->
-                                </div>
-                            </section>
-
-                            <section class="key-points" aria-labelledby="key-points-title">
-                                <h2 id="key-points-title">Informations clés</h2>
-                                <ul class="key-points-list" data-key-points>
-                                    <!-- Éléments insérés via JavaScript -->
-                                </ul>
-                            </section>
-                        </aside>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="site-footer" role="contentinfo">
-            <div class="footer-inner">
-                <p class="footer-title">Hubby – Assistant Academy Days Club Med 2025</p>
-                <p class="footer-subtext">Besoin d’un coup de main&nbsp;? Écris-nous sur WhatsApp ou retrouve-nous au centre de conciergerie Club Med.</p>
+        <section class="chat-interface">
+            <div class="chat-window" id="chatWindow" role="log" aria-live="polite" aria-relevant="additions"></div>
+            <div class="day-filter" id="dayFilter" role="group" aria-label="Filtrer par jour">
+                <!-- Buttons rendered by JavaScript -->
             </div>
-        </footer>
+            <div class="quick-actions" id="quickActions" aria-label="Actions rapides">
+                <!-- Buttons rendered by JavaScript -->
+            </div>
+            <div class="chat-input-area">
+                <label class="visually-hidden" for="chatInput">Votre message</label>
+                <input type="text" id="chatInput" autocomplete="off" placeholder="Écrivez votre message...">
+                <button id="sendMessageBtn" type="button">Envoyer</button>
+            </div>
+        </section>
     </div>
 
     <script>
-        (function () {
-            const populationContent = {
-                CDG: {
-                    name: 'Population CDG',
-                    description: 'Votre agenda stratégique et les moments clés vous attendent ici.',
-                    quickQuestions: [
-                        'Quels sont les ateliers de leadership aujourd\'hui ?',
-                        'Où se déroule le dîner de gala ?',
-                        'Quels speakers interviennent ce matin ?'
-                    ],
-                    keyPoints: [
-                        'Briefing exécutif à 8h30 – salle Horizon.',
-                        'Navettes privées disponibles toutes les 20 minutes.',
-                        'Dîner networking avec le Comex à 20h.'
-                    ]
-                },
-                LC: {
-                    name: 'Population LC',
-                    description: 'Retrouvez vos points de rendez-vous et les sessions clients.',
-                    quickQuestions: [
-                        'Quel est l\'itinéraire du parcours client ?',
-                        'Où puis-je récupérer mes supports marketing ?',
-                        'Quel est le prochain atelier produit ?'
-                    ],
-                    keyPoints: [
-                        'Accueil clients à 9h – amphithéâtre Azur.',
-                        'Corner marketing ouvert de 14h à 18h.',
-                        'Soirée expérience immersive à partir de 19h.'
-                    ]
-                },
-                CDV: {
-                    name: 'Population CDV',
-                    description: 'Suivez le planning des villages et les points d\'attention opérationnels.',
-                    quickQuestions: [
-                        'Quelle est la réunion opérationnelle du jour ?',
-                        'Quels sont les temps forts à partager avec mon équipe ?',
-                        'Où trouver le support logistique ?'
-                    ],
-                    keyPoints: [
-                        'Brief opérationnel à 8h – salle Latitude.',
-                        'Point logistique disponible via le desk Hubby.',
-                        'Visite terrain organisée à 15h.'
-                    ]
-                },
-                LKT: {
-                    name: 'Population LKT',
-                    description: 'Planifiez vos sessions de formation et d\'échanges best practices.',
-                    quickQuestions: [
-                        'Quel atelier formation commence maintenant ?',
-                        'Comment rejoindre la masterclass digitale ?',
-                        'Quels sont les intervenants de l\'après-midi ?'
-                    ],
-                    keyPoints: [
-                        'Rendez-vous formation à 10h – salle Compass.',
-                        'Masterclass digitale en salle Horizon B.',
-                        'Afterwork thématique à 18h30.'
-                    ]
-                },
-                MKT: {
-                    name: 'Population MKT',
-                    description: 'Les actus communication et les rendez-vous influence sont ici.',
-                    quickQuestions: [
-                        'Quelle est la session social media du jour ?',
-                        'Où rencontrer l\'équipe influence ?',
-                        'Quels contenus sont à mettre en avant ?'
-                    ],
-                    keyPoints: [
-                        'Workshop storytelling à 11h – salle Riviera.',
-                        'Studio photo disponible de 14h à 17h.',
-                        'Session influenceurs à 19h.'
-                    ]
-                },
-                'MKT+': {
-                    name: 'Population MKT+',
-                    description: 'Votre agenda premium et les accès exclusifs sont disponibles ici.',
-                    quickQuestions: [
-                        'Quels sont les accès privilégiés aujourd\'hui ?',
-                        'Comment rejoindre le salon privé ?',
-                        'Quel est le programme VIP ?'
-                    ],
-                    keyPoints: [
-                        'Salon privé ouvert dès 9h – terrasse Lagoon.',
-                        'Conciergerie dédiée joignable via Hubby.',
-                        'Dîner signature avec le Chef à 20h30.'
-                    ]
-                }
-            };
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatWindow = document.getElementById('chatWindow');
+            const quickActionsContainer = document.getElementById('quickActions');
+            const dayFilterContainer = document.getElementById('dayFilter');
+            const chatInput = document.getElementById('chatInput');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            const backButton = document.getElementById('backButton');
+            const langButtons = Array.from(document.querySelectorAll('.lang-btn'));
+            const popChip = document.getElementById('selectedPopIcon');
 
             const params = new URLSearchParams(window.location.search);
-            const populationCode = params.get('population');
+            const rawPopulation = params.get('population') || 'CDV';
+            const requestedPopulation = decodeURIComponent(rawPopulation).toUpperCase();
+            const allowedPopulations = ['CDV', 'LC', 'LKT', 'MKT', 'MKT+'];
 
-            const titleEl = document.querySelector('[data-population-name]');
-            const descriptionEl = document.querySelector('[data-population-description]');
-            const quickListEl = document.querySelector('[data-quick-questions]');
-            const keyPointsEl = document.querySelector('[data-key-points]');
-            const chatThreadEl = document.querySelector('[data-chat-thread]');
-            const chatForm = document.querySelector('[data-chat-form]');
-            const messageInput = chatForm.querySelector('input');
-
-            const population = populationContent[populationCode] || {
-                name: 'Hubby vous accompagne.',
-                description: 'Posez vos questions et retrouvez les informations clés du séminaire.',
-                quickQuestions: [
-                    'Quel est le programme d\'aujourd\'hui ?',
-                    'Où se trouve la prochaine activité ?',
-                    'Comment contacter la conciergerie ?'
-                ],
-                keyPoints: [
-                    'Consultez le planning dans Hubby pour ne rien manquer.',
-                    'Les équipes Hubby sont disponibles sur place de 8h à 22h.',
-                    'Contact WhatsApp dédié&nbsp;: +33 6 00 00 00 00.'
-                ]
+            const state = {
+                lang: 'fr',
+                day: null,
+                population: allowedPopulations.includes(requestedPopulation) ? requestedPopulation : 'CDV'
             };
 
-            titleEl.textContent = population.name;
-            descriptionEl.innerHTML = population.description;
+            const dayOptions = [
+                { key: 'monday', label: { fr: 'Lundi 18', en: 'Monday 18' } },
+                { key: 'tuesday', label: { fr: 'Mardi 19', en: 'Tuesday 19' } },
+                { key: 'wednesday', label: { fr: 'Mercredi 20', en: 'Wednesday 20' } },
+                { key: 'thursday', label: { fr: 'Jeudi 21', en: 'Thursday 21' } }
+            ];
 
-            const resetList = (element) => {
-                while (element.firstChild) {
-                    element.removeChild(element.firstChild);
+            const translations = {
+                fr: {
+                    placeholder: 'Écrivez votre message...',
+                    send: 'Envoyer',
+                    typing: 'Hubby tape…',
+                    fallback: 'Je n’ai pas encore la réponse à cette question 😅 Tu peux jeter un œil aux boutons rapides ci-dessous.',
+                    back: 'Retour',
+                    dayClear: 'Tous les jours',
+                    quickActions: {
+                        programme: 'Programme complet',
+                        groupe: 'Mon groupe',
+                        activites: 'Activités',
+                        clubMedLive: 'Club Med Live',
+                        infosPratiques: 'Infos pratiques',
+                        vivaEngage: 'Viva Engage'
+                    },
+                    initial: 'Bonjour ! Je suis là pour te guider pendant les Academy Days. Choisis un bouton rapide ou écris ta question.'
+                },
+                en: {
+                    placeholder: 'Type your message…',
+                    send: 'Send',
+                    typing: 'Hubby is typing…',
+                    fallback: 'I don’t have an answer for that yet 😅 Have a look at the quick buttons below.',
+                    back: 'Back',
+                    dayClear: 'All days',
+                    quickActions: {
+                        programme: 'Full program',
+                        groupe: 'My group',
+                        activites: 'Activities',
+                        clubMedLive: 'Club Med Live',
+                        infosPratiques: 'Practical info',
+                        vivaEngage: 'Viva Engage'
+                    },
+                    initial: 'Hello! I’m here to guide you through the Academy Days. Pick a quick button or type your question.'
                 }
             };
 
-            resetList(quickListEl);
-            resetList(keyPointsEl);
+            const quickActionsByPopulation = {
+                DEFAULT: ['programme', 'groupe', 'activites', 'clubMedLive', 'infosPratiques', 'vivaEngage'],
+                CDV: ['programme', 'groupe', 'activites', 'clubMedLive', 'infosPratiques', 'vivaEngage'],
+                LC: ['programme', 'groupe', 'activites', 'clubMedLive', 'infosPratiques', 'vivaEngage'],
+                LKT: ['programme', 'groupe', 'activites', 'clubMedLive', 'infosPratiques', 'vivaEngage'],
+                MKT: ['programme', 'groupe', 'activites', 'clubMedLive', 'infosPratiques', 'vivaEngage'],
+                'MKT+': ['programme', 'groupe', 'activites', 'clubMedLive', 'infosPratiques', 'vivaEngage']
+            };
 
-            population.quickQuestions.forEach((question) => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'quick-question-button';
-                button.textContent = question;
+            const responses = {
+                DEFAULT: {
+                    programme: {
+                        fr: {
+                            message: 'Voici le lien pour consulter le programme complet 👇',
+                            link: { url: 'https://hubby.clubmed/programme', label: 'Programme général' }
+                        },
+                        en: {
+                            message: 'Here’s the link to view the full program 👇',
+                            link: { url: 'https://hubby.clubmed/programme', label: 'Overall schedule' }
+                        }
+                    },
+                    groupe: {
+                        fr: {
+                            message: 'Découvre ton groupe et les participants associés 👇',
+                            link: { url: 'https://hubby.clubmed/groupes', label: 'Accéder à mon groupe' }
+                        },
+                        en: {
+                            message: 'Check your group and fellow participants 👇',
+                            link: { url: 'https://hubby.clubmed/groups', label: 'Open my group' }
+                        }
+                    },
+                    activites: {
+                        fr: {
+                            message: 'Voici les expériences phares de la journée. Choisis ton mood et fonce !',
+                            isHTML: true,
+                            list: [
+                                '🍷 <strong>Épicurien</strong> : Dégustation de vins, Atelier cuisine, Brunch gourmand.',
+                                '🎨 <strong>Créatif</strong> : Poterie berbère, Calligraphie arabe, Atelier henné.',
+                                '🏃‍♂️ <strong>Sportif</strong> : Tennis, Aqua fitness, Randonnée Atlas.',
+                                '🧭 <strong>Curieux</strong> : Visite des souks, Conférence berbère, Jardin Majorelle.',
+                                '🧘 <strong>Bienveillant</strong> : Yoga sunrise, Méditation, Spa & hammam.'
+                            ]
+                        },
+                        en: {
+                            message: 'Here are the signature experiences for today. Pick your vibe and go!',
+                            isHTML: true,
+                            list: [
+                                '🍷 <strong>Epicurean</strong>: Wine tasting, Cooking workshop, Gourmet brunch.',
+                                '🎨 <strong>Creative</strong>: Berber pottery, Arabic calligraphy, Henna workshop.',
+                                '🏃‍♂️ <strong>Sporty</strong>: Tennis, Aqua fitness, Atlas hike.',
+                                '🧭 <strong>Curious</strong>: Souk visit, Berber conference, Majorelle Garden.',
+                                '🧘 <strong>Caring</strong>: Sunrise yoga, Meditation, Spa & hammam.'
+                            ]
+                        }
+                    },
+                    clubMedLive: {
+                        fr: {
+                            message: 'Club Med Live te réserve un show différent chaque soir ✨',
+                            days: {
+                                monday: '🎶 Lundi 18 : Zavmusic à 21h – set électro innovant au théâtre Azur.',
+                                tuesday: '🎷 Mardi 19 : Sax Vibes à 20h30 – soirée jazz moderne sur la terrasse Lagoon.',
+                                wednesday: '🎤 Mercredi 20 : ASMA & Mat Duval dès 22h – performance live au M Lounge.',
+                                thursday: '🪘 Jeudi 21 : Sunset Jam à 19h – fusion world au rooftop Horizon.'
+                            }
+                        },
+                        en: {
+                            message: 'Club Med Live brings a different vibe every night ✨',
+                            days: {
+                                monday: '🎶 Monday 18th: Zavmusic at 9 PM – innovative electro set on the Azur stage.',
+                                tuesday: '🎷 Tuesday 19th: Sax Vibes at 8:30 PM – modern jazz evening on the Lagoon terrace.',
+                                wednesday: '🎤 Wednesday 20th: ASMA & Mat Duval from 10 PM – live performance at the M Lounge.',
+                                thursday: '🪘 Thursday 21st: Sunset Jam at 7 PM – world fusion on the Horizon rooftop.'
+                            }
+                        }
+                    },
+                    infosPratiques: {
+                        fr: {
+                            message: 'Retrouve ici les infos pratiques :',
+                            isHTML: true,
+                            list: [
+                                '🕗 <strong>Horaires navettes</strong> : toutes les 20 min depuis l’entrée principale.',
+                                '📍 <strong>Conciergerie Hubby</strong> : ouverte 8h-22h au lobby central.',
+                                '📱 <strong>Assistance</strong> : WhatsApp +33 6 00 00 00 00.'
+                            ]
+                        },
+                        en: {
+                            message: 'Here’s your essential info:',
+                            isHTML: true,
+                            list: [
+                                '🕗 <strong>Shuttle schedule</strong>: every 20 minutes from the main gate.',
+                                '📍 <strong>Hubby concierge</strong>: open 8 AM - 10 PM in the central lobby.',
+                                '📱 <strong>Assistance</strong>: WhatsApp +33 6 00 00 00 00.'
+                            ]
+                        }
+                    },
+                    vivaEngage: {
+                        fr: {
+                            message: 'Découvre nos communautés sur Viva Engage 👇',
+                            isHTML: true,
+                            links: [
+                                { label: 'AI Learning Club', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all' },
+                                { label: 'Forever Young', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new' },
+                                { label: 'Club Med News & Events', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new' }
+                            ]
+                        },
+                        en: {
+                            message: 'Explore our Viva Engage communities 👇',
+                            isHTML: true,
+                            links: [
+                                { label: 'AI Learning Club', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjcxNDczNDE4MjQifQ/all' },
+                                { label: 'Forever Young', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjc0NjE0NjQwNjQifQ/new' },
+                                { label: 'Club Med News & Events', url: 'https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMjYyMDY4OTIwMzIifQ/new' }
+                            ]
+                        }
+                    }
+                },
+                CDV: {
+                    programme: {
+                        fr: {
+                            message: 'Ton programme CDV met l’accent sur les temps forts opérationnels. Retrouve-le ici 👇',
+                            link: { url: 'https://hubby.clubmed/programme-cdv', label: 'Programme CDV' }
+                        },
+                        en: {
+                            message: 'Your CDV schedule highlights the key operational moments. Access it here 👇',
+                            link: { url: 'https://hubby.clubmed/program-cdv', label: 'CDV program' }
+                        }
+                    },
+                    groupe: {
+                        fr: {
+                            message: 'Le mapping de ton village et des équipes associées est prêt 👇',
+                            link: { url: 'https://hubby.clubmed/groupes-cdv', label: 'Voir mon réseau CDV' }
+                        },
+                        en: {
+                            message: 'Your village mapping and partner teams are ready 👇',
+                            link: { url: 'https://hubby.clubmed/groups-cdv', label: 'View my CDV network' }
+                        }
+                    },
+                    activites: {
+                        fr: {
+                            message: 'Ta sélection CDV met l’accent sur le partage terrain. Voici les expériences clés :'
+                        },
+                        en: {
+                            message: 'Your CDV selection focuses on field sharing. Here are today’s highlights:'
+                        }
+                    },
+                    infosPratiques: {
+                        fr: {
+                            message: 'Tes points clés du jour :',
+                            isHTML: true,
+                            list: [
+                                '🧭 <strong>Brief opérationnel</strong> : 8h salle Latitude.',
+                                '🚐 <strong>Visite terrain</strong> : départ 15h depuis le lobby.',
+                                '🤝 <strong>Desk support</strong> : assistance villages 8h-20h.'
+                            ]
+                        },
+                        en: {
+                            message: 'Today’s key checkpoints:',
+                            isHTML: true,
+                            list: [
+                                '🧭 <strong>Operations briefing</strong>: 8 AM in Latitude room.',
+                                '🚐 <strong>Field visit</strong>: 3 PM departure from the lobby.',
+                                '🤝 <strong>Support desk</strong>: village assistance from 8 AM to 8 PM.'
+                            ]
+                        }
+                    }
+                },
+                LC: {
+                    programme: {
+                        fr: {
+                            message: 'Ton parcours LC est optimisé autour des rencontres clients. Consulter le planning 👇',
+                            link: { url: 'https://hubby.clubmed/programme-lc', label: 'Programme LC' }
+                        },
+                        en: {
+                            message: 'Your LC path is tailored to client sessions. Check the schedule 👇',
+                            link: { url: 'https://hubby.clubmed/program-lc', label: 'LC program' }
+                        }
+                    },
+                    groupe: {
+                        fr: {
+                            message: 'Voici la composition de ton portefeuille clients pour la journée 👇',
+                            link: { url: 'https://hubby.clubmed/groupes-lc', label: 'Voir mes clients' }
+                        },
+                        en: {
+                            message: 'Here’s today’s client portfolio for your group 👇',
+                            link: { url: 'https://hubby.clubmed/groups-lc', label: 'View my clients' }
+                        }
+                    },
+                    activites: {
+                        fr: {
+                            message: 'Pour tes clients, privilégie ces moments expérientiels :'
+                        },
+                        en: {
+                            message: 'For your clients, spotlight these experiential moments:'
+                        }
+                    },
+                    infosPratiques: {
+                        fr: {
+                            message: 'À ne pas manquer :',
+                            isHTML: true,
+                            list: [
+                                '📍 <strong>Accueil clients</strong> : amphithéâtre Azur dès 9h.',
+                                '🧳 <strong>Logistique marketing</strong> : corner Riviera 14h-18h.',
+                                '💬 <strong>Coaching pitch</strong> : sessions flash à 16h.'
+                            ]
+                        },
+                        en: {
+                            message: 'Don’t miss:',
+                            isHTML: true,
+                            list: [
+                                '📍 <strong>Client welcome</strong>: Azur theater from 9 AM.',
+                                '🧳 <strong>Marketing logistics</strong>: Riviera corner 2 PM - 6 PM.',
+                                '💬 <strong>Pitch coaching</strong>: flash sessions at 4 PM.'
+                            ]
+                        }
+                    }
+                },
+                LKT: {
+                    programme: {
+                        fr: {
+                            message: 'Les masterclasses LKT et les ateliers best practices sont ici 👇',
+                            link: { url: 'https://hubby.clubmed/programme-lkt', label: 'Programme LKT' }
+                        },
+                        en: {
+                            message: 'All LKT masterclasses and best-practice labs are available here 👇',
+                            link: { url: 'https://hubby.clubmed/program-lkt', label: 'LKT program' }
+                        }
+                    },
+                    groupe: {
+                        fr: {
+                            message: 'Retrouve ton cercle d’apprentissage et les speakers associés 👇',
+                            link: { url: 'https://hubby.clubmed/groupes-lkt', label: 'Mon cercle LKT' }
+                        },
+                        en: {
+                            message: 'Find your learning circle and the related speakers 👇',
+                            link: { url: 'https://hubby.clubmed/groups-lkt', label: 'My LKT circle' }
+                        }
+                    },
+                    activites: {
+                        fr: {
+                            message: 'Pour alimenter tes partages de bonnes pratiques, explore ces ateliers signatures :'
+                        },
+                        en: {
+                            message: 'Fuel your best-practice exchanges with these signature workshops:'
+                        }
+                    },
+                    infosPratiques: {
+                        fr: {
+                            message: 'Tes repères pour la journée :',
+                            isHTML: true,
+                            list: [
+                                '🎓 <strong>Atelier opening</strong> : 10h salle Compass.',
+                                '💡 <strong>Masterclass digitale</strong> : Horizon B à 14h.',
+                                '🍹 <strong>Afterwork partage</strong> : rooftop Horizon 18h30.'
+                            ]
+                        },
+                        en: {
+                            message: 'Today’s landmarks:',
+                            isHTML: true,
+                            list: [
+                                '🎓 <strong>Workshop opening</strong>: 10 AM in Compass room.',
+                                '💡 <strong>Digital masterclass</strong>: Horizon B at 2 PM.',
+                                '🍹 <strong>Sharing afterwork</strong>: Horizon rooftop 6:30 PM.'
+                            ]
+                        }
+                    }
+                },
+                MKT: {
+                    programme: {
+                        fr: {
+                            message: 'Ton agenda communication & influence se trouve ici 👇',
+                            link: { url: 'https://hubby.clubmed/programme-mkt', label: 'Programme MKT' }
+                        },
+                        en: {
+                            message: 'Your communication & influence schedule lives here 👇',
+                            link: { url: 'https://hubby.clubmed/program-mkt', label: 'MKT program' }
+                        }
+                    },
+                    groupe: {
+                        fr: {
+                            message: 'Retrouve ton squad marketing et les influenceurs associés 👇',
+                            link: { url: 'https://hubby.clubmed/groupes-mkt', label: 'Mon squad MKT' }
+                        },
+                        en: {
+                            message: 'Access your marketing squad and linked influencers 👇',
+                            link: { url: 'https://hubby.clubmed/groups-mkt', label: 'My MKT squad' }
+                        }
+                    },
+                    activites: {
+                        fr: {
+                            message: 'Voici les expériences idéales pour nourrir ta stratégie de contenu :'
+                        },
+                        en: {
+                            message: 'These experiences are perfect to feed your content strategy:'
+                        }
+                    },
+                    infosPratiques: {
+                        fr: {
+                            message: 'Highlights du jour :',
+                            isHTML: true,
+                            list: [
+                                '📸 <strong>Studio photo</strong> : ouvert 14h-17h.',
+                                '🧠 <strong>Workshop storytelling</strong> : 11h salle Riviera.',
+                                '🤳 <strong>Social media lab</strong> : coaching express 16h.'
+                            ]
+                        },
+                        en: {
+                            message: 'Today’s highlights:',
+                            isHTML: true,
+                            list: [
+                                '📸 <strong>Photo studio</strong>: open 2 PM - 5 PM.',
+                                '🧠 <strong>Storytelling workshop</strong>: 11 AM in Riviera room.',
+                                '🤳 <strong>Social media lab</strong>: express coaching at 4 PM.'
+                            ]
+                        }
+                    }
+                },
+                'MKT+': {
+                    programme: {
+                        fr: {
+                            message: 'Ton agenda exclusif MKT+ est disponible ici 👇',
+                            link: { url: 'https://hubby.clubmed/programme-mktplus', label: 'Programme MKT+' }
+                        },
+                        en: {
+                            message: 'Your exclusive MKT+ agenda is ready here 👇',
+                            link: { url: 'https://hubby.clubmed/program-mktplus', label: 'MKT+ program' }
+                        }
+                    },
+                    groupe: {
+                        fr: {
+                            message: 'Voici les accès VIP et ton cercle premium 👇',
+                            link: { url: 'https://hubby.clubmed/groupes-mktplus', label: 'Cercle MKT+' }
+                        },
+                        en: {
+                            message: 'Here are your VIP accesses and premium circle 👇',
+                            link: { url: 'https://hubby.clubmed/groups-mktplus', label: 'MKT+ circle' }
+                        }
+                    },
+                    activites: {
+                        fr: {
+                            message: 'Tes accès privilégiés t’ouvrent ces expériences exclusives :'
+                        },
+                        en: {
+                            message: 'Your privileged access unlocks these exclusive experiences:'
+                        }
+                    },
+                    infosPratiques: {
+                        fr: {
+                            message: 'Pour profiter à fond :',
+                            isHTML: true,
+                            list: [
+                                '🥂 <strong>Salon privé Lagoon</strong> : ouvert dès 9h.',
+                                '🧑‍💼 <strong>Conciergerie dédiée</strong> : hotline MKT+ 8h-22h.',
+                                '🍽️ <strong>Dîner signature</strong> : 20h30 avec le Chef.'
+                            ]
+                        },
+                        en: {
+                            message: 'Make the most of it:',
+                            isHTML: true,
+                            list: [
+                                '🥂 <strong>Lagoon private lounge</strong>: open from 9 AM.',
+                                '🧑‍💼 <strong>Dedicated concierge</strong>: MKT+ hotline 8 AM - 10 PM.',
+                                '🍽️ <strong>Signature dinner</strong>: 8:30 PM with the Chef.'
+                            ]
+                        }
+                    }
+                }
+            };
+
+            const keywordMap = {
+                programme: ['programme', 'program', 'schedule', 'agenda'],
+                groupe: ['groupe', 'group', 'squad', 'team'],
+                activites: ['activit', 'activity', 'atelier', 'workshop'],
+                clubMedLive: ['live', 'concert', 'music', 'show'],
+                infosPratiques: ['info', 'pratique', 'practical', 'shuttle', 'horaire', 'schedule'],
+                vivaEngage: ['viva', 'engage', 'community', 'communaut']
+            };
+
+            popChip.textContent = state.population;
+
+            document.documentElement.lang = state.lang;
+
+            chatInput.placeholder = translations[state.lang].placeholder;
+            sendMessageBtn.textContent = translations[state.lang].send;
+            backButton.setAttribute('aria-label', translations[state.lang].back);
+
+            renderDayFilter();
+            renderQuickActions();
+            appendHubbyMessage(translations[state.lang].initial);
+
+            backButton.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+
+            langButtons.forEach((button) => {
                 button.addEventListener('click', () => {
-                    appendMessage('user', question);
-                    simulateHubbyResponse(question);
+                    const selectedLang = button.dataset.lang;
+                    if (state.lang === selectedLang) {
+                        return;
+                    }
+                    state.lang = selectedLang;
+                    updateLanguage();
                 });
-                quickListEl.appendChild(button);
             });
 
-            population.keyPoints.forEach((point) => {
-                const item = document.createElement('li');
-                item.innerHTML = point;
-                keyPointsEl.appendChild(item);
+            dayFilterContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('button[data-day]');
+                if (!button) {
+                    return;
+                }
+                const selectedDay = button.dataset.day || null;
+                state.day = selectedDay === state.day ? null : selectedDay;
+                renderDayFilter();
             });
 
-            if (populationCode && populationContent[populationCode]) {
-                appendMessage('hubby', `Ravi de vous retrouver, ${population.name}. Voici les informations qui vous concernent.`);
-            }
+            quickActionsContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('button[data-action]');
+                if (!button) {
+                    return;
+                }
+                const actionKey = button.dataset.action;
+                const label = button.textContent.trim();
+                handleUserMessage(label, actionKey);
+            });
 
-            chatForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const message = messageInput.value.trim();
+            sendMessageBtn.addEventListener('click', submitMessage);
+            chatInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    submitMessage();
+                }
+            });
 
+            function submitMessage() {
+                const message = chatInput.value.trim();
                 if (!message) {
                     return;
                 }
+                chatInput.value = '';
+                chatInput.focus();
+                handleUserMessage(message);
+            }
 
-                appendMessage('user', message);
-                simulateHubbyResponse(message);
-                messageInput.value = '';
-                messageInput.focus();
-            });
+            function handleUserMessage(message, forcedAction = null) {
+                appendUserMessage(message);
+                const actionKey = forcedAction || detectAction(message);
+                if (actionKey) {
+                    respondWithAction(actionKey);
+                } else {
+                    respondWithFallback();
+                }
+            }
 
-            function appendMessage(author, text) {
-                const message = document.createElement('article');
-                message.className = `message message--${author}`;
+            function normalizeText(text) {
+                return text
+                    .normalize('NFD')
+                    .replace(/\p{Diacritic}/gu, '')
+                    .toLowerCase();
+            }
 
-                const heading = document.createElement('h2');
-                heading.className = 'message-author';
-                heading.textContent = author === 'hubby' ? 'Hubby' : 'Vous';
+            function detectAction(message) {
+                const normalized = normalizeText(message);
+                for (const [action, keywords] of Object.entries(keywordMap)) {
+                    if (keywords.some((keyword) => normalized.includes(keyword))) {
+                        return action;
+                    }
+                }
+                return null;
+            }
 
-                const paragraph = document.createElement('p');
-                if (author === 'hubby') {
+            function respondWithAction(actionKey) {
+                const response = getResponseContent(actionKey);
+                if (!response) {
+                    respondWithFallback();
+                    return;
+                }
+                showTypingIndicator(() => {
+                    appendHubbyMessage(response.message, response.isHTML);
+                });
+            }
+
+            function respondWithFallback() {
+                const fallback = translations[state.lang].fallback;
+                showTypingIndicator(() => {
+                    appendHubbyMessage(fallback);
+                });
+            }
+
+            function getResponseContent(actionKey) {
+                const baseEntry = responses.DEFAULT?.[actionKey];
+                const populationEntry = responses[state.population]?.[actionKey];
+                const entry = mergeEntries(baseEntry, populationEntry);
+                if (!entry) {
+                    return null;
+                }
+                const langContent = cloneContent(entry[state.lang]);
+                if (!langContent) {
+                    return null;
+                }
+
+                let message = '';
+                let isHTML = Boolean(langContent?.isHTML);
+
+                if (langContent?.days) {
+                    const dayMessage = state.day ? langContent.days[state.day] : null;
+                    message = dayMessage || langContent.days.default || '';
+                }
+
+                if (!message && typeof langContent === 'string') {
+                    message = langContent;
+                }
+
+                if (!message && langContent?.message) {
+                    message = langContent.message;
+                }
+
+                if (Array.isArray(langContent?.list) && langContent.list.length) {
+                    const listMarkup = langContent.list.map((item) => `<li>${item}</li>`).join('');
+                    const wrapper = `<ul class="message-list">${listMarkup}</ul>`;
+                    message = message ? `${message}<br>${wrapper}` : wrapper;
+                    isHTML = true;
+                }
+
+                if (langContent?.link) {
+                    const link = langContent.link;
+                    const linkMarkup = `<a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.label || link.url}</a>`;
+                    message = message ? `${message}<br>${linkMarkup}` : linkMarkup;
+                    isHTML = true;
+                }
+
+                if (Array.isArray(langContent?.links) && langContent.links.length) {
+                    const linksMarkup = langContent.links
+                        .map((link) => `<a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.label || link.url}</a>`)
+                        .join('<br>');
+                    message = message ? `${message}<br>${linksMarkup}` : linksMarkup;
+                    isHTML = true;
+                }
+
+                if (!message) {
+                    return null;
+                }
+
+                return { message, isHTML };
+            }
+
+            function mergeEntries(baseEntry, populationEntry) {
+                if (!baseEntry && !populationEntry) {
+                    return null;
+                }
+                if (!baseEntry) {
+                    return cloneContent(populationEntry);
+                }
+                if (!populationEntry) {
+                    return cloneContent(baseEntry);
+                }
+                const merged = {};
+                for (const lang of ['fr', 'en']) {
+                    if (populationEntry[lang] !== undefined) {
+                        merged[lang] = mergeLanguageContent(baseEntry[lang], populationEntry[lang]);
+                    } else if (baseEntry[lang] !== undefined) {
+                        merged[lang] = cloneContent(baseEntry[lang]);
+                    }
+                }
+                return merged;
+            }
+
+            function mergeLanguageContent(baseLang, overrideLang) {
+                if (overrideLang === undefined || overrideLang === null) {
+                    return cloneContent(baseLang);
+                }
+                if (typeof baseLang === 'string' && typeof overrideLang === 'string') {
+                    return overrideLang;
+                }
+                if (typeof overrideLang === 'string') {
+                    return overrideLang;
+                }
+                if (typeof baseLang === 'string') {
+                    return cloneContent(overrideLang);
+                }
+                const merged = { ...cloneContent(baseLang), ...cloneContent(overrideLang) };
+                if (baseLang?.list && overrideLang?.list) {
+                    merged.list = overrideLang.list;
+                }
+                if (baseLang?.links && overrideLang?.links) {
+                    merged.links = overrideLang.links;
+                }
+                if (baseLang?.days && overrideLang?.days) {
+                    merged.days = { ...baseLang.days, ...overrideLang.days };
+                }
+                return merged;
+            }
+
+            function cloneContent(content) {
+                if (content === undefined || content === null) {
+                    return content;
+                }
+                if (typeof content === 'string') {
+                    return content;
+                }
+                return JSON.parse(JSON.stringify(content));
+            }
+
+            function appendUserMessage(text) {
+                appendMessage('user', text, false);
+            }
+
+            function appendHubbyMessage(text, isHTML = false) {
+                appendMessage('hubby', text, isHTML);
+            }
+
+            function appendMessage(author, text, isHTML) {
+                const bubble = document.createElement('div');
+                bubble.className = `message ${author === 'hubby' ? 'message--hubby' : 'message--user'}`;
+                const paragraph = document.createElement('div');
+                paragraph.className = 'message-content';
+                if (isHTML) {
                     paragraph.innerHTML = text;
                 } else {
                     paragraph.textContent = text;
                 }
-
-                message.appendChild(heading);
-                message.appendChild(paragraph);
-                chatThreadEl.appendChild(message);
-                chatThreadEl.scrollTop = chatThreadEl.scrollHeight;
+                bubble.appendChild(paragraph);
+                chatWindow.appendChild(bubble);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
             }
 
-            function simulateHubbyResponse(question) {
-                let response = "Je note votre demande et je vous reviens rapidement avec plus d'informations.";
+            function showTypingIndicator(callback) {
+                const indicator = document.createElement('div');
+                indicator.className = 'message message--hubby message--typing';
+                indicator.setAttribute('aria-live', 'assertive');
+                indicator.innerHTML = `<div class="typing-indicator">${translations[state.lang].typing}</div>`;
+                chatWindow.appendChild(indicator);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
 
-                if (/programme/i.test(question)) {
-                    response = 'Le programme complet est disponible dans votre agenda Hubby et s\'adapte à votre population. Souhaitez-vous le recevoir par e-mail&nbsp;?';
-                } else if (/où|ou /i.test(question)) {
-                    response = 'Vous pouvez retrouver le lieu exact dans la carte interactive de l\'app. Une signalétique Hubby vous guidera sur place.';
-                } else if (/contact|contacter/i.test(question)) {
-                    response = 'La conciergerie Hubby est joignable sur WhatsApp au +33 6 00 00 00 00 ou directement au desk dans le lobby.';
-                }
-
-                appendMessage('hubby', response);
+                window.setTimeout(() => {
+                    indicator.remove();
+                    callback();
+                }, 900);
             }
-        })();
+
+            function renderQuickActions() {
+                quickActionsContainer.innerHTML = '';
+                const keys = quickActionsByPopulation[state.population] || quickActionsByPopulation.DEFAULT;
+                keys.forEach((key) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.dataset.action = key;
+                    button.className = 'quick-action-btn';
+                    button.textContent = translations[state.lang].quickActions[key] || key;
+                    quickActionsContainer.appendChild(button);
+                });
+            }
+
+            function renderDayFilter() {
+                dayFilterContainer.innerHTML = '';
+
+                const clearButton = document.createElement('button');
+                clearButton.type = 'button';
+                clearButton.className = `day-pill${state.day === null ? ' is-active' : ''}`;
+                clearButton.dataset.day = '';
+                clearButton.textContent = translations[state.lang].dayClear;
+                dayFilterContainer.appendChild(clearButton);
+
+                dayOptions.forEach((option) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.dataset.day = option.key;
+                    button.className = `day-pill${state.day === option.key ? ' is-active' : ''}`;
+                    button.textContent = option.label[state.lang];
+                    dayFilterContainer.appendChild(button);
+                });
+            }
+
+            function updateLanguage() {
+                document.documentElement.lang = state.lang;
+                chatInput.placeholder = translations[state.lang].placeholder;
+                sendMessageBtn.textContent = translations[state.lang].send;
+                backButton.setAttribute('aria-label', translations[state.lang].back);
+                langButtons.forEach((button) => {
+                    if (button.dataset.lang === state.lang) {
+                        button.classList.add('is-active');
+                    } else {
+                        button.classList.remove('is-active');
+                    }
+                });
+                renderDayFilter();
+                renderQuickActions();
+                appendHubbyMessage(translations[state.lang].initial);
+            }
+        });
     </script>
 </body>
 </html>
