@@ -7,34 +7,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
-    <main class="home-container">
-      <h1 class="hubby-logo" aria-label="Hubby">
-        <span>H</span>
-        <span>u</span>
-        <span>b</span>
-        <span>b</span>
-        <span>y</span>
-      </h1>
-      <p class="tagline">Your personal companion for Academy Days.</p>
+    <main class="home">
+      <section class="hubby-card" aria-labelledby="hubby-logo">
+        <h1 id="hubby-logo" class="hubby-logo">Hubby</h1>
+        <p class="tagline">Your personal companion for Academy Days.</p>
 
-      <div class="population-selector">
-        <button data-link="hubby-cdv-lc-lkt.html" data-population="CDV">CDV</button>
-        <button data-link="hubby-cdv-lc-lkt.html" data-population="CDG">CDG</button>
-        <button data-link="hubby-cdv-lc-lkt.html" data-population="LC">LC</button>
-        <button data-link="hubby-cdv-lc-lkt.html" data-population="LKT">LKT</button>
-        <button data-link="hubby-mkt.html" data-population="MKT">MKT</button>
-        <button data-link="hubby-mktplus.html" data-population="MKT+">MKT+</button>
-      </div>
+        <div class="population-selector" aria-label="Choose your destination">
+          <button data-link="hubby-cdv-lc-lkt.html" data-population="CDV">CDV</button>
+          <button data-link="hubby-cdv-lc-lkt.html" data-population="CDG">CDG</button>
+          <button data-link="hubby-cdv-lc-lkt.html" data-population="LC">LC</button>
+          <button data-link="hubby-cdv-lc-lkt.html" data-population="LKT">LKT</button>
+          <button data-link="hubby-mkt.html" data-population="MKT">MKT</button>
+          <button data-link="hubby-mktplus.html" data-population="MKT+">MKT+</button>
+        </div>
 
-      <footer>
-        <p>Club Med — Academy Days 2025</p>
-      </footer>
+        <footer class="card-footer">
+          <p class="event-credit">Club Med – Academy Days 2025</p>
+          <p class="signature">Made by the Digital Learning Factory Team</p>
+        </footer>
+      </section>
     </main>
 
     <script src="assets/js/main.js"></script>
