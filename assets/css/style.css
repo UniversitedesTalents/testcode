@@ -99,7 +99,7 @@ body.fade-out {
 }
 
 .population-selector button:hover,
-.population-selector button:focus {
+.population-selector button:focus-visible {
   outline: none;
   background: #2a3b65;
 }
