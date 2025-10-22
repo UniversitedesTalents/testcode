@@ -1,93 +1,36 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hubby – Assistant Academy Days Club Med 2025</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="page">
-        <header class="site-header" role="banner">
-            <span class="header-band" aria-hidden="true"></span>
-            <div class="header-inner">
-                <div class="brand">
-                    <span class="brand-logo" aria-label="Hubby">Hubby</span>
-                    <p class="brand-subtitle">Assistant Academy Days Club Med 2025</p>
-                </div>
-            </div>
-        </header>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hubby — Academy Days Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <main class="home-container">
+      <h1 class="hubby-logo">Hubby</h1>
+      <p class="tagline">Your personal companion for Academy Days.</p>
 
-        <main>
-            <section class="hero" id="experience" aria-labelledby="hero-title">
-                <div class="hero-inner">
-                    <div class="hero-card">
-                        <div class="hero-card-body hero-appear-left">
-                            <h1 id="hero-title" class="hero-heading">Vivez pleinement les Academy Days Club Med.</h1>
-                            <p class="hero-intro">Je suis Hubby, ton assistant digital dédié. Je t’aide à orchestrer chaque moment du séminaire, à retrouver les bonnes informations et à vivre une expérience mémorable.</p>
-                            <details class="population-accordion" id="populations">
-                                <summary class="population-accordion-summary">Choisissez votre population</summary>
-                                <div class="population-accordion-panel">
-                                    <button class="population-card" type="button" data-population="CDG" aria-label="Population CDG" aria-pressed="false">
-                                        <span class="population-code">CDG</span>
-                                    </button>
-                                    <button class="population-card" type="button" data-population="LC" aria-label="Population LC" aria-pressed="false">
-                                        <span class="population-code">LC</span>
-                                    </button>
-                                    <button class="population-card" type="button" data-population="CDV" aria-label="Population CDV" aria-pressed="false">
-                                        <span class="population-code">CDV</span>
-                                    </button>
-                                    <button class="population-card" type="button" data-population="LKT" aria-label="Population LKT" aria-pressed="false">
-                                        <span class="population-code">LKT</span>
-                                    </button>
-                                    <button class="population-card" type="button" data-population="MKT" aria-label="Population MKT" aria-pressed="false">
-                                        <span class="population-code">MKT</span>
-                                    </button>
-                                    <button class="population-card" type="button" data-population="MKT+" aria-label="Population MKT plus" aria-pressed="false">
-                                        <span class="population-code">MKT+</span>
-                                    </button>
-                                </div>
-                            </details>
-                            <p class="population-selection" id="population-selection" aria-live="polite">
-                                Sélectionnez votre population pour accéder rapidement aux informations dédiées.
-                            </p>
-                        </div>
-                        <div class="hero-visual hero-appear-right">
-                            <img src="hubby-hero.jpg" alt="Vue extérieure du resort Club Med avec piscine" loading="lazy">
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+      <div class="population-selector">
+        <button data-link="hubby-cdv-lc-lkt.html" data-population="CDV">CDV</button>
+        <button data-link="hubby-cdv-lc-lkt.html" data-population="CDG">CDG</button>
+        <button data-link="hubby-cdv-lc-lkt.html" data-population="LC">LC</button>
+        <button data-link="hubby-cdv-lc-lkt.html" data-population="LKT">LKT</button>
+        <button data-link="hubby-mkt.html" data-population="MKT">MKT</button>
+        <button data-link="hubby-mktplus.html" data-population="MKT+">MKT+</button>
+      </div>
 
-        <footer class="site-footer" id="conciergerie" role="contentinfo">
-            <div class="footer-inner">
-                <p class="footer-title">Hubby – Assistant Academy Days Club Med 2025</p>
-                <p class="footer-subtext" id="contact">Besoin d’un coup de main&nbsp;? Écris-nous sur WhatsApp ou retrouve-nous au centre de conciergerie Club Med.</p>
-            </div>
-        </footer>
-    </div>
-    <script>
-        (function () {
-            const populationButtons = document.querySelectorAll('.population-card');
-            const chatbotPage = 'chatbot.html';
+      <footer>
+        <p>Club Med — Academy Days 2025</p>
+      </footer>
+    </main>
 
-            if (!populationButtons.length) {
-                return;
-            }
-
-            populationButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    const populationCode = button.dataset.population;
-                    const url = `${chatbotPage}?population=${encodeURIComponent(populationCode)}`;
-
-                    window.location.href = url;
-                });
-            });
-        })();
-    </script>
-</body>
+    <script src="assets/js/main.js"></script>
+  </body>
 </html>

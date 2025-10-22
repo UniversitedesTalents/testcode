@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hubby — CDV / CDG / LC / LKT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/chatbot.css" />
+  </head>
+  <body data-population="cdv_lc_lkt">
+    <header class="chat-header">
+      <button id="backButton" aria-label="Back">&larr;</button>
+      <h1 class="hubby-title">Hubby</h1>
+      <div class="lang-toggle">
+        <button id="langFrChat" class="active">FR</button>
+        <button id="langEnChat">EN</button>
+      </div>
+    </header>
+
+    <section class="chat-interface">
+      <div class="chat-window" id="chatWindow"></div>
+      <div class="day-filter" id="dayFilter"></div>
+      <div class="quick-actions" id="quickActions"></div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Écrivez votre message..." />
+        <button id="sendMessageBtn">Envoyer</button>
+      </div>
+    </section>
+
+    <script src="assets/js/chatbot.js"></script>
+  </body>
+</html>

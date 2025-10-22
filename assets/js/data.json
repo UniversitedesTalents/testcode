@@ -1,0 +1,205 @@
+{
+  "global": {
+    "fallback": {
+      "fr": "Je n’ai pas encore la réponse à cette question 😅 Tu peux utiliser les boutons ci-dessous.",
+      "en": "I don’t have the answer to that yet 😅 Try the quick buttons below."
+    }
+  },
+  "cdv_lc_lkt": {
+    "days": [
+      {
+        "id": "day1",
+        "labels": {
+          "fr": "Jour 1",
+          "en": "Day 1"
+        },
+        "messages": {
+          "fr": "Jour 1 · Arrivée, ouverture et accueil des villages partenaires.",
+          "en": "Day 1 · Arrival, opening, and welcome of partner resorts."
+        }
+      },
+      {
+        "id": "day2",
+        "labels": {
+          "fr": "Jour 2",
+          "en": "Day 2"
+        },
+        "messages": {
+          "fr": "Jour 2 · Ateliers immersifs, focus sur l’expérience client et Club Med Live.",
+          "en": "Day 2 · Immersive workshops, guest experience deep dive, and Club Med Live highlights."
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "programme",
+        "labels": {
+          "fr": "Programme",
+          "en": "Program"
+        },
+        "messages": {
+          "fr": "Voici le programme des Academy Days 👇",
+          "en": "Here’s your Academy Days schedule 👇"
+        },
+        "link": "https://sharepoint.clubmed.com/programme-cdv",
+        "linkLabels": {
+          "fr": "Accéder au programme",
+          "en": "Open the schedule"
+        },
+        "keywords": ["programme", "planning", "program"],
+        "sharedKey": "programme"
+      },
+      {
+        "id": "activities",
+        "labels": {
+          "fr": "Activités",
+          "en": "Activities"
+        },
+        "messages": {
+          "fr": "Les activités clés : ateliers immersifs, modules Club Med Live et sessions LC.",
+          "en": "Key activities: immersive workshops, Club Med Live modules, and LC sessions."
+        },
+        "keywords": ["activités", "activite", "activities"],
+        "sharedKey": "activities"
+      },
+      {
+        "id": "group",
+        "labels": {
+          "fr": "Groupe & contacts",
+          "en": "Group & contacts"
+        },
+        "messages": {
+          "fr": "Retrouve ton groupe dans Viva Engage — canal CDV / LC / LKT.",
+          "en": "Find your group in Viva Engage — CDV / LC / LKT channel."
+        },
+        "link": "https://vivaengage.microsoft.com/cdv-lc-lkt",
+        "linkLabels": {
+          "fr": "Ouvrir Viva Engage",
+          "en": "Open Viva Engage"
+        },
+        "sharedKey": "group"
+      },
+      {
+        "id": "live",
+        "labels": {
+          "fr": "Club Med Live",
+          "en": "Club Med Live"
+        },
+        "messages": {
+          "fr": "La session Club Med Live débute à 19h au théâtre principal.",
+          "en": "The Club Med Live session starts at 7 PM in the main theatre."
+        },
+        "sharedKey": "live"
+      }
+    ]
+  },
+  "mkt": {
+    "days": [
+      {
+        "id": "kickoff",
+        "labels": {
+          "fr": "Kick-off",
+          "en": "Kick-off"
+        },
+        "messages": {
+          "fr": "Kick-off marketing : inspiration 2025 et ambitions digitales.",
+          "en": "Marketing kick-off: 2025 inspiration and digital ambitions."
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "programme",
+        "labels": {
+          "fr": "Programme",
+          "en": "Program"
+        },
+        "messages": {
+          "fr": "Voici le programme dédié Marketing 👇",
+          "en": "Here’s your Marketing schedule 👇"
+        },
+        "link": "https://sharepoint.clubmed.com/programme-mkt",
+        "linkLabels": {
+          "fr": "Voir le programme Marketing",
+          "en": "View the Marketing agenda"
+        },
+        "sharedKey": "programme"
+      },
+      {
+        "id": "vivaEngage",
+        "labels": {
+          "fr": "Viva Engage",
+          "en": "Viva Engage"
+        },
+        "messages": {
+          "fr": "Toutes les annonces Marketing sont publiées dans Viva Engage — canal MKT.",
+          "en": "All Marketing announcements go live on Viva Engage — MKT channel."
+        },
+        "link": "https://vivaengage.microsoft.com/mkt",
+        "linkLabels": {
+          "fr": "Accéder au canal MKT",
+          "en": "Open the MKT channel"
+        },
+        "sharedKey": "viva"
+      },
+      {
+        "id": "workshops",
+        "labels": {
+          "fr": "Workshops",
+          "en": "Workshops"
+        },
+        "messages": {
+          "fr": "Les workshops sont regroupés par focus : Brand, Performance et Expérience Client.",
+          "en": "Workshops are grouped by focus: Brand, Performance, and Guest Experience."
+        },
+        "sharedKey": "activities"
+      }
+    ]
+  },
+  "mktplus": {
+    "actions": [
+      {
+        "id": "programme",
+        "labels": {
+          "fr": "Programme",
+          "en": "Program"
+        },
+        "messages": {
+          "fr": "Le programme MKT+ met l’accent sur les rencontres avec les partenaires clés.",
+          "en": "The MKT+ schedule focuses on meetings with key partners."
+        },
+        "link": "https://sharepoint.clubmed.com/programme-mktplus",
+        "linkLabels": {
+          "fr": "Voir le programme MKT+",
+          "en": "View the MKT+ agenda"
+        },
+        "sharedKey": "programme"
+      },
+      {
+        "id": "teamMeetings",
+        "labels": {
+          "fr": "Team meetings",
+          "en": "Team meetings"
+        },
+        "messages": {
+          "fr": "Tes réunions d’équipe se tiennent dans la salle Horizon (niveau +1).",
+          "en": "Your team meetings take place in the Horizon room (level +1)."
+        },
+        "keywords": ["team", "meeting", "réunion"],
+        "sharedKey": "group"
+      },
+      {
+        "id": "clubMedLive",
+        "labels": {
+          "fr": "Club Med Live",
+          "en": "Club Med Live"
+        },
+        "messages": {
+          "fr": "Le show Club Med Live MKT+ est réservé aux invités du programme Extended.",
+          "en": "The MKT+ Club Med Live showcase is exclusive to the Extended program guests."
+        },
+        "sharedKey": "live"
+      }
+    ]
+  }
+}
