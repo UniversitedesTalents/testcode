@@ -1,34 +1,98 @@
+const DAYS = [
+  {
+    id: '18',
+    labels: {
+      fr: '18 novembre',
+      en: '18 November',
+    },
+  },
+  {
+    id: '19',
+    labels: {
+      fr: '19 novembre',
+      en: '19 November',
+    },
+  },
+  {
+    id: '20',
+    labels: {
+      fr: '20 novembre',
+      en: '20 November',
+    },
+  },
+];
+
+const QUICK_ACTIONS = [
+  {
+    id: 'programme',
+    labels: {
+      fr: 'Programme',
+      en: 'Program',
+    },
+  },
+  {
+    id: 'groupes',
+    labels: {
+      fr: 'Groupes',
+      en: 'Groups',
+    },
+  },
+  {
+    id: 'activities',
+    labels: {
+      fr: 'Activités',
+      en: 'Activities',
+    },
+  },
+  {
+    id: 'dresscode',
+    labels: {
+      fr: 'Dress code',
+      en: 'Dress code',
+    },
+  },
+  {
+    id: 'clubmedlive',
+    labels: {
+      fr: 'Club Med Live',
+      en: 'Club Med Live',
+    },
+  },
+];
+
+const KEYWORDS = {
+  fr: {
+    programme: ['programme', 'planning', 'agenda', 'horaires'],
+    groupes: ['groupe', 'groupes', 'équipe', 'contacts'],
+    activities: ['activité', 'activités', 'atelier', 'ateliers'],
+    dresscode: ['dress code', 'tenue', 'code vestimentaire'],
+    clubmedlive: ['club med live', 'show', 'concert', 'soirée'],
+  },
+  en: {
+    programme: ['program', 'programme', 'schedule', 'agenda'],
+    groupes: ['group', 'groups', 'team', 'teams'],
+    activities: ['activities', 'activity', 'workshop', 'workshops'],
+    dresscode: ['dress code', 'outfit', 'look'],
+    clubmedlive: ['club med live', 'show', 'concert', 'live'],
+  },
+};
+
 const UI_TEXT = {
   fr: {
     placeholder: 'Écrivez votre message...',
     send: 'Envoyer',
-    typing: 'Hubby prépare une réponse…',
-    dayDefault: 'Tous les jours',
-    backTooltip: 'Retour à l’accueil',
+    typing: 'Hubby tape…',
+    defaultLink: 'Ouvrir le lien',
+    welcome:
+      'Bonjour ! Choisis une date puis une action rapide pour découvrir le contenu des Academy Days.',
   },
   en: {
     placeholder: 'Type your message…',
     send: 'Send',
     typing: 'Hubby is typing…',
-    dayDefault: 'All days',
-    backTooltip: 'Back to home',
-  },
-};
-
-const SHARED_KEYWORDS = {
-  fr: {
-    programme: ['programme', 'planning', 'agenda', 'horaires'],
-    activities: ['activités', 'activite', 'atelier', 'ateliers'],
-    group: ['groupe', 'team', 'équipes'],
-    live: ['club med live', 'live'],
-    viva: ['viva engage', 'viva'],
-  },
-  en: {
-    programme: ['program', 'programme', 'schedule', 'agenda', 'plan'],
-    activities: ['activities', 'activity', 'workshop', 'workshops'],
-    group: ['group', 'team'],
-    live: ['club med live', 'live'],
-    viva: ['viva engage', 'viva'],
+    defaultLink: 'Open link',
+    welcome:
+      'Hello! Pick a date and a quick action to explore the Academy Days content.',
   },
 };
 
@@ -39,35 +103,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatInput = document.getElementById('chatInput');
   const sendMessageBtn = document.getElementById('sendMessageBtn');
   const backButton = document.getElementById('backButton');
-  const langFrBtn = document.getElementById('langFrChat');
-  const langEnBtn = document.getElementById('langEnChat');
-  const body = document.body;
-  const populationKey = body.dataset.population;
+  const langButtons = Array.from(document.querySelectorAll('.lang-toggle button'));
 
-  if (!chatWindow || !chatInput || !populationKey) {
+  if (!chatWindow || !dayFilter || !quickActions || !chatInput || !sendMessageBtn) {
     return;
   }
 
-  let knowledgeBase = null;
-  let populationData = null;
-  let language = (localStorage.getItem('hubbyLang') || 'fr').toLowerCase();
-  if (!['fr', 'en'].includes(language)) language = 'fr';
+  const state = {
+    lang: 'fr',
+    day: null,
+    data: null,
+    availableDays: [],
+  };
 
-  const storedPopulation = localStorage.getItem('hubbyPopulation');
-  if (storedPopulation && populationKey === 'cdv_lc_lkt') {
-    const allowed = ['CDV', 'CDG', 'LC', 'LKT'];
-    if (!allowed.includes(storedPopulation)) {
-      localStorage.setItem('hubbyPopulation', 'CDV');
-    }
-  } else if (storedPopulation && storedPopulation.toLowerCase() !== populationKey) {
-    localStorage.setItem('hubbyPopulation', populationKey.toUpperCase());
-  } else if (!storedPopulation) {
-    localStorage.setItem('hubbyPopulation', populationKey.toUpperCase());
+  initialiseLanguage();
+  attachEvents();
+  loadData();
+
+  function initialiseLanguage() {
+    const storedLang = (localStorage.getItem('hubbyLang') || 'fr').toLowerCase();
+    state.lang = storedLang === 'en' ? 'en' : 'fr';
+    applyLanguage();
   }
 
-  setupLanguage(language);
-  attachEvents();
-  fetchData();
+  function applyLanguage() {
+    chatInput.placeholder = UI_TEXT[state.lang].placeholder;
+    sendMessageBtn.textContent = UI_TEXT[state.lang].send;
+    langButtons.forEach((button) => {
+      const lang = (button.dataset.lang || button.textContent || '').trim().toLowerCase();
+      if (!lang) {
+        return;
+      }
+      button.dataset.lang = lang;
+      button.classList.toggle('active', lang === state.lang);
+    });
+  }
+
+  function switchLanguage(nextLang) {
+    if (state.lang === nextLang) {
+      return;
+    }
+    state.lang = nextLang === 'en' ? 'en' : 'fr';
+    localStorage.setItem('hubbyLang', state.lang);
+    applyLanguage();
+    renderDayButtons();
+    renderQuickActions();
+  }
 
   function attachEvents() {
     sendMessageBtn.addEventListener('click', handleUserMessage);
@@ -78,250 +159,289 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    backButton.addEventListener('click', () => {
-      window.location.href = 'index.html';
+    if (backButton) {
+      backButton.addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+    }
+
+    dayFilter.addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-day]');
+      if (!button) {
+        return;
+      }
+      const selectedDay = button.dataset.day;
+      if (!selectedDay || selectedDay === state.day) {
+        return;
+      }
+      state.day = selectedDay;
+      updateDaySelection();
+      renderQuickActions();
     });
 
-    langFrBtn.addEventListener('click', () => switchLanguage('fr'));
-    langEnBtn.addEventListener('click', () => switchLanguage('en'));
+    quickActions.addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) {
+        return;
+      }
+      const actionId = button.dataset.action;
+      const label = button.textContent.trim();
+      if (!actionId) {
+        return;
+      }
+      appendUserMessage(label);
+      respondToAction(actionId);
+    });
+
+    langButtons.forEach((button) => {
+      const lang = (button.dataset.lang || button.textContent || '').trim().toLowerCase();
+      if (!lang || !['fr', 'en'].includes(lang)) {
+        return;
+      }
+      button.dataset.lang = lang;
+      button.addEventListener('click', () => switchLanguage(lang));
+    });
   }
 
-  function fetchData() {
+  function loadData() {
     fetch('assets/js/data.json', { cache: 'no-cache' })
       .then((response) => response.json())
       .then((data) => {
-        knowledgeBase = data;
-        populationData = data?.[populationKey] || null;
-        if (!populationData) {
-          displayBotMessage(getFallbackMessage());
+        state.data = data;
+        state.availableDays = DAYS.filter((day) => data?.days?.[day.id]);
+        if (!state.availableDays.length) {
+          appendSystemMessage(getFallbackMessage());
           return;
         }
-        renderInterface();
+        if (!state.day || !data.days[state.day]) {
+          state.day = state.availableDays[0].id;
+        }
+        renderDayButtons();
+        renderQuickActions();
+        appendSystemMessage(UI_TEXT[state.lang].welcome);
       })
       .catch(() => {
-        displayBotMessage(getFallbackMessage());
+        appendSystemMessage(getFallbackMessage());
       });
   }
 
-  function setupLanguage(selected) {
-    language = selected;
-    localStorage.setItem('hubbyLang', language);
-    chatInput.placeholder = UI_TEXT[language].placeholder;
-    sendMessageBtn.textContent = UI_TEXT[language].send;
-    backButton.title = UI_TEXT[language].backTooltip;
-
-    if (language === 'fr') {
-      langFrBtn.classList.add('active');
-      langEnBtn.classList.remove('active');
-    } else {
-      langEnBtn.classList.add('active');
-      langFrBtn.classList.remove('active');
-    }
-  }
-
-  function switchLanguage(nextLanguage) {
-    if (language === nextLanguage) return;
-    setupLanguage(nextLanguage);
-    renderInterface();
-  }
-
-  function renderInterface() {
-    renderDayFilters();
-    renderQuickActions();
-  }
-
-  function renderDayFilters() {
+  function renderDayButtons() {
     dayFilter.innerHTML = '';
-    const days = populationData?.days;
-    if (!Array.isArray(days) || days.length === 0) {
-      dayFilter.style.display = 'none';
-      return;
-    }
-
-    dayFilter.style.display = '';
-
-    days.forEach((day, index) => {
+    state.availableDays.forEach((day) => {
       const button = document.createElement('button');
-      button.textContent = day.labels?.[language] || day.labels?.fr || day.labels?.en || '';
-      if (index === 0) {
-        button.classList.add('active');
-      }
-      button.addEventListener('click', () => {
-        Array.from(dayFilter.children).forEach((child) => child.classList.remove('active'));
-        button.classList.add('active');
-        triggerResponse(day.messages?.[language] || day.messages?.fr || '');
-      });
+      button.type = 'button';
+      button.dataset.day = day.id;
+      button.textContent = day.labels[state.lang] || day.labels.fr || day.labels.en;
+      button.classList.toggle('active', day.id === state.day);
       dayFilter.appendChild(button);
+    });
+  }
+
+  function updateDaySelection() {
+    Array.from(dayFilter.children).forEach((child) => {
+      child.classList.toggle('active', child.dataset.day === state.day);
     });
   }
 
   function renderQuickActions() {
     quickActions.innerHTML = '';
-    const actions = populationData?.actions;
-    if (!Array.isArray(actions) || actions.length === 0) {
-      quickActions.style.display = 'none';
-      return;
-    }
-
-    quickActions.style.display = '';
-
-    actions.forEach((action) => {
+    QUICK_ACTIONS.forEach((action) => {
       const button = document.createElement('button');
-      button.textContent = action.labels?.[language] || action.labels?.fr || action.labels?.en || '';
-      button.addEventListener('click', () => {
-        const userText = button.textContent;
-        displayUserMessage(userText);
-        respondWithAction(action);
-      });
+      button.type = 'button';
+      button.dataset.action = action.id;
+      button.textContent = action.labels[state.lang] || action.labels.fr || action.labels.en;
       quickActions.appendChild(button);
     });
   }
 
   function handleUserMessage() {
     const message = chatInput.value.trim();
-    if (!message) return;
-    displayUserMessage(message);
+    if (!message) {
+      return;
+    }
     chatInput.value = '';
-    processUserInput(message);
+    appendUserMessage(message);
+    const detectedAction = detectAction(message);
+    if (detectedAction) {
+      respondToAction(detectedAction);
+    } else {
+      respondWithFallback();
+    }
   }
 
-  function displayUserMessage(message) {
-    addMessageToChat(escapeHtml(message), 'user');
+  function detectAction(message) {
+    const normalized = normalizeText(message);
+    const languageKeywords = KEYWORDS[state.lang] || {};
+    return Object.entries(languageKeywords).find(([action, keywords]) =>
+      keywords.some((keyword) => normalized.includes(keyword))
+    )?.[0];
   }
 
-  function respondWithAction(action) {
-    showTypingIndicator();
-    const response = buildActionResponse(action);
-    setTimeout(() => {
-      removeTypingIndicator();
-      displayBotMessage(response);
-    }, 600);
+  function normalizeText(text) {
+    return text
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase();
   }
 
-  function processUserInput(message) {
-    showTypingIndicator();
-    const action = matchAction(message);
-    setTimeout(() => {
-      removeTypingIndicator();
-      if (action) {
-        const response = buildActionResponse(action);
-        displayBotMessage(response);
-      } else {
-        displayBotMessage(getFallbackMessage());
-      }
-    }, 650);
-  }
-
-  function buildActionResponse(action) {
-    const responseText = action.messages?.[language] || action.messages?.fr || action.messages?.en || '';
-    const link = action.link;
-    const linkLabel = action.linkLabels?.[language] || action.linkLabels?.fr || action.linkLabels?.en;
-    const extras = action.extras?.[language] || action.extras?.fr || action.extras?.en;
-
-    let html = escapeHtml(responseText);
-
-    if (link) {
-      const safeLabel = escapeHtml(linkLabel || link);
-      html += `<br><a href="${link}" target="_blank" rel="noopener">${safeLabel}</a>`;
+  function respondToAction(actionId) {
+    const dayEntry = state.data?.days?.[state.day];
+    const category = dayEntry?.[actionId];
+    if (!category) {
+      respondWithFallback();
+      return;
     }
 
-    if (extras) {
-      html += `<br>${escapeHtml(extras)}`;
-    }
+    const message = category[state.lang] || category.en || category.fr || '';
+    const details = getLocalizedArray(category.details);
+    const link = resolveLink(category);
 
-    return html;
+    showTypingIndicator(() => {
+      appendBotMessage({ message, details, link });
+    });
   }
 
-  function matchAction(message) {
-    if (!populationData?.actions) return null;
-    const normalized = message.toLowerCase();
+  function getLocalizedArray(entry) {
+    if (!entry) {
+      return null;
+    }
+    if (Array.isArray(entry)) {
+      return entry;
+    }
+    if (typeof entry === 'object') {
+      const localized = entry[state.lang] || entry.en || entry.fr;
+      return Array.isArray(localized) ? localized : null;
+    }
+    return null;
+  }
 
+  function resolveLink(category) {
+    const linkEntry = category.link;
+    if (!linkEntry) {
+      return null;
+    }
+
+    if (typeof linkEntry === 'string') {
+      return {
+        url: linkEntry,
+        label: getLocalizedText(category.linkLabel) || UI_TEXT[state.lang].defaultLink,
+      };
+    }
+
+    if (typeof linkEntry === 'object' && linkEntry.url) {
+      return {
+        url: linkEntry.url,
+        label: getLocalizedText(linkEntry.label) || UI_TEXT[state.lang].defaultLink,
+      };
+    }
+
+    return null;
+  }
+
+  function getLocalizedText(entry) {
+    if (!entry) {
+      return '';
+    }
+    if (typeof entry === 'string') {
+      return entry;
+    }
+    if (typeof entry === 'object') {
+      return entry[state.lang] || entry.en || entry.fr || '';
+    }
+    return '';
+  }
+
+  function respondWithFallback() {
+    showTypingIndicator(() => {
+      appendBotMessage({ message: getFallbackMessage() });
+    });
+  }
+
+  function getFallbackMessage() {
     return (
-      populationData.actions.find((action) => {
-        const keywords = new Set();
-        if (Array.isArray(action.keywords)) {
-          action.keywords.forEach((kw) => keywords.add(kw.toLowerCase()));
-        }
-        const labelFr = action.labels?.fr;
-        const labelEn = action.labels?.en;
-        if (labelFr) keywords.add(labelFr.toLowerCase());
-        if (labelEn) keywords.add(labelEn.toLowerCase());
-
-        const shared = SHARED_KEYWORDS[language];
-        if (shared && action.sharedKey && shared[action.sharedKey]) {
-          shared[action.sharedKey].forEach((kw) => keywords.add(kw.toLowerCase()));
-        }
-
-        for (const keyword of keywords) {
-          if (keyword && normalized.includes(keyword)) {
-            return true;
-          }
-        }
-        return false;
-      }) || null
+      state.data?.fallback?.[state.lang] ||
+      state.data?.fallback?.en ||
+      state.data?.fallback?.fr ||
+      (state.lang === 'fr'
+        ? "Je n’ai pas encore la réponse à cette question 😅"
+        : "I don’t have the answer to that yet 😅")
     );
   }
 
-  let typingBubble = null;
-  function showTypingIndicator() {
-    removeTypingIndicator();
-    typingBubble = document.createElement('div');
-    typingBubble.className = 'chat-bubble typing-indicator';
-    typingBubble.innerHTML = `${escapeHtml(UI_TEXT[language].typing)} <span></span><span></span><span></span>`;
-    chatWindow.appendChild(typingBubble);
-    scrollToBottom();
-  }
-
-  function removeTypingIndicator() {
-    if (typingBubble && typingBubble.parentNode) {
-      typingBubble.parentNode.removeChild(typingBubble);
-      typingBubble = null;
-    }
-  }
-
-  function displayBotMessage(message) {
-    addMessageToChat(message, 'bot');
-  }
-
-  function addMessageToChat(message, sender) {
+  function appendUserMessage(message) {
     const bubble = document.createElement('div');
-    bubble.className = `chat-bubble ${sender}`;
-    bubble.innerHTML = message;
+    bubble.className = 'chat-bubble user';
+    bubble.textContent = message;
     chatWindow.appendChild(bubble);
     scrollToBottom();
   }
 
-  function triggerResponse(message) {
-    if (!message) return;
-    showTypingIndicator();
-    setTimeout(() => {
-      removeTypingIndicator();
-      displayBotMessage(escapeHtml(message));
-    }, 600);
-  }
+  function appendBotMessage({ message, details, link }) {
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble bot';
 
-  function getFallbackMessage() {
-    const fallback = knowledgeBase?.global?.fallback;
-    if (!fallback) {
-      return language === 'fr'
-        ? "Je n’ai pas encore la réponse à cette question 😅 Tu peux utiliser les boutons ci-dessous."
-        : "I don’t have the answer to that yet 😅 Try the quick buttons below.";
+    if (message) {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = formatMessage(message);
+      bubble.appendChild(paragraph);
     }
-    return fallback[language] || fallback.fr || fallback.en || '';
+
+    if (Array.isArray(details) && details.length) {
+      const list = document.createElement('ul');
+      list.className = 'message-list';
+      details.forEach((item) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item;
+        list.appendChild(listItem);
+      });
+      bubble.appendChild(list);
+    }
+
+    if (link && link.url) {
+      const anchor = document.createElement('a');
+      anchor.href = link.url;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.className = 'chat-link-button';
+      anchor.textContent = link.label || UI_TEXT[state.lang].defaultLink;
+      bubble.appendChild(anchor);
+    }
+
+    chatWindow.appendChild(bubble);
+    scrollToBottom();
   }
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+  function appendSystemMessage(message) {
+    if (!message) {
+      return;
+    }
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble bot';
+    bubble.innerHTML = formatMessage(message);
+    chatWindow.appendChild(bubble);
+    scrollToBottom();
+  }
+
+  function formatMessage(text) {
+    return text.replace(/\n/g, '<br>');
+  }
+
+  function showTypingIndicator(callback) {
+    const indicator = document.createElement('div');
+    indicator.className = 'chat-bubble typing-indicator';
+    indicator.setAttribute('aria-live', 'polite');
+    indicator.innerHTML = `<span></span><span></span><span></span>`;
+    chatWindow.appendChild(indicator);
+    scrollToBottom();
+    setTimeout(() => {
+      indicator.remove();
+      callback();
+    }, 400);
   }
 
   function scrollToBottom() {
     requestAnimationFrame(() => {
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
     });
   }
 });
