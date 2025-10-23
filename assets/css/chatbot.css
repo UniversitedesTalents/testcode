@@ -206,11 +206,21 @@ body {
 }
 
 .day-filter button:hover,
-.day-filter button.active,
 .quick-actions button:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 36px rgba(30, 40, 72, 0.16);
   background: var(--soft-green);
+}
+
+.day-filter button.active-date {
+  background: #d67b5c;
+  color: #ffffff;
+  border-radius: 12px;
+}
+
+.day-filter button.active-date:hover {
+  background: #d67b5c;
+  color: #ffffff;
 }
 
 .chat-input-area {
