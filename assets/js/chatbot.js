@@ -1,6 +1,7 @@
 const EXCEL_DATA_URL =
   'https://github.com/UniversitedesTalents/testcode/raw/refs/heads/main/DATA-HUBBY-AD.xlsx';
 const DEFAULT_DAY_IDS = ['17', '18', '19', '20', '21'];
+const STATIC_DATA_URL = 'assets/js/data.json';
 
 const QUICK_ACTIONS = [
   {
@@ -106,6 +107,19 @@ const POPULATION_PROFILES = {
 };
 
 let xlsxLibraryPromise = null;
+
+async function loadStaticFallbackData() {
+  try {
+    const response = await fetch(STATIC_DATA_URL, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch fallback data: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Hubby fallback data error', error);
+    return null;
+  }
+}
 
 async function ensureXLSXLoaded() {
   if (typeof window !== 'undefined' && window.XLSX) {
@@ -663,12 +677,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const state = {
-    lang: 'fr',
+    lang: 'en',
     day: null,
     data: null,
+    staticData: null,
     availableDays: [],
     populationKey,
     populationSet: buildPopulationSet(populationKey),
+    activeActionByDay: {},
   };
 
   initialiseLanguage();
@@ -676,8 +692,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadData();
 
   function initialiseLanguage() {
-    const storedLang = (localStorage.getItem('hubbyLang') || 'fr').toLowerCase();
-    state.lang = storedLang === 'en' ? 'en' : 'fr';
+    const storedLang = (localStorage.getItem('hubbyLang') || 'en').toLowerCase();
+    state.lang = storedLang === 'fr' ? 'fr' : 'en';
     applyLanguage();
   }
 
@@ -690,8 +706,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       button.dataset.lang = lang;
-      button.classList.toggle('active', lang === state.lang);
+      button.classList.toggle('is-active', lang === state.lang);
     });
+    document.documentElement.setAttribute('lang', state.lang === 'fr' ? 'fr' : 'en');
   }
 
   function switchLanguage(nextLang) {
@@ -744,6 +761,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!actionId) {
         return;
       }
+      if (state.day) {
+        state.activeActionByDay[state.day] = actionId;
+      }
+      updateQuickActionSelection();
       appendUserMessage(label);
       respondToAction(actionId);
     });
@@ -761,18 +782,36 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadData() {
     try {
       state.data = await updateHubbyData();
+    } catch (error) {
+      console.error('Hubby data error', error);
+      state.data = null;
+      state.staticData = await loadStaticFallbackData();
+    }
+
+    if (state.data) {
       const dayIds = (state.data?.dayOrder?.length ? state.data.dayOrder : DEFAULT_DAY_IDS).filter((dayId) =>
         state.data?.dayInfo?.[dayId]
       );
       state.availableDays = dayIds.length ? dayIds : DEFAULT_DAY_IDS;
-      if (!state.day || !state.availableDays.includes(state.day)) {
-        state.day = state.availableDays[0] || null;
-      }
-      renderDayButtons();
-      renderQuickActions();
+    } else if (state.staticData?.days) {
+      state.availableDays = Object.keys(state.staticData.days)
+        .map((dayId) => dayId.trim())
+        .filter(Boolean)
+        .sort((a, b) => Number(a) - Number(b));
+    } else {
+      state.availableDays = DEFAULT_DAY_IDS;
+    }
+
+    if (!state.day || !state.availableDays.includes(state.day)) {
+      state.day = state.availableDays[0] || null;
+    }
+
+    renderDayButtons();
+    renderQuickActions();
+
+    if (state.data || state.staticData) {
       appendSystemMessage(UI_TEXT[state.lang].welcome);
-    } catch (error) {
-      console.error('Hubby data error', error);
+    } else {
       appendSystemMessage(getFallbackMessage());
     }
   }
@@ -784,19 +823,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     state.availableDays.forEach((dayId) => {
       const info = state.data?.dayInfo?.[dayId];
-      const label = info?.labels?.[state.lang] || info?.labels?.en || info?.labels?.fr || formatDayLabel(null, state.lang, dayId);
+      let label = info?.labels?.[state.lang] || info?.labels?.en || info?.labels?.fr;
+      if (!label) {
+        label = formatDayLabel(null, state.lang, dayId);
+      }
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.day = dayId;
       button.textContent = label;
-      button.classList.toggle('active', dayId === state.day);
+      button.className = 'day-pill';
+      if (dayId === state.day) {
+        button.classList.add('is-active');
+      }
       dayFilter.appendChild(button);
     });
   }
 
   function updateDaySelection() {
     Array.from(dayFilter.children).forEach((child) => {
-      child.classList.toggle('active', child.dataset.day === state.day);
+      child.classList.toggle('is-active', child.dataset.day === state.day);
     });
   }
 
@@ -807,7 +852,28 @@ document.addEventListener('DOMContentLoaded', () => {
       button.type = 'button';
       button.dataset.action = action.id;
       button.textContent = action.labels[state.lang] || action.labels.fr || action.labels.en;
+      button.className = 'quick-action-btn';
+      if (state.day && state.activeActionByDay[state.day] === action.id) {
+        button.classList.add('is-active');
+        button.setAttribute('aria-pressed', 'true');
+      } else {
+        button.setAttribute('aria-pressed', 'false');
+      }
       quickActions.appendChild(button);
+    });
+    updateQuickActionSelection();
+  }
+
+  function updateQuickActionSelection() {
+    const activeAction = state.day ? state.activeActionByDay[state.day] : null;
+    Array.from(quickActions.children).forEach((child) => {
+      const { action } = child.dataset;
+      if (!action) {
+        return;
+      }
+      const isActive = action === activeAction;
+      child.classList.toggle('is-active', isActive);
+      child.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
   }
 
@@ -842,33 +908,44 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function respondToAction(actionId) {
-    if (!state.data || !state.day) {
-      respondWithFallback();
+    if (state.data && state.day) {
+      const handlers = {
+        programme: buildProgrammeResponse,
+        activities: buildActivitiesResponse,
+        groupes: buildGroupsResponse,
+        dresscode: buildDressCodeResponse,
+        clubmedlive: buildLiveResponse,
+      };
+
+      const handler = handlers[actionId];
+      if (!handler) {
+        respondWithFallback();
+        return;
+      }
+
+      const response = handler();
+      if (!response) {
+        respondWithFallback();
+        return;
+      }
+
+      showTypingIndicator(() => {
+        appendBotMessage(response);
+      });
       return;
     }
-    const handlers = {
-      programme: buildProgrammeResponse,
-      activities: buildActivitiesResponse,
-      groupes: buildGroupsResponse,
-      dresscode: buildDressCodeResponse,
-      clubmedlive: buildLiveResponse,
-    };
 
-    const handler = handlers[actionId];
-    if (!handler) {
-      respondWithFallback();
-      return;
+    if (state.staticData && state.day) {
+      const response = buildStaticResponse(actionId);
+      if (response) {
+        showTypingIndicator(() => {
+          appendBotMessage(response);
+        });
+        return;
+      }
     }
 
-    const response = handler();
-    if (!response) {
-      respondWithFallback();
-      return;
-    }
-
-    showTypingIndicator(() => {
-      appendBotMessage(response);
-    });
+    respondWithFallback();
   }
 
   function buildProgrammeResponse() {
@@ -999,8 +1076,37 @@ document.addEventListener('DOMContentLoaded', () => {
       state.data?.fallback?.[state.lang] ||
       state.data?.fallback?.en ||
       state.data?.fallback?.fr ||
+      state.staticData?.fallback?.[state.lang] ||
+      state.staticData?.fallback?.en ||
+      state.staticData?.fallback?.fr ||
       FALLBACK_MESSAGES[state.lang]
     );
+  }
+
+  function buildStaticResponse(actionId) {
+    const dayData = state.staticData?.days?.[state.day];
+    if (!dayData) {
+      return null;
+    }
+
+    const entry = dayData[actionId];
+    if (!entry) {
+      return null;
+    }
+
+    const message = entry[state.lang] || entry.en || entry.fr;
+    const detailsSource = entry.details?.[state.lang] || entry.details?.en || entry.details?.fr;
+    const details = Array.isArray(detailsSource) ? detailsSource.filter(Boolean) : null;
+    const linkUrl = entry.link;
+    const linkLabel =
+      (entry.linkLabel && (entry.linkLabel[state.lang] || entry.linkLabel.en || entry.linkLabel.fr || entry.linkLabel.default)) ||
+      null;
+
+    return {
+      message,
+      details,
+      link: linkUrl ? { url: linkUrl, label: linkLabel } : null,
+    };
   }
 
   function appendUserMessage(message) {

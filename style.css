@@ -879,9 +879,11 @@ main {
 }
 
 .quick-action-btn:hover,
-.quick-action-btn:focus-visible {
+.quick-action-btn:focus-visible,
+.quick-action-btn.is-active {
     transform: translateY(-2px);
     box-shadow: 0 16px 28px rgba(30, 40, 72, 0.16);
+    background: #91b6af;
     outline: none;
 }
 
