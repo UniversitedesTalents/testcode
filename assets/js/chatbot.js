@@ -1,26 +1,6 @@
-const DAYS = [
-  {
-    id: '18',
-    labels: {
-      fr: '18 novembre',
-      en: '18 November',
-    },
-  },
-  {
-    id: '19',
-    labels: {
-      fr: '19 novembre',
-      en: '19 November',
-    },
-  },
-  {
-    id: '20',
-    labels: {
-      fr: '20 novembre',
-      en: '20 November',
-    },
-  },
-];
+const EXCEL_DATA_URL =
+  'https://github.com/UniversitedesTalents/testcode/raw/refs/heads/main/DATA-HUBBY-AD.xlsx';
+const DEFAULT_DAY_IDS = ['17', '18', '19', '20', '21'];
 
 const QUICK_ACTIONS = [
   {
@@ -96,6 +76,578 @@ const UI_TEXT = {
   },
 };
 
+const FALLBACK_MESSAGES = {
+  fr: "Je n’ai pas encore cette information, mais elle arrive très vite ! N’hésite pas à explorer une autre rubrique en attendant.",
+  en: "I don’t have the information for this yet, but it’s coming soon! Feel free to explore another section while waiting.",
+};
+
+const POPULATION_PROFILES = {
+  cdv_lc_lkt: {
+    label: {
+      fr: 'CDV / CDG / LC / LKT',
+      en: 'CDV / CDG / LC / LKT',
+    },
+    populations: ['ALL', 'CDV', 'CDG', 'LC', 'LKT', 'CDV/CDG/LC/LKT'],
+  },
+  mkt: {
+    label: {
+      fr: 'équipe Marketing',
+      en: 'Marketing team',
+    },
+    populations: ['ALL', 'MKT'],
+  },
+  mktplus: {
+    label: {
+      fr: 'équipe MKT+',
+      en: 'MKT+ team',
+    },
+    populations: ['ALL', 'MKT+'],
+  },
+};
+
+let xlsxLibraryPromise = null;
+
+async function ensureXLSXLoaded() {
+  if (typeof window !== 'undefined' && window.XLSX) {
+    return window.XLSX;
+  }
+
+  if (!xlsxLibraryPromise) {
+    xlsxLibraryPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+      script.async = true;
+      script.onload = () => {
+        if (window.XLSX) {
+          resolve(window.XLSX);
+        } else {
+          reject(new Error('XLSX library did not load correctly.'));
+        }
+      };
+      script.onerror = () => reject(new Error('Unable to load XLSX library.'));
+      document.head.appendChild(script);
+    });
+  }
+
+  return xlsxLibraryPromise;
+}
+
+function excelSerialToDate(serial) {
+  if (typeof serial !== 'number' || Number.isNaN(serial)) {
+    return null;
+  }
+  const excelEpoch = Date.UTC(1899, 11, 30);
+  const milliseconds = serial * 24 * 60 * 60 * 1000;
+  return new Date(excelEpoch + milliseconds);
+}
+
+function formatDayLabel(date, lang, fallbackDay) {
+  if (date instanceof Date && !Number.isNaN(date.getTime())) {
+    try {
+      return new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
+        day: 'numeric',
+        month: 'long',
+      }).format(date);
+    } catch (error) {
+      // continue to fallback below
+    }
+  }
+  if (lang === 'fr') {
+    return `${fallbackDay} novembre`;
+  }
+  return `${fallbackDay} November`;
+}
+
+function normaliseString(value) {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  return String(value).trim();
+}
+
+function normaliseLanguage(value) {
+  const language = normaliseString(value).toLowerCase();
+  if (language.startsWith('fr')) {
+    return 'fr';
+  }
+  if (language.startsWith('en')) {
+    return 'en';
+  }
+  return '';
+}
+
+function extractPopulationTokens(value) {
+  const raw = normaliseString(value);
+  if (!raw) {
+    return [];
+  }
+  return raw
+    .replace(/&/g, '/')
+    .split(/[\\/;,]|\band\b/i)
+    .map((token) => token.replace(/\s+/g, '').toUpperCase())
+    .filter(Boolean);
+}
+
+function buildPopulationSet(profileKey) {
+  const profile = POPULATION_PROFILES[profileKey];
+  const base = new Set(['ALL']);
+  if (!profile) {
+    return base;
+  }
+  profile.populations.forEach((population) => {
+    extractPopulationTokens(population).forEach((token) => base.add(token));
+  });
+  return base;
+}
+
+function isValidUrl(url) {
+  const value = normaliseString(url);
+  if (!value) {
+    return false;
+  }
+  try {
+    const parsed = new URL(value, window.location.origin);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch (error) {
+    return false;
+  }
+}
+
+function getTimeSortValue(time) {
+  const text = normaliseString(time).toLowerCase();
+  if (!text) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  const keywordOrder = {
+    morning: 8 * 60,
+    afternoon: 14 * 60,
+    evening: 19 * 60,
+    night: 22 * 60,
+  };
+
+  for (const [keyword, minutes] of Object.entries(keywordOrder)) {
+    if (text.includes(keyword)) {
+      return minutes;
+    }
+  }
+
+  const match = text.match(/(\d{1,2})(?:[:h](\d{2}))?/);
+  if (!match) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+  const hours = Number(match[1]);
+  const minutes = Number(match[2] || '0');
+  return hours * 60 + minutes;
+}
+
+function deduplicateEntries(entries) {
+  const seen = new Set();
+  return entries.filter((entry) => {
+    const key = [entry.time, entry.title || entry.activity, entry.location, entry.description]
+      .map((part) => normaliseString(part).toLowerCase())
+      .join('|');
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
+
+function formatProgramLine(entry) {
+  const parts = [];
+  if (entry.time) {
+    parts.push(entry.time);
+  }
+  if (entry.activity || entry.title) {
+    const title = entry.activity || entry.title;
+    parts.push(parts.length ? `· ${title}` : title);
+  }
+  let line = parts.join(' ');
+  if (entry.location) {
+    line += ` (${entry.location})`;
+  }
+  if (entry.description) {
+    line += ` — ${entry.description}`;
+  }
+  return line;
+}
+
+function formatActivityLine(entry) {
+  const parts = [];
+  if (entry.time) {
+    parts.push(entry.time);
+  }
+  if (entry.category) {
+    parts.push(parts.length ? `· ${entry.category}` : entry.category);
+  }
+  if (entry.title || entry.activity) {
+    parts.push(parts.length ? `· ${entry.title || entry.activity}` : entry.title || entry.activity);
+  }
+  let line = parts.join(' ');
+  if (entry.location) {
+    line += ` (${entry.location})`;
+  }
+  if (entry.description) {
+    line += ` — ${entry.description}`;
+  }
+  return line;
+}
+
+function formatLiveLine(entry) {
+  const parts = [];
+  if (entry.time) {
+    parts.push(entry.time);
+  }
+  if (entry.artist) {
+    parts.push(parts.length ? `· ${entry.artist}` : entry.artist);
+  }
+  let line = parts.join(' ');
+  if (entry.location) {
+    line += ` (${entry.location})`;
+  }
+  if (entry.description) {
+    line += ` — ${entry.description}`;
+  }
+  return line;
+}
+
+function matchesPopulation(entry, populationSet) {
+  if (!populationSet || !populationSet.size) {
+    return true;
+  }
+  if (!entry || !entry.populationTokens || !entry.populationTokens.length) {
+    return true;
+  }
+  if (entry.populationTokens.includes('ALL')) {
+    return true;
+  }
+  return entry.populationTokens.some((token) => populationSet.has(token));
+}
+
+function preferLanguage(entries, lang) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+  const primary = entries.filter((entry) => !entry.language || entry.language === lang);
+  if (primary.length) {
+    return primary;
+  }
+  const secondaryLang = lang === 'fr' ? 'en' : 'fr';
+  return entries.filter((entry) => entry.language === secondaryLang || !entry.language);
+}
+
+function collectLink(entries, lang, fallbackLabel) {
+  for (const entry of entries) {
+    if (entry.link && isValidUrl(entry.link)) {
+      let label = fallbackLabel;
+      if (entry.linkLabel) {
+        if (typeof entry.linkLabel === 'string') {
+          label = entry.linkLabel || fallbackLabel;
+        } else {
+          label = entry.linkLabel?.[lang] || entry.linkLabel?.en || entry.linkLabel?.fr || entry.linkLabel?.default || fallbackLabel;
+        }
+      }
+      return {
+        url: entry.link,
+        label,
+      };
+    }
+  }
+  return null;
+}
+
+function transformWorkbook(workbook) {
+  const XLSX = window.XLSX;
+  const sheetAliases = {
+    program: ['Program', 'Programme', 'Agenda'],
+    activities: ['Activities', 'Activités'],
+    live: ['Club Med Live', 'Club Med Live '],
+    groups: ['Groups', 'Groupes'],
+    dress: ['Dress code', 'Dress Code', 'Dresscode'],
+  };
+
+  const dayInfo = {};
+  const dayOrder = [];
+  const dayMapping = new Map();
+  let fallbackIndex = 0;
+
+  function normaliseRow(row) {
+    const normalised = {};
+    Object.entries(row).forEach(([key, value]) => {
+      if (!key) {
+        return;
+      }
+      normalised[key.toString().trim().toLowerCase()] = value;
+    });
+    return normalised;
+  }
+
+  function getSheet(nameOptions) {
+    const names = Array.isArray(nameOptions) ? nameOptions : [nameOptions];
+    for (const name of names) {
+      if (workbook.Sheets[name]) {
+        return workbook.Sheets[name];
+      }
+    }
+    return null;
+  }
+
+  function sheetToJson(nameOptions) {
+    const sheet = getSheet(nameOptions);
+    if (!sheet) {
+      return [];
+    }
+    return XLSX.utils.sheet_to_json(sheet, { defval: '', raw: true });
+  }
+
+  function registerDay(rawValue) {
+    if (rawValue === undefined || rawValue === null || rawValue === '') {
+      return null;
+    }
+
+    let key;
+    if (rawValue instanceof Date) {
+      key = rawValue.getTime();
+    } else if (typeof rawValue === 'number') {
+      key = rawValue;
+    } else {
+      key = normaliseString(rawValue);
+    }
+
+    if (dayMapping.has(key)) {
+      return dayMapping.get(key);
+    }
+
+    let dateObject = null;
+    let usedFallback = false;
+    if (rawValue instanceof Date) {
+      dateObject = rawValue;
+    } else if (typeof rawValue === 'number' && !Number.isNaN(rawValue)) {
+      dateObject = excelSerialToDate(rawValue);
+    } else {
+      const numeric = Number(rawValue);
+      if (!Number.isNaN(numeric) && numeric > 0) {
+        dateObject = excelSerialToDate(numeric);
+      } else {
+        const parsed = Date.parse(normaliseString(rawValue));
+        if (!Number.isNaN(parsed)) {
+          dateObject = new Date(parsed);
+        }
+      }
+    }
+
+    let dayId = null;
+    if (dateObject instanceof Date && !Number.isNaN(dateObject.getTime())) {
+      const day = dateObject.getUTCDate();
+      const candidate = String(day);
+      if (DEFAULT_DAY_IDS.includes(candidate)) {
+        dayId = candidate;
+      }
+    }
+
+    if (!dayId) {
+      dayId = DEFAULT_DAY_IDS[fallbackIndex] || String(key);
+      if (fallbackIndex < DEFAULT_DAY_IDS.length - 1) {
+        fallbackIndex += 1;
+      }
+      usedFallback = true;
+    }
+
+    if (!dayInfo[dayId]) {
+      dayInfo[dayId] = {
+        raw: rawValue,
+        date: dateObject,
+        labels: {
+          fr: formatDayLabel(usedFallback ? null : dateObject, 'fr', dayId),
+          en: formatDayLabel(usedFallback ? null : dateObject, 'en', dayId),
+        },
+      };
+      if (!dayOrder.includes(dayId)) {
+        dayOrder.push(dayId);
+      }
+    }
+
+    const record = { id: dayId, date: dateObject, raw: rawValue };
+    dayMapping.set(key, record);
+    return record;
+  }
+
+  const programEntries = {};
+  const activityEntries = {};
+  const liveEntries = {};
+  const dressEntries = {};
+  const groupsEntries = [];
+
+  sheetToJson(sheetAliases.program)
+    .map(normaliseRow)
+    .forEach((row) => {
+      const day = registerDay(row['date']);
+      if (!day) {
+        return;
+      }
+      const population = normaliseString(row['population']) || 'All';
+      const entry = {
+        dayId: day.id,
+        time: normaliseString(row['time']),
+        activity: normaliseString(row['activity']) || normaliseString(row['programme']),
+        location: normaliseString(row['location']),
+        description: normaliseString(row['description']),
+        type: normaliseString(row['type']),
+        language: normaliseLanguage(row['language']),
+        populationRaw: population,
+        populationTokens: extractPopulationTokens(population),
+        link: normaliseString(row['link'] || row['external link'] || row['programme link'] || row['lien']),
+        linkLabel: {
+          fr: normaliseString(row['link label fr']),
+          en: normaliseString(row['link label en']),
+          default: normaliseString(row['link label']),
+        },
+      };
+      if (!programEntries[day.id]) {
+        programEntries[day.id] = [];
+      }
+      programEntries[day.id].push(entry);
+    });
+
+  sheetToJson(sheetAliases.activities)
+    .map(normaliseRow)
+    .forEach((row) => {
+      const day = registerDay(row['date']);
+      if (!day) {
+        return;
+      }
+      const population = normaliseString(row['population']);
+      const entry = {
+        dayId: day.id,
+        category: normaliseString(row['category']),
+        activity: normaliseString(row['activity']),
+        title: normaliseString(row['title']),
+        time: normaliseString(row['time']),
+        location: normaliseString(row['location']),
+        description: normaliseString(row['description']),
+        language: normaliseLanguage(row['language']),
+        populationRaw: population,
+        populationTokens: extractPopulationTokens(population),
+        link: normaliseString(row['link'] || row['external link'] || row['lien']),
+        linkLabel: {
+          fr: normaliseString(row['link label fr']),
+          en: normaliseString(row['link label en']),
+          default: normaliseString(row['link label']),
+        },
+      };
+      if (!activityEntries[day.id]) {
+        activityEntries[day.id] = [];
+      }
+      activityEntries[day.id].push(entry);
+    });
+
+  sheetToJson(sheetAliases.live)
+    .map(normaliseRow)
+    .forEach((row) => {
+      const day = registerDay(row['date']);
+      if (!day) {
+        return;
+      }
+      const entry = {
+        dayId: day.id,
+        artist: normaliseString(row['artist']),
+        time: normaliseString(row['time']),
+        location: normaliseString(row['location']),
+        description: normaliseString(row['description']),
+        language: normaliseLanguage(row['language']),
+        link: normaliseString(row['link'] || row['external link'] || row['teaser'] || row['lien']),
+        linkLabel: {
+          fr: normaliseString(row['link label fr']),
+          en: normaliseString(row['link label en']),
+          default: normaliseString(row['link label']),
+        },
+      };
+      if (!liveEntries[day.id]) {
+        liveEntries[day.id] = [];
+      }
+      liveEntries[day.id].push(entry);
+    });
+
+  sheetToJson(sheetAliases.dress)
+    .map(normaliseRow)
+    .forEach((row) => {
+      const day = registerDay(row['date']);
+      if (!day) {
+        return;
+      }
+      const language = normaliseLanguage(row['language']);
+      if (!dressEntries[day.id]) {
+        dressEntries[day.id] = {};
+      }
+      dressEntries[day.id][language || 'en'] = {
+        dayId: day.id,
+        theme: normaliseString(row['theme']) || normaliseString(row['dress code']) || normaliseString(row['code']),
+        description: normaliseString(row['description']),
+        link: normaliseString(row['link'] || row['external link'] || row['lien']),
+        linkLabel: {
+          fr: normaliseString(row['link label fr']),
+          en: normaliseString(row['link label en']),
+          default: normaliseString(row['link label']),
+        },
+      };
+    });
+
+  sheetToJson(sheetAliases.groups)
+    .map(normaliseRow)
+    .forEach((row) => {
+      const population = normaliseString(row['population']);
+      if (!population) {
+        return;
+      }
+      const entry = {
+        populationRaw: population,
+        populationTokens: extractPopulationTokens(population),
+        groupName: normaliseString(row['group name'] || row['group']),
+        workshop: normaliseString(row['workshop/training name'] || row['workshop'] || row['training']),
+        location: normaliseString(row['room/location'] || row['location']),
+        description: normaliseString(row['description']),
+        language: normaliseLanguage(row['language']),
+        link: normaliseString(row['external link'] || row['link'] || row['lien']),
+        linkLabel: {
+          fr: normaliseString(row['link label fr']),
+          en: normaliseString(row['link label en']),
+          default: normaliseString(row['link label']),
+        },
+      };
+      groupsEntries.push(entry);
+    });
+
+  return {
+    dayInfo,
+    dayOrder,
+    program: programEntries,
+    activities: activityEntries,
+    live: liveEntries,
+    dressCode: dressEntries,
+    groups: groupsEntries,
+    fallback: FALLBACK_MESSAGES,
+  };
+}
+
+async function updateHubbyData() {
+  const XLSX = await ensureXLSXLoaded();
+  const response = await fetch(`${EXCEL_DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch Excel data: ${response.status}`);
+  }
+  const arrayBuffer = await response.arrayBuffer();
+  const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+  const data = transformWorkbook(workbook);
+  console.log('Hubby data refreshed from Excel at', new Date().toLocaleString());
+  return data;
+}
+
+if (typeof window !== 'undefined') {
+  window.updateHubbyData = updateHubbyData;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const chatWindow = document.getElementById('chatWindow');
   const dayFilter = document.getElementById('dayFilter');
@@ -104,6 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sendMessageBtn = document.getElementById('sendMessageBtn');
   const backButton = document.getElementById('backButton');
   const langButtons = Array.from(document.querySelectorAll('.lang-toggle button'));
+  const populationKey = (document.body?.dataset?.population || 'cdv_lc_lkt').toLowerCase();
 
   if (!chatWindow || !dayFilter || !quickActions || !chatInput || !sendMessageBtn) {
     return;
@@ -114,6 +667,8 @@ document.addEventListener('DOMContentLoaded', () => {
     day: null,
     data: null,
     availableDays: [],
+    populationKey,
+    populationSet: buildPopulationSet(populationKey),
   };
 
   initialiseLanguage();
@@ -203,36 +758,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function loadData() {
-    fetch('assets/js/data.json', { cache: 'no-cache' })
-      .then((response) => response.json())
-      .then((data) => {
-        state.data = data;
-        state.availableDays = DAYS.filter((day) => data?.days?.[day.id]);
-        if (!state.availableDays.length) {
-          appendSystemMessage(getFallbackMessage());
-          return;
-        }
-        if (!state.day || !data.days[state.day]) {
-          state.day = state.availableDays[0].id;
-        }
-        renderDayButtons();
-        renderQuickActions();
-        appendSystemMessage(UI_TEXT[state.lang].welcome);
-      })
-      .catch(() => {
-        appendSystemMessage(getFallbackMessage());
-      });
+  async function loadData() {
+    try {
+      state.data = await updateHubbyData();
+      const dayIds = (state.data?.dayOrder?.length ? state.data.dayOrder : DEFAULT_DAY_IDS).filter((dayId) =>
+        state.data?.dayInfo?.[dayId]
+      );
+      state.availableDays = dayIds.length ? dayIds : DEFAULT_DAY_IDS;
+      if (!state.day || !state.availableDays.includes(state.day)) {
+        state.day = state.availableDays[0] || null;
+      }
+      renderDayButtons();
+      renderQuickActions();
+      appendSystemMessage(UI_TEXT[state.lang].welcome);
+    } catch (error) {
+      console.error('Hubby data error', error);
+      appendSystemMessage(getFallbackMessage());
+    }
   }
 
   function renderDayButtons() {
     dayFilter.innerHTML = '';
-    state.availableDays.forEach((day) => {
+    if (!Array.isArray(state.availableDays)) {
+      return;
+    }
+    state.availableDays.forEach((dayId) => {
+      const info = state.data?.dayInfo?.[dayId];
+      const label = info?.labels?.[state.lang] || info?.labels?.en || info?.labels?.fr || formatDayLabel(null, state.lang, dayId);
       const button = document.createElement('button');
       button.type = 'button';
-      button.dataset.day = day.id;
-      button.textContent = day.labels[state.lang] || day.labels.fr || day.labels.en;
-      button.classList.toggle('active', day.id === state.day);
+      button.dataset.day = dayId;
+      button.textContent = label;
+      button.classList.toggle('active', dayId === state.day);
       dayFilter.appendChild(button);
     });
   }
@@ -285,70 +842,150 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function respondToAction(actionId) {
-    const dayEntry = state.data?.days?.[state.day];
-    const category = dayEntry?.[actionId];
-    if (!category) {
+    if (!state.data || !state.day) {
+      respondWithFallback();
+      return;
+    }
+    const handlers = {
+      programme: buildProgrammeResponse,
+      activities: buildActivitiesResponse,
+      groupes: buildGroupsResponse,
+      dresscode: buildDressCodeResponse,
+      clubmedlive: buildLiveResponse,
+    };
+
+    const handler = handlers[actionId];
+    if (!handler) {
       respondWithFallback();
       return;
     }
 
-    const message = category[state.lang] || category.en || category.fr || '';
-    const details = getLocalizedArray(category.details);
-    const link = resolveLink(category);
+    const response = handler();
+    if (!response) {
+      respondWithFallback();
+      return;
+    }
 
     showTypingIndicator(() => {
-      appendBotMessage({ message, details, link });
+      appendBotMessage(response);
     });
   }
 
-  function getLocalizedArray(entry) {
-    if (!entry) {
-      return null;
-    }
-    if (Array.isArray(entry)) {
-      return entry;
-    }
-    if (typeof entry === 'object') {
-      const localized = entry[state.lang] || entry.en || entry.fr;
-      return Array.isArray(localized) ? localized : null;
-    }
-    return null;
-  }
-
-  function resolveLink(category) {
-    const linkEntry = category.link;
-    if (!linkEntry) {
+  function buildProgrammeResponse() {
+    const entries = preferLanguage(
+      (state.data.program?.[state.day] || []).filter((entry) => matchesPopulation(entry, state.populationSet)),
+      state.lang
+    );
+    if (!entries.length) {
       return null;
     }
 
-    if (typeof linkEntry === 'string') {
-      return {
-        url: linkEntry,
-        label: getLocalizedText(category.linkLabel) || UI_TEXT[state.lang].defaultLink,
-      };
-    }
+    const sorted = deduplicateEntries(entries).sort((a, b) => getTimeSortValue(a.time) - getTimeSortValue(b.time));
+    const dayLabel = state.data.dayInfo?.[state.day]?.labels?.[state.lang] || state.day;
+    const populationLabel = POPULATION_PROFILES[state.populationKey]?.label?.[state.lang] || '';
+    const message =
+      state.lang === 'fr'
+        ? `Voici ce que j’ai trouvé pour ${populationLabel || 'toi'} le ${dayLabel} :`
+        : `Here’s what I found for ${populationLabel || 'you'} on ${dayLabel}:`;
+    const details = sorted.map(formatProgramLine);
+    const link = collectLink(sorted, state.lang, UI_TEXT[state.lang].defaultLink);
 
-    if (typeof linkEntry === 'object' && linkEntry.url) {
-      return {
-        url: linkEntry.url,
-        label: getLocalizedText(linkEntry.label) || UI_TEXT[state.lang].defaultLink,
-      };
-    }
-
-    return null;
+    return { message, details, link };
   }
 
-  function getLocalizedText(entry) {
+  function buildActivitiesResponse() {
+    const entries = preferLanguage(
+      (state.data.activities?.[state.day] || []).filter((entry) => matchesPopulation(entry, state.populationSet)),
+      state.lang
+    );
+    if (!entries.length) {
+      return null;
+    }
+
+    const sorted = deduplicateEntries(entries).sort((a, b) => getTimeSortValue(a.time) - getTimeSortValue(b.time));
+    const dayLabel = state.data.dayInfo?.[state.day]?.labels?.[state.lang] || state.day;
+    const message =
+      state.lang === 'fr'
+        ? `Envie de bouger ? Voici les activités proposées le ${dayLabel} :`
+        : `Ready for more? Here are the activities available on ${dayLabel}:`;
+    const details = sorted.map(formatActivityLine);
+    const link = collectLink(sorted, state.lang, UI_TEXT[state.lang].defaultLink);
+
+    return { message, details, link };
+  }
+
+  function buildGroupsResponse() {
+    const entries = preferLanguage(
+      (state.data.groups || []).filter((entry) => matchesPopulation(entry, state.populationSet)),
+      state.lang
+    );
+    if (!entries.length) {
+      return null;
+    }
+
+    const populationLabel = POPULATION_PROFILES[state.populationKey]?.label?.[state.lang] || '';
+    const message =
+      state.lang === 'fr'
+        ? `Voici les groupes et contacts pour ${populationLabel || 'ton équipe'} :`
+        : `Here are the groups and key contacts for ${populationLabel || 'your team'}:`;
+    const details = entries.map((entry) => {
+      const fragments = [];
+      if (entry.groupName) {
+        fragments.push(entry.groupName);
+      }
+      if (entry.workshop) {
+        fragments.push(entry.workshop);
+      }
+      if (entry.location) {
+        fragments.push(entry.location);
+      }
+      if (entry.description) {
+        fragments.push(entry.description);
+      }
+      return fragments.join(' · ');
+    });
+    const link = collectLink(entries, state.lang, UI_TEXT[state.lang].defaultLink);
+
+    return { message, details, link };
+  }
+
+  function buildDressCodeResponse() {
+    const dressData = state.data.dressCode?.[state.day];
+    if (!dressData) {
+      return null;
+    }
+    const entry = dressData[state.lang] || dressData.en || dressData.fr;
     if (!entry) {
-      return '';
+      return null;
     }
-    if (typeof entry === 'string') {
-      return entry;
+
+    const dayLabel = state.data.dayInfo?.[state.day]?.labels?.[state.lang] || state.day;
+    const message =
+      state.lang === 'fr'
+        ? `Dress code du ${dayLabel} : ${entry.theme}`
+        : `Dress code for ${dayLabel}: ${entry.theme}`;
+    const details = entry.description ? [entry.description] : null;
+    const link = collectLink([entry], state.lang, UI_TEXT[state.lang].defaultLink);
+
+    return { message, details, link };
+  }
+
+  function buildLiveResponse() {
+    const entries = preferLanguage(state.data.live?.[state.day] || [], state.lang);
+    if (!entries.length) {
+      return null;
     }
-    if (typeof entry === 'object') {
-      return entry[state.lang] || entry.en || entry.fr || '';
-    }
-    return '';
+
+    const sorted = deduplicateEntries(entries).sort((a, b) => getTimeSortValue(a.time) - getTimeSortValue(b.time));
+    const dayLabel = state.data.dayInfo?.[state.day]?.labels?.[state.lang] || state.day;
+    const message =
+      state.lang === 'fr'
+        ? `Line-up Club Med Live pour le ${dayLabel} :`
+        : `Club Med Live line-up for ${dayLabel}:`;
+    const details = sorted.map(formatLiveLine);
+    const link = collectLink(sorted, state.lang, UI_TEXT[state.lang].defaultLink);
+
+    return { message, details, link };
   }
 
   function respondWithFallback() {
@@ -362,9 +999,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.data?.fallback?.[state.lang] ||
       state.data?.fallback?.en ||
       state.data?.fallback?.fr ||
-      (state.lang === 'fr'
-        ? "Je n’ai pas encore la réponse à cette question 😅"
-        : "I don’t have the answer to that yet 😅")
+      FALLBACK_MESSAGES[state.lang]
     );
   }
 
@@ -390,11 +1025,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const list = document.createElement('ul');
       list.className = 'message-list';
       details.forEach((item) => {
+        if (!item) {
+          return;
+        }
         const listItem = document.createElement('li');
         listItem.textContent = item;
         list.appendChild(listItem);
       });
-      bubble.appendChild(list);
+      if (list.children.length) {
+        bubble.appendChild(list);
+      }
     }
 
     if (link && link.url) {
@@ -436,7 +1076,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       indicator.remove();
       callback();
-    }, 400);
+    }, 450);
   }
 
   function scrollToBottom() {
