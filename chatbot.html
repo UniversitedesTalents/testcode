@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-sBvOB0fOkH1ZZ1xd6QbaO5jM90+hCbGyF/F7fs/3Gzdh0dX8GZFODdgNpTi27C/7fyqCkCmDYJLdnOjFk6tXrA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="chat-page">
     <div class="chat-app">
@@ -42,6 +43,35 @@
     </div>
 
     <script>
+        let hubbyChatData = null;
+
+        async function loadHubbyChatData() {
+            const dataUrl = 'https://github.com/UniversitedesTalents/testcode/raw/refs/heads/main/DATA-HUBBY-AD.xlsx';
+
+            try {
+                const response = await fetch(dataUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} – ${response.statusText}`);
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const jsonData = {};
+
+                workbook.SheetNames.forEach((sheetName) => {
+                    const worksheet = workbook.Sheets[sheetName];
+                    jsonData[sheetName] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+                });
+
+                hubbyChatData = jsonData;
+                console.log('✅ Données du chatbot Hubby chargées :', hubbyChatData);
+                return hubbyChatData;
+            } catch (error) {
+                console.error('❌ Erreur de chargement des données Hubby :', error);
+                throw error;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const chatWindow = document.getElementById('chatWindow');
             const quickActionsContainer = document.getElementById('quickActions');
@@ -51,6 +81,8 @@
             const backButton = document.getElementById('backButton');
             const langButtons = Array.from(document.querySelectorAll('.lang-btn'));
             const popChip = document.getElementById('selectedPopIcon');
+
+            loadHubbyChatData().catch(() => {});
 
             const params = new URLSearchParams(window.location.search);
             const rawPopulation = params.get('population') || 'CDV';
