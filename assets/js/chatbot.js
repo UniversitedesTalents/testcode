@@ -684,6 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
     availableDays: [],
     populationKey,
     populationSet: buildPopulationSet(populationKey),
+    activeActionByDay: {},
   };
 
   initialiseLanguage();
@@ -760,6 +761,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!actionId) {
         return;
       }
+      if (state.day) {
+        state.activeActionByDay[state.day] = actionId;
+      }
+      updateQuickActionSelection();
       appendUserMessage(label);
       respondToAction(actionId);
     });
@@ -849,6 +854,20 @@ document.addEventListener('DOMContentLoaded', () => {
       button.textContent = action.labels[state.lang] || action.labels.fr || action.labels.en;
       button.className = 'quick-action-btn';
       quickActions.appendChild(button);
+    });
+    updateQuickActionSelection();
+  }
+
+  function updateQuickActionSelection() {
+    const activeAction = state.day ? state.activeActionByDay[state.day] : null;
+    Array.from(quickActions.children).forEach((child) => {
+      const { action } = child.dataset;
+      if (!action) {
+        return;
+      }
+      const isActive = action === activeAction;
+      child.classList.toggle('is-active', isActive);
+      child.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
   }
 
