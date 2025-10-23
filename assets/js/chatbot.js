@@ -677,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const state = {
-    lang: 'fr',
+    lang: 'en',
     day: null,
     data: null,
     staticData: null,
@@ -691,8 +691,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadData();
 
   function initialiseLanguage() {
-    const storedLang = (localStorage.getItem('hubbyLang') || 'fr').toLowerCase();
-    state.lang = storedLang === 'en' ? 'en' : 'fr';
+    const storedLang = (localStorage.getItem('hubbyLang') || 'en').toLowerCase();
+    state.lang = storedLang === 'fr' ? 'fr' : 'en';
     applyLanguage();
   }
 
@@ -705,8 +705,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       button.dataset.lang = lang;
-      button.classList.toggle('active', lang === state.lang);
+      button.classList.toggle('is-active', lang === state.lang);
     });
+    document.documentElement.setAttribute('lang', state.lang === 'fr' ? 'fr' : 'en');
   }
 
   function switchLanguage(nextLang) {
@@ -825,14 +826,17 @@ document.addEventListener('DOMContentLoaded', () => {
       button.type = 'button';
       button.dataset.day = dayId;
       button.textContent = label;
-      button.classList.toggle('active', dayId === state.day);
+      button.className = 'day-pill';
+      if (dayId === state.day) {
+        button.classList.add('is-active');
+      }
       dayFilter.appendChild(button);
     });
   }
 
   function updateDaySelection() {
     Array.from(dayFilter.children).forEach((child) => {
-      child.classList.toggle('active', child.dataset.day === state.day);
+      child.classList.toggle('is-active', child.dataset.day === state.day);
     });
   }
 
@@ -843,6 +847,7 @@ document.addEventListener('DOMContentLoaded', () => {
       button.type = 'button';
       button.dataset.action = action.id;
       button.textContent = action.labels[state.lang] || action.labels.fr || action.labels.en;
+      button.className = 'quick-action-btn';
       quickActions.appendChild(button);
     });
   }
