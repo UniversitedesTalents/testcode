@@ -853,12 +853,6 @@ document.addEventListener('DOMContentLoaded', () => {
       button.dataset.action = action.id;
       button.textContent = action.labels[state.lang] || action.labels.fr || action.labels.en;
       button.className = 'quick-action-btn';
-      if (state.day && state.activeActionByDay[state.day] === action.id) {
-        button.classList.add('is-active');
-        button.setAttribute('aria-pressed', 'true');
-      } else {
-        button.setAttribute('aria-pressed', 'false');
-      }
       quickActions.appendChild(button);
     });
     updateQuickActionSelection();
