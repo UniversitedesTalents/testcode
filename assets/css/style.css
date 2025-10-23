@@ -57,17 +57,9 @@ body.fade-out {
   color: var(--terracotta);
   letter-spacing: 0.04em;
   position: relative;
-}
-
-.hubby-logo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  box-shadow: 0 0 0 rgba(179, 90, 66, 0.4);
-  opacity: 0;
-  pointer-events: none;
-  animation: haloGlow 1.4s ease-out forwards 0.2s;
+  display: inline-block;
+  transform-origin: center;
+  animation: fadeInHubby 1.2s ease-out both, breathe 4s ease-in-out 1.2s 2;
 }
 
 .tagline {
@@ -155,18 +147,26 @@ body.fade-out {
   }
 }
 
-@keyframes haloGlow {
-  0% {
+@keyframes fadeInHubby {
+  from {
     opacity: 0;
-    box-shadow: 0 0 0 rgba(179, 90, 66, 0.4);
+    transform: translateY(10px);
   }
-  40% {
+  to {
     opacity: 1;
-    box-shadow: 0 0 24px rgba(179, 90, 66, 0.35);
+    transform: translateY(0);
   }
+}
+
+@keyframes breathe {
+  0%,
   100% {
-    opacity: 0;
-    box-shadow: 0 0 12px rgba(179, 90, 66, 0.2);
+    transform: scale(1);
+    text-shadow: none;
+  }
+  50% {
+    transform: scale(1.015);
+    text-shadow: 0 0 10px rgba(179, 90, 66, 0.25);
   }
 }
 
