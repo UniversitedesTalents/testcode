@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,31 +13,27 @@
 <body class="chat-page">
     <div class="chat-app">
         <header class="chat-header">
-            <button id="backButton" class="back-btn" type="button" aria-label="Retour">
+            <button id="backButton" class="back-btn" type="button" aria-label="Back">
                 ←
             </button>
             <div class="title-area">
                 <h1 class="hubby-title">Hubby</h1>
                 <div class="pop-chip" id="selectedPopIcon" aria-live="polite"></div>
             </div>
-            <div class="lang-toggle" role="group" aria-label="Choisir la langue">
-                <button id="langFrChat" type="button" data-lang="fr" class="lang-btn is-active">FR</button>
-                <button id="langEnChat" type="button" data-lang="en" class="lang-btn">EN</button>
-            </div>
         </header>
 
         <section class="chat-interface">
             <div class="chat-window" id="chatWindow" role="log" aria-live="polite" aria-relevant="additions"></div>
-            <div class="day-filter" id="dayFilter" role="group" aria-label="Filtrer par jour">
+            <div class="day-filter" id="dayFilter" role="group" aria-label="Filter by day">
                 <!-- Buttons rendered by JavaScript -->
             </div>
-            <div class="quick-actions" id="quickActions" aria-label="Actions rapides">
+            <div class="quick-actions" id="quickActions" aria-label="Quick actions">
                 <!-- Buttons rendered by JavaScript -->
             </div>
             <div class="chat-input-area">
-                <label class="visually-hidden" for="chatInput">Votre message</label>
-                <input type="text" id="chatInput" autocomplete="off" placeholder="Écrivez votre message...">
-                <button id="sendMessageBtn" type="button">Envoyer</button>
+                <label class="visually-hidden" for="chatInput">Your message</label>
+                <input type="text" id="chatInput" autocomplete="off" placeholder="Type your message…">
+                <button id="sendMessageBtn" type="button">Send</button>
             </div>
         </section>
     </div>
@@ -64,10 +60,10 @@
                 });
 
                 hubbyChatData = jsonData;
-                console.log('✅ Données du chatbot Hubby chargées :', hubbyChatData);
+                console.log('✅ Hubby chatbot data loaded:', hubbyChatData);
                 return hubbyChatData;
             } catch (error) {
-                console.error('❌ Erreur de chargement des données Hubby :', error);
+                console.error('❌ Failed to load Hubby data:', error);
                 throw error;
             }
         }
@@ -79,7 +75,6 @@
             const chatInput = document.getElementById('chatInput');
             const sendMessageBtn = document.getElementById('sendMessageBtn');
             const backButton = document.getElementById('backButton');
-            const langButtons = Array.from(document.querySelectorAll('.lang-btn'));
             const popChip = document.getElementById('selectedPopIcon');
 
             loadHubbyChatData().catch(() => {});
@@ -90,37 +85,21 @@
             const allowedPopulations = ['CDV', 'LC', 'LKT', 'MKT', 'MKT+'];
 
             const state = {
-                lang: 'fr',
+                lang: 'en',
                 day: null,
                 population: allowedPopulations.includes(requestedPopulation) ? requestedPopulation : 'CDV',
                 selectedAction: null
             };
 
             const dayOptions = [
-                { key: 'monday', label: { fr: 'Lundi 18', en: 'Monday 18' } },
-                { key: 'tuesday', label: { fr: 'Mardi 19', en: 'Tuesday 19' } },
-                { key: 'wednesday', label: { fr: 'Mercredi 20', en: 'Wednesday 20' } },
-                { key: 'thursday', label: { fr: 'Jeudi 21', en: 'Thursday 21' } }
+                { key: 'arrival17', label: { en: 'Arrival 17' } },
+                { key: 'monday', label: { en: 'Monday 18' } },
+                { key: 'tuesday', label: { en: 'Tuesday 19' } },
+                { key: 'wednesday', label: { en: 'Wednesday 20' } },
+                { key: 'departure21', label: { en: 'Departure 21' } }
             ];
 
             const translations = {
-                fr: {
-                    placeholder: 'Écrivez votre message...',
-                    send: 'Envoyer',
-                    typing: 'Hubby tape…',
-                    fallback: 'Je n’ai pas encore la réponse à cette question 😅 Tu peux jeter un œil aux boutons rapides ci-dessous.',
-                    back: 'Retour',
-                    dayClear: 'Tous les jours',
-                    quickActions: {
-                        programme: 'Programme complet',
-                        groupe: 'Mon groupe',
-                        activites: 'Activités',
-                        clubMedLive: 'Club Med Live',
-                        infosPratiques: 'Infos pratiques',
-                        vivaEngage: 'Viva Engage'
-                    },
-                    initial: 'Bonjour ! Je suis là pour te guider pendant les Academy Days. Choisis un bouton rapide ou écris ta question.'
-                },
                 en: {
                     placeholder: 'Type your message…',
                     send: 'Send',
@@ -199,19 +178,21 @@
                         fr: {
                             message: 'Club Med Live te réserve un show différent chaque soir ✨',
                             days: {
+                                arrival17: '🛬 Dimanche 17 : Journée d’arrivée – accueil dédié au lobby principal.',
                                 monday: '🎶 Lundi 18 : Zavmusic à 21h – set électro innovant au théâtre Azur.',
                                 tuesday: '🎷 Mardi 19 : Sax Vibes à 20h30 – soirée jazz moderne sur la terrasse Lagoon.',
                                 wednesday: '🎤 Mercredi 20 : ASMA & Mat Duval dès 22h – performance live au M Lounge.',
-                                thursday: '🪘 Jeudi 21 : Sunset Jam à 19h – fusion world au rooftop Horizon.'
+                                departure21: '👋 Jeudi 21 : Journée de départ – navettes disponibles dès 7h toutes les 30 min.'
                             }
                         },
                         en: {
                             message: 'Club Med Live brings a different vibe every night ✨',
                             days: {
+                                arrival17: '🛬 Sunday 17th: Arrival day – dedicated welcome desks in the main lobby.',
                                 monday: '🎶 Monday 18th: Zavmusic at 9 PM – innovative electro set on the Azur stage.',
                                 tuesday: '🎷 Tuesday 19th: Sax Vibes at 8:30 PM – modern jazz evening on the Lagoon terrace.',
                                 wednesday: '🎤 Wednesday 20th: ASMA & Mat Duval from 10 PM – live performance at the M Lounge.',
-                                thursday: '🪘 Thursday 21st: Sunset Jam at 7 PM – world fusion on the Horizon rooftop.'
+                                departure21: '👋 Thursday 21st: Departure day – shuttles available from 7 AM every 30 minutes.'
                             }
                         }
                     },
@@ -533,17 +514,6 @@
                 window.location.href = 'index.html';
             });
 
-            langButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    const selectedLang = button.dataset.lang;
-                    if (state.lang === selectedLang) {
-                        return;
-                    }
-                    state.lang = selectedLang;
-                    updateLanguage();
-                });
-            });
-
             dayFilterContainer.addEventListener('click', (event) => {
                 const button = event.target.closest('button[data-day]');
                 if (!button) {
@@ -700,7 +670,7 @@
                     return cloneContent(baseEntry);
                 }
                 const merged = {};
-                for (const lang of ['fr', 'en']) {
+                for (const lang of ['en']) {
                     if (populationEntry[lang] !== undefined) {
                         merged[lang] = mergeLanguageContent(baseEntry[lang], populationEntry[lang]);
                     } else if (baseEntry[lang] !== undefined) {
@@ -823,23 +793,6 @@
                     button.textContent = option.label[state.lang];
                     dayFilterContainer.appendChild(button);
                 });
-            }
-
-            function updateLanguage() {
-                document.documentElement.lang = state.lang;
-                chatInput.placeholder = translations[state.lang].placeholder;
-                sendMessageBtn.textContent = translations[state.lang].send;
-                backButton.setAttribute('aria-label', translations[state.lang].back);
-                langButtons.forEach((button) => {
-                    if (button.dataset.lang === state.lang) {
-                        button.classList.add('is-active');
-                    } else {
-                        button.classList.remove('is-active');
-                    }
-                });
-                renderDayFilter();
-                renderQuickActions();
-                appendHubbyMessage(translations[state.lang].initial);
             }
         });
     </script>
