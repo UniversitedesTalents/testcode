@@ -833,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
       button.textContent = label;
       button.className = 'day-pill';
       if (dayId === state.day) {
-        button.classList.add('is-active');
+        button.classList.add('active-date');
       }
       dayFilter.appendChild(button);
     });
@@ -841,7 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateDaySelection() {
     Array.from(dayFilter.children).forEach((child) => {
-      child.classList.toggle('is-active', child.dataset.day === state.day);
+      child.classList.toggle('active-date', child.dataset.day === state.day);
     });
   }
 

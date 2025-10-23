@@ -851,10 +851,12 @@ main {
     white-space: nowrap;
 }
 
-.day-pill.is-active {
-    background: #1e2848;
+.day-pill.is-active,
+.day-pill.active-date {
+    background: #d67b5c;
     color: #ffffff;
-    border-color: #1e2848;
+    border-color: #d67b5c;
+    border-radius: 12px;
 }
 
 .quick-actions {

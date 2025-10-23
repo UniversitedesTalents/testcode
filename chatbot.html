@@ -518,7 +518,10 @@
                     return;
                 }
                 const selectedDay = button.dataset.day || null;
-                state.day = selectedDay === state.day ? null : selectedDay;
+                if (selectedDay === state.day) {
+                    return;
+                }
+                state.day = selectedDay;
                 renderDayFilter();
             });
 
@@ -775,7 +778,7 @@
 
                 const clearButton = document.createElement('button');
                 clearButton.type = 'button';
-                clearButton.className = `day-pill${state.day === null ? ' is-active' : ''}`;
+                clearButton.className = `day-pill${state.day === null ? ' active-date' : ''}`;
                 clearButton.dataset.day = '';
                 clearButton.textContent = translations[state.lang].dayClear;
                 dayFilterContainer.appendChild(clearButton);
@@ -784,7 +787,7 @@
                     const button = document.createElement('button');
                     button.type = 'button';
                     button.dataset.day = option.key;
-                    button.className = `day-pill${state.day === option.key ? ' is-active' : ''}`;
+                    button.className = `day-pill${state.day === option.key ? ' active-date' : ''}`;
                     button.textContent = option.label[state.lang];
                     dayFilterContainer.appendChild(button);
                 });
