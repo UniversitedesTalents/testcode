@@ -60,7 +60,8 @@
             const state = {
                 lang: 'fr',
                 day: null,
-                population: allowedPopulations.includes(requestedPopulation) ? requestedPopulation : 'CDV'
+                population: allowedPopulations.includes(requestedPopulation) ? requestedPopulation : 'CDV',
+                selectedAction: null
             };
 
             const dayOptions = [
@@ -528,6 +529,8 @@
                 }
                 const actionKey = button.dataset.action;
                 const label = button.textContent.trim();
+                state.selectedAction = actionKey;
+                updateQuickActionSelection();
                 handleUserMessage(label, actionKey);
             });
 
@@ -755,6 +758,15 @@
                     button.className = 'quick-action-btn';
                     button.textContent = translations[state.lang].quickActions[key] || key;
                     quickActionsContainer.appendChild(button);
+                });
+                updateQuickActionSelection();
+            }
+
+            function updateQuickActionSelection() {
+                const buttons = quickActionsContainer.querySelectorAll('.quick-action-btn');
+                buttons.forEach((button) => {
+                    const isActive = button.dataset.action === state.selectedAction;
+                    button.classList.toggle('is-active', isActive);
                 });
             }
 
